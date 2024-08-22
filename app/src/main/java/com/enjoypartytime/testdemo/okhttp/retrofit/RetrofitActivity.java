@@ -1,6 +1,7 @@
 package com.enjoypartytime.testdemo.okhttp.retrofit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class RetrofitActivity extends Activity {
         TextView tvRetrofitPath = findViewById(R.id.tv_retrofit_path);
         TextView tvRetrofitHeaders = findViewById(R.id.tv_retrofit_headers);
         TextView tvRetrofitUrl = findViewById(R.id.tv_retrofit_url);
+        TextView tvRetrofitConverter = findViewById(R.id.tv_retrofit_converter);
 
         tvRetrofitGet.setOnClickListener(view -> retrofitGet());
         tvRetrofitPost.setOnClickListener(view -> retrofitPost());
@@ -47,6 +49,10 @@ public class RetrofitActivity extends Activity {
         tvRetrofitPath.setOnClickListener(view -> retrofitPath());
         tvRetrofitHeaders.setOnClickListener(view -> retrofitHeaders());
         tvRetrofitUrl.setOnClickListener(view -> retrofitUrl());
+        tvRetrofitConverter.setOnClickListener(view -> {
+            Intent intent = new Intent(RetrofitActivity.this, RetrofitConverterActivity.class);
+            startActivity(intent);
+        });
 
         retrofit = new Retrofit.Builder().baseUrl("https://www.httpbin.org/").build();
         httpBinService = retrofit.create(HttpBinService.class);
@@ -111,21 +117,22 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitPath() {
-        httpBinService.postInPath("post", "android", "aaa", "123").enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    LogUtils.i("retrofitPath：" + response.body().string());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        httpBinService.postInPath("post", "android", "aaa", "123")
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        try {
+                            LogUtils.i("retrofitPath：" + response.body().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable throwable) {
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable throwable) {
 
-            }
-        });
+                    }
+                });
     }
 
     private void retrofitHeaders() {
@@ -147,20 +154,21 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitUrl() {
-        httpBinService.postWithUrl("https://www.httpbin.org/post").enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    LogUtils.i("retrofitHeaders：" + response.body().string());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        httpBinService.postWithUrl("https://www.httpbin.org/post")
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        try {
+                            LogUtils.i("retrofitHeaders：" + response.body().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable throwable) {
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable throwable) {
 
-            }
-        });
+                    }
+                });
     }
 }

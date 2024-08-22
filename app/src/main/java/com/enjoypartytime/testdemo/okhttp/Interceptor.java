@@ -17,27 +17,28 @@ import okhttp3.Response;
 public class Interceptor {
 
     public void interceptor() {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(new okhttp3.Interceptor() {
-            @NonNull
-            @Override
-            public Response intercept(@NonNull Chain chain) throws IOException {
-                //前置处理
-                Request request = chain.request().newBuilder().addHeader("os", "Android")
-                        .addHeader("version", "1.0").build();
-                Response response = chain.proceed(request);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new okhttp3.Interceptor() {
+                    @NonNull
+                    @Override
+                    public Response intercept(@NonNull Chain chain) throws IOException {
+                        //前置处理
+                        Request request = chain.request().newBuilder().addHeader("os", "Android")
+                                               .addHeader("version", "1.0").build();
+                        Response response = chain.proceed(request);
 
-                //后置处理
+                        //后置处理
 
-                return response;
-            }
-        }).addNetworkInterceptor(new okhttp3.Interceptor() {
-            @NonNull
-            @Override
-            public Response intercept(@NonNull Chain chain) throws IOException {
+                        return response;
+                    }
+                }).addNetworkInterceptor(new okhttp3.Interceptor() {
+                    @NonNull
+                    @Override
+                    public Response intercept(@NonNull Chain chain) throws IOException {
 
-                return null;
-            }
-        }).build();
+                        return null;
+                    }
+                }).build();
 
         Request request = new Request.Builder().url("").build();
         Call call = okHttpClient.newCall(request);

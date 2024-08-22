@@ -38,7 +38,7 @@
         <activity android:name=".okhttp.Okhttp2Activity" />
 
         <activity android:name=".okhttp.retrofit.RetrofitActivity" />
-
+        <activity android:name=".okhttp.retrofit.RetrofitConverterActivity" />
 
     </application>
 

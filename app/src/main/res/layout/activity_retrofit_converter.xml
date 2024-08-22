@@ -5,81 +5,58 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
     <TextView
-        android:id="@+id/tv_retrofit_get"
+        android:id="@+id/tv_retrofit_converter_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="GET Retrofit请求"
+        android:text="POST Converter请求"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_retrofit_post"
+        android:id="@+id/tv_retrofit_converter_post_bean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="POST Retrofit请求"
+        android:text="POST Bean Converter请求"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_retrofit_body"
+        android:id="@+id/tv_retrofit_converter_post_flowable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="Body Retrofit请求"
+        android:text="POST Flowable Converter请求"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_retrofit_path"
+        android:id="@+id/tv_retrofit_converter_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="Path Retrofit请求"
+        android:text="Download Converter请求"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_retrofit_headers"
+        android:id="@+id/tv_retrofit_converter_download_flowable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="Headrs Retrofit请求"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tv_retrofit_url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="Url Retrofit请求"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tv_retrofit_converter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="Converter Retrofit请求"
+        android:text="Download Flowable Converter请求"
         android:textSize="20sp" />
 
 </LinearLayout>

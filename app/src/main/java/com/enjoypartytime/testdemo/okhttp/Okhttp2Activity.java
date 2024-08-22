@@ -106,7 +106,8 @@ public class Okhttp2Activity extends Activity {
                 .addFormDataPart("file1", file1.getName(), requestBody1)
                 .build();
 
-        Request request = new Request.Builder().url("https://www.httpbin.org/post").post(multipartBody).build();
+        Request request = new Request.Builder().url("https://www.httpbin.org/post")
+                .post(multipartBody).build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -128,7 +129,8 @@ public class Okhttp2Activity extends Activity {
     private void uploadJson() {
         RequestBody requestBody = RequestBody.create("{\"a\":1,\"b\":2}", MediaType.parse("application/json"));
 
-        Request request = new Request.Builder().url("https://www.httpbin.org/post").post(requestBody).build();
+        Request request = new Request.Builder().url("https://www.httpbin.org/post")
+                .post(requestBody).build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
