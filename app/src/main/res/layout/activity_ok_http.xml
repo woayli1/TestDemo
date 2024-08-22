@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_get_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="GET同步请求"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_get_async"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="GET异步请求"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_post_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="POST同步请求"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_post_async"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="POST异步请求"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_ok_http_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="更多请求"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_retrofit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="Retrofit相关请求"
+        android:textSize="20sp" />
+
+</LinearLayout>
