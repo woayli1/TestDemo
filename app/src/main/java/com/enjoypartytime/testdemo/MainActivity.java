@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
+import com.enjoypartytime.testdemo.shop.ShopActivity;
 
 public class MainActivity extends Activity {
 
@@ -33,6 +34,13 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MainActivity.this, MediaActivity.class);
             startActivity(intent);
         });
+
+        TextView tvShop = findViewById(R.id.tv_shop);
+        tvShop.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ShopActivity.class);
+            startActivity(intent);
+        });
+
 
     }
 
