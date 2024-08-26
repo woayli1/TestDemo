@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_jump"
+        android:id="@+id/tv_media_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="跳转到 JumpActivity"
+        android:text="录制 Media"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_ok_http"
+        android:id="@+id/tv_media_play_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="跳转到 okHttp"
+        android:text="播放视频 Media"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_media"
+        android:id="@+id/tv_media_play_video_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="跳转到 Media"
+        android:text="播放视频 Media videoView"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_media_play_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="播放音频 Media"
         android:textSize="20sp" />
 
 </LinearLayout>

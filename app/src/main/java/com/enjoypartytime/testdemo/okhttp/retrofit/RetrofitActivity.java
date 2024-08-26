@@ -110,7 +110,7 @@ public class RetrofitActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable throwable) {
 
             }
         });

@@ -37,6 +37,7 @@ dependencies {
     androidTestImplementation libs.espresso.core
 
     implementation libs.utilcodex
+    implementation libs.xpopup
 
     // define a BOM and its version
     implementation platform(libs.okhttp.bom)

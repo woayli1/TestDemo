@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.enjoypartytime.testdemo.jump.JumpActivity;
+import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
 
 public class MainActivity extends Activity {
@@ -26,6 +27,13 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MainActivity.this, OkhttpActivity.class);
             startActivity(intent);
         });
+
+        TextView tvMedia = findViewById(R.id.tv_media);
+        tvMedia.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+            startActivity(intent);
+        });
+
     }
 
 }

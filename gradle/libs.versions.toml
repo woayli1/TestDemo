@@ -12,6 +12,7 @@ okhttpBom = "4.12.0"
 retrofit = "2.11.0"
 rxandroid = "3.0.2"
 utilcodex = "1.31.1"
+xpopup = "2.10.0"
 
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "converterGson" }
@@ -29,6 +30,7 @@ okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
+xpopup = { module = "com.github.li-xiaojun:XPopup", version.ref = "xpopup" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
