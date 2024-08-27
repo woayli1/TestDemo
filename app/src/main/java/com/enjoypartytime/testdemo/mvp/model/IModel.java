@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.shop.model;
+package com.enjoypartytime.testdemo.mvp.model;
 
 /**
  * author gc

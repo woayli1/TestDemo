@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/button_home"
+        android:icon="@drawable/ic_button_home"
+        android:title="@string/button_navi_home" />
+
+    <item
+        android:id="@+id/button_cart"
+        android:icon="@drawable/ic_button_shopping_cart"
+        android:title="@string/button_navi_cart" />
+
+    <item
+        android:id="@+id/button_mine"
+        android:icon="@drawable/ic_button_mine"
+        android:title="@string/button_navi_mine" />
+
+</menu>

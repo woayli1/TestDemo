@@ -1,6 +1,6 @@
-package com.enjoypartytime.testdemo.shop.view;
+package com.enjoypartytime.testdemo.mvp.view;
 
-import com.enjoypartytime.testdemo.shop.bean.UserBean;
+import com.enjoypartytime.testdemo.mvp.bean.UserBean;
 
 /**
  * author gc

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TestDemo</string>
+
+    <string name="button_navi_home">首页</string>
+    <string name="button_navi_cart">购物车</string>
+    <string name="button_navi_mine">我的</string>
+
 </resources>

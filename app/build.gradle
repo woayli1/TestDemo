@@ -50,4 +50,7 @@ dependencies {
     implementation libs.adapter.rxjava3
     implementation libs.rxandroid
 
+    implementation libs.swiperefreshlayout
+    implementation libs.banner
+    implementation libs.glide
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
+import com.enjoypartytime.testdemo.mvp.MvpActivity;
 import com.enjoypartytime.testdemo.shop.ShopActivity;
 
 public class MainActivity extends Activity {
@@ -32,6 +33,12 @@ public class MainActivity extends Activity {
         TextView tvMedia = findViewById(R.id.tv_media);
         tvMedia.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvMvp = findViewById(R.id.tv_mvp);
+        tvMvp.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, MvpActivity.class);
             startActivity(intent);
         });
 

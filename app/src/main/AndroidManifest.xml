@@ -57,7 +57,10 @@
         <activity android:name=".media.VideoViewActivity" />
         <activity android:name=".media.SoundPlayActivity" />
 
+        <activity android:name=".mvp.MvpActivity" />
+
         <activity android:name=".shop.ShopActivity" />
+        <activity android:name=".shop.ui.detail.GoodsDetailActivity" />
 
     </application>
 

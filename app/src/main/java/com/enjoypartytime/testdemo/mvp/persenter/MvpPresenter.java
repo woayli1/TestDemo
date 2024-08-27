@@ -1,23 +1,23 @@
-package com.enjoypartytime.testdemo.shop.persenter;
+package com.enjoypartytime.testdemo.mvp.persenter;
 
-import com.enjoypartytime.testdemo.shop.bean.UserBean;
-import com.enjoypartytime.testdemo.shop.model.Callback;
-import com.enjoypartytime.testdemo.shop.model.IModel;
-import com.enjoypartytime.testdemo.shop.model.ShopModel;
-import com.enjoypartytime.testdemo.shop.view.IView;
+import com.enjoypartytime.testdemo.mvp.bean.UserBean;
+import com.enjoypartytime.testdemo.mvp.model.Callback;
+import com.enjoypartytime.testdemo.mvp.model.IModel;
+import com.enjoypartytime.testdemo.mvp.model.MvpModel;
+import com.enjoypartytime.testdemo.mvp.view.IView;
 
 /**
  * author gc
  * company enjoyPartyTime
  * date 2024/8/26
  */
-public class ShopPresenter implements IPresenter, Callback {
+public class MvpPresenter implements IPresenter, Callback {
 
     private IView shopView;
     private IModel shopModel;
 
-    public ShopPresenter(IView shopView) {
-        shopModel = new ShopModel();
+    public MvpPresenter(IView shopView) {
+        shopModel = new MvpModel();
         this.shopView = shopView;
     }
 

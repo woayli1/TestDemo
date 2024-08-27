@@ -9,5 +9,8 @@
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="Theme.TestDemo" parent="Base.Theme.TestDemo" />
+    <style name="Theme.TestDemo" parent="Base.Theme.TestDemo">
+<!--        <item name="android:windowBackground">@drawable/ic_launcher_foreground</item>-->
+
+    </style>
 </resources>

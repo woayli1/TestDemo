@@ -1,69 +1,68 @@
 package com.enjoypartytime.testdemo.shop;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import androidx.annotation.Nullable;
-
-import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.shop.bean.UserBean;
-import com.enjoypartytime.testdemo.shop.persenter.IPresenter;
-import com.enjoypartytime.testdemo.shop.persenter.ShopPresenter;
-import com.enjoypartytime.testdemo.shop.view.IView;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.impl.LoadingPopupView;
+import com.enjoypartytime.testdemo.shop.adapter.ShopAdapter;
+import com.enjoypartytime.testdemo.shop.base.BaseActivity;
+import com.enjoypartytime.testdemo.shop.ui.cart.CartFragment;
+import com.enjoypartytime.testdemo.shop.ui.home.HomeFragment;
+import com.enjoypartytime.testdemo.shop.ui.mime.MineFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * author gc
  * company enjoyPartyTime
- * date 2024/8/26
+ * date 2024/8/27
  */
-public class ShopActivity extends Activity implements IView {
+public class ShopActivity extends BaseActivity {
 
-    private LoadingPopupView loadingPopup;
-    private IPresenter shopPresenter;
-
+    private ViewPager2 shopViewPager;
+    private BottomNavigationView bottomShop;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop);
-
-        TextView tvShopLogin = findViewById(R.id.tv_shop_login);
-
-        tvShopLogin.setOnClickListener(view -> login());
-
-        shopPresenter = new ShopPresenter(this);
-        loadingPopup = new XPopup.Builder(this)
-                .dismissOnBackPressed(false)
-                .isLightNavigationBar(true)
-                .asLoading(null, LoadingPopupView.Style.ProgressBar);
-
-    }
-
-    private void login() {
-        shopPresenter.login("111", "222");
+    protected int getLayoutId() {
+        return R.layout.activity_shop;
     }
 
     @Override
-    public void showProgress() {
-        loadingPopup.show();
+    protected void initViews() {
+
+        shopViewPager = find(R.id.shop_view_pager);
+        bottomShop = find(R.id.bottom_shop);
+
+        bottomShop.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.button_home) {
+                shopViewPager.setCurrentItem(0);
+            } else if (itemId == R.id.button_cart) {
+                shopViewPager.setCurrentItem(1);
+            } else if (itemId == R.id.button_mine) {
+                shopViewPager.setCurrentItem(2);
+            }
+
+            return true;
+        });
+
+        initFragment();
     }
 
-    @Override
-    public void hideProgress() {
-        loadingPopup.dismiss();
-    }
+    private void initFragment() {
+        ShopAdapter shopAdapter = new ShopAdapter(this);
+        shopAdapter.addFragment(new HomeFragment());
+        shopAdapter.addFragment(new CartFragment());
+        shopAdapter.addFragment(new MineFragment());
 
-    @Override
-    public void loginSuccess(UserBean userBean) {
-        ToastUtils.showShort("登录成功");
-    }
+        shopViewPager.setAdapter(shopAdapter);
+        shopViewPager.setCurrentItem(0);
+        shopViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                bottomShop.getMenu().getItem(position).setChecked(true);
 
-    @Override
-    public void loginFailure(String msg) {
-        ToastUtils.showShort("登录失败：" + msg);
+            }
+        });
     }
 }

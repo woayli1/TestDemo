@@ -1,17 +1,17 @@
-package com.enjoypartytime.testdemo.shop.model;
+package com.enjoypartytime.testdemo.mvp.model;
 
 import android.os.Handler;
 import android.os.Looper;
 
 import com.blankj.utilcode.util.TimeUtils;
-import com.enjoypartytime.testdemo.shop.bean.UserBean;
+import com.enjoypartytime.testdemo.mvp.bean.UserBean;
 
 /**
  * author gc
  * company enjoyPartyTime
  * date 2024/8/26
  */
-public class ShopModel implements IModel {
+public class MvpModel implements IModel {
 
     @Override
     public void login(final String username, String password, final Callback callback) {

@@ -22,7 +22,6 @@ import java.io.InputStream;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -117,8 +116,8 @@ public class RetrofitConverterActivity extends Activity {
     private void converterPostFlowable() {
         disposable = httpConverterServiceConverter.postFlowable("aaa", "123")
                 .flatMap((Function<ConverterBean, Publisher<ResponseBody>>) converterBean -> httpConverterServiceConverter.postFlowable2("bbb", "111"))
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseBody -> {
                     try {
                         String res = responseBody.string();

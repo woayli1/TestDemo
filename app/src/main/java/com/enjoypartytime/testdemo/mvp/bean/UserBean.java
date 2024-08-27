@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.shop.bean;
+package com.enjoypartytime.testdemo.mvp.bean;
 
 /**
  * author gc

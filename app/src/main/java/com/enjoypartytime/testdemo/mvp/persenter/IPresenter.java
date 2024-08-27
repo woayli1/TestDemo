@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.shop.persenter;
+package com.enjoypartytime.testdemo.mvp.persenter;
 
 /**
  * author gc
