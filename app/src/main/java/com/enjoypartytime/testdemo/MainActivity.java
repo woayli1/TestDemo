@@ -9,6 +9,7 @@ import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
 import com.enjoypartytime.testdemo.mvp.MvpActivity;
+import com.enjoypartytime.testdemo.opengl.OpenglActivity;
 import com.enjoypartytime.testdemo.shop.ShopActivity;
 
 public class MainActivity extends Activity {
@@ -45,6 +46,12 @@ public class MainActivity extends Activity {
         TextView tvShop = findViewById(R.id.tv_shop);
         tvShop.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ShopActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvOpengl = findViewById(R.id.tv_opengl);
+        tvOpengl.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, OpenglActivity.class);
             startActivity(intent);
         });
 
