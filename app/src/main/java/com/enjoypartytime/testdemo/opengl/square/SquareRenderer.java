@@ -19,7 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
  * company enjoyPartyTime
  * date 2024/8/29
  */
-public class SquareRender implements GLSurfaceView.Renderer {
+public class SquareRenderer implements GLSurfaceView.Renderer {
 
     private FloatBuffer vertexBuffer;
     private ShortBuffer indexBuffer;

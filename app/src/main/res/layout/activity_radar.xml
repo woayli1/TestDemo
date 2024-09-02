@@ -5,9 +5,8 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <android.opengl.GLSurfaceView
-        android:id="@+id/gl_surface_view"
+    <com.enjoypartytime.testdemo.canvas.view.RadarView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

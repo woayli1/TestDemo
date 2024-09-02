@@ -29,7 +29,7 @@ public class TriangleActivity extends Activity {
         triangleGlSurfaceView.setZOrderOnTop(true);
 
         triangleGlSurfaceView.setEGLContextClientVersion(3);
-        triangleGlSurfaceView.setRenderer(new TriangleRender());
+        triangleGlSurfaceView.setRenderer(new TriangleRenderer());
         triangleGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         triangleGlSurfaceView.requestRender();
     }

@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
  * company enjoyPartyTime
  * date 2024/8/29
  */
-public class TriangleRender implements GLSurfaceView.Renderer {
+public class TriangleRenderer implements GLSurfaceView.Renderer {
 
     private int mProgram;
     private FloatBuffer vertexBuffer;

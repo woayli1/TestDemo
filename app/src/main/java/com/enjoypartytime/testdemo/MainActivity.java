@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.enjoypartytime.testdemo.canvas.CanvasActivity;
 import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
@@ -52,6 +53,12 @@ public class MainActivity extends Activity {
         TextView tvOpengl = findViewById(R.id.tv_opengl);
         tvOpengl.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, OpenglActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvCanvas = findViewById(R.id.tv_canvas);
+        tvCanvas.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CanvasActivity.class);
             startActivity(intent);
         });
 

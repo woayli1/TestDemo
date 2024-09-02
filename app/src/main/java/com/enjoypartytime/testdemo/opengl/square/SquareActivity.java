@@ -30,7 +30,7 @@ public class SquareActivity extends Activity {
         squareGlSurfaceView.setZOrderOnTop(true);
 
         squareGlSurfaceView.setEGLContextClientVersion(3);
-        squareGlSurfaceView.setRenderer(new SquareRender());
+        squareGlSurfaceView.setRenderer(new SquareRenderer());
         squareGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         squareGlSurfaceView.requestRender();
     }

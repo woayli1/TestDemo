@@ -73,6 +73,9 @@
         <activity android:name=".opengl.mosaic.MosaicActivity" />
         <activity android:name=".opengl.live2d.Live2DActivity" />
 
+        <activity android:name=".canvas.CanvasActivity" />
+        <activity android:name=".canvas.RadarActivity" />
+
     </application>
 
 </manifest>
