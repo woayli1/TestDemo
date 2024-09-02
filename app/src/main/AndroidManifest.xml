@@ -70,8 +70,8 @@
         <activity android:name=".opengl.OpenglActivity" />
         <activity android:name=".opengl.triangle.TriangleActivity" />
         <activity android:name=".opengl.square.SquareActivity" />
-
-        <activity android:name=".live2d.Live2DActivity" />
+        <activity android:name=".opengl.mosaic.MosaicActivity" />
+        <activity android:name=".opengl.live2d.Live2DActivity" />
 
     </application>
 

@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.live2d.Live2DActivity;
+import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
+import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
 import com.enjoypartytime.testdemo.opengl.triangle.TriangleActivity;
 
@@ -36,10 +37,17 @@ public class OpenglActivity extends Activity {
             startActivity(intent);
         });
 
+        TextView tvMosaic = findViewById(R.id.tv_mosaic);
+        tvMosaic.setOnClickListener(view -> {
+            Intent intent = new Intent(OpenglActivity.this, MosaicActivity.class);
+            startActivity(intent);
+        });
+
         TextView tvLive2d = findViewById(R.id.tv_live_2d);
         tvLive2d.setOnClickListener(view -> {
             Intent intent = new Intent(OpenglActivity.this, Live2DActivity.class);
             startActivity(intent);
         });
     }
+
 }

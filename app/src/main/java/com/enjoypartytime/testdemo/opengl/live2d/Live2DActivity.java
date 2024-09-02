@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.live2d;
+package com.enjoypartytime.testdemo.opengl.live2d;
 
 import android.app.Activity;
 import android.os.Bundle;

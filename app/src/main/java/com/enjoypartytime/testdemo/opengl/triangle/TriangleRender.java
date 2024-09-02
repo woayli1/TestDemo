@@ -26,18 +26,18 @@ public class TriangleRender implements GLSurfaceView.Renderer {
 
     private final String fragmentShaderCode = "precision mediump float;" + "uniform vec4 vColor;" + "void main() {" + "  gl_FragColor = vColor;" + "}";
 
-    private static final float[] triangleCords = {0f, 0.25f, 0.0f, -0.5f, -0.25f, 0.0f, 0.5f, -0.25f, 0.0f};
+    private static final float[] triangleCoords = {0f, 0.25f, 0.0f, -0.5f, -0.25f, 0.0f, 0.5f, -0.25f, 0.0f};
 
     private final float[] color = {1f, 0f, 0f, 1f};
-    private static final int CORDS_PER_VERTEX = 3;
+    private static final int COORDS_PER_VERTEX = 3;
 
     private int mPositionHandle;
     private int mColorHandle;
 
     //顶点个数
-    private final int vertexCount = triangleCords.length / CORDS_PER_VERTEX;
+    private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     //顶点之间的偏移量 每个顶点四个字节
-    private final int vertexStride = CORDS_PER_VERTEX * 4;
+    private final int vertexStride = COORDS_PER_VERTEX * 4;
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
@@ -45,12 +45,12 @@ public class TriangleRender implements GLSurfaceView.Renderer {
         GLES32.glClearColor(0, 0, 0, 0);
 
         //申请底层空间
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(triangleCords.length * 4);
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(triangleCoords.length * 4);
         byteBuffer.order(ByteOrder.nativeOrder());
 
         //将坐标数据转换为FloatBuffer,用以传入OpenGl ES程序
         vertexBuffer = byteBuffer.asFloatBuffer();
-        vertexBuffer.put(triangleCords);
+        vertexBuffer.put(triangleCoords);
         vertexBuffer.position(0);
 
         int vertexShader = loadShader(GLES32.GL_VERTEX_SHADER, vertexShaderCode);
@@ -82,7 +82,7 @@ public class TriangleRender implements GLSurfaceView.Renderer {
         //启用三角形顶点的句柄
         GLES32.glEnableVertexAttribArray(mPositionHandle);
         //准备三角形的坐标数据
-        GLES32.glVertexAttribPointer(mPositionHandle, CORDS_PER_VERTEX, GLES32.GL_FLOAT, false, vertexStride, vertexBuffer);
+        GLES32.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES32.GL_FLOAT, false, vertexStride, vertexBuffer);
         //获取片元着色器的vColor成员的句柄
         mColorHandle = GLES32.glGetUniformLocation(mProgram, "vColor");
         //设置绘制三角形的颜色
