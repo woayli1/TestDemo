@@ -1,15 +1,16 @@
 package com.enjoypartytime.testdemo.media.sound;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ObjectUtils;
+import com.enjoypartytime.testdemo.R;
 
 import java.util.List;
 
@@ -33,12 +34,15 @@ public class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundViewHol
     @NonNull
     @Override
     public SoundViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView textView = new TextView(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.bottomMargin = 18;
-        layoutParams.leftMargin = 18;
-        textView.setLayoutParams(layoutParams);
-        return new SoundViewHolder(textView);
+//        TextView textView = new TextView(context);
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.bottomMargin = 18;
+//        layoutParams.leftMargin = 18;
+//        textView.setLayoutParams(layoutParams);
+//        return new SoundViewHolder(textView);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.item_sound, parent, false);
+        return new SoundViewHolder(view);
     }
 
     @Override
