@@ -53,4 +53,7 @@ dependencies {
     implementation libs.swiperefreshlayout
     implementation libs.banner
     implementation libs.glide
+
+    implementation project(":Framework:framework")
+    implementation (fileTree(dir: '../libs', include: ['*.aar']))
 }
