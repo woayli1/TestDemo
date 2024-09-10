@@ -17,7 +17,6 @@ import com.enjoypartytime.testdemo.R;
 public class Live2DActivity extends Activity {
 
     private GLSurfaceView glSurfaceView;
-    private Live2DRenderer live2DRenderer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class Live2DActivity extends Activity {
 
         glSurfaceView.setEGLContextClientVersion(3);
 
-        live2DRenderer = new Live2DRenderer();
+        Live2DRenderer live2DRenderer = new Live2DRenderer();
         glSurfaceView.setRenderer(live2DRenderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 

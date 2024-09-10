@@ -329,9 +329,16 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
     }
 
     public void setXY(float moveX, float moveY) {
-        sizeBeanList.add(new SizeBean(moveX, moveY));
 
-        int i = sizeBeanList.size() - 1;
+        int i = sizeBeanList.size();
+
+        if (3 * i + 2 >= 5000) {
+            setStop();
+            setBegin();
+            i = sizeBeanList.size();
+        }
+
+        sizeBeanList.add(new SizeBean(moveX, moveY));
         int last = floatList.size() - 1;
         float[] vertices = floatList.get(last);
         vertices[3 * i] = (moveX - parentWidth) / parentWidth;

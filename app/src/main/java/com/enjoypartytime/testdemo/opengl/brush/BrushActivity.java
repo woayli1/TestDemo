@@ -75,7 +75,7 @@ public class BrushActivity extends Activity {
             public void onFail(Throwable t) {
 
             }
-        }, 33, TimeUnit.MILLISECONDS);
+        }, 20, TimeUnit.MILLISECONDS);
     }
 
     @Override
