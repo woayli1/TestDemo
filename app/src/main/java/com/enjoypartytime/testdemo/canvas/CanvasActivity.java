@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.canvas.brush.BrushCanvasActivity;
 
 /**
  * author gc
@@ -28,5 +29,10 @@ public class CanvasActivity extends Activity {
         });
 
 
+        TextView tvBrushCanvas = findViewById(R.id.tv_brush_canvas);
+        tvBrushCanvas.setOnClickListener(view -> {
+            Intent intent = new Intent(CanvasActivity.this, BrushCanvasActivity.class);
+            startActivity(intent);
+        });
     }
 }

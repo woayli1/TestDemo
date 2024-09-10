@@ -12,7 +12,18 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="雷达扫描效果"
+        android:text="雷达扫描 效果"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_brush_canvas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="画笔Canvas 效果"
         android:textSize="20sp" />
 
 </LinearLayout>
