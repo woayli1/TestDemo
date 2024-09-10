@@ -34,6 +34,40 @@ public class Bezier {
         return new float[]{x, y};
     }
 
+    /**
+     * 计算n阶贝塞尔曲线，n值=vertices.length / 2 - 1
+     *
+     * @param vertices float[]
+     * @param t        float
+     * @return float[]
+     */
+    public static float[] bezier(float[] vertices, float t) { //贝塞尔公式调用
+        float x = 0;
+        float y = 0;
+        //控制点数组
+        final int n = vertices.length / 2 - 1;
+        final int size = vertices.length / 2;
+
+        for (int index = 0; index < size; index++) {
+            float itemX = vertices[2 * index];
+            float itemY = vertices[2 * index + 1];
+
+            double pow = Math.pow((1 - t), n - index) * Math.pow(t, index);
+
+            if (index == 0) {
+                x += (float) (itemX * pow);
+                y += (float) (itemY * pow);
+            } else {
+                //factorial为阶乘函数
+                double value = (double) factorial(n) / factorial(index) / factorial(n - index);
+                x += (float) (value * itemX * pow);
+                y += (float) (value * itemY * pow);
+            }
+        }
+
+        return new float[]{x, y};
+    }
+
     public static long factorial(int num) {
         if (num < 0) {
             return -1;

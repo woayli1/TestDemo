@@ -17,6 +17,6 @@ public class BrushCanvasActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brush);
+        setContentView(R.layout.activity_brush_canvas);
     }
 }
