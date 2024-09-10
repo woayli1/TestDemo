@@ -114,9 +114,15 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
             float[] vertices2 = ArrayUtils.subArray(floatList.get(i), 0, ArrayUtils.lastIndexOf(floatList.get(i), 0.1f) + 1);
             if (ObjectUtils.isNotEmpty(vertices2)) {
                 //方案1 CPU计算执行
+                int length = vertices2.length;
+                int num = 18;
+                int num2 = num / 3;
 
-                if (i == size - 1) {
-                    floatTmpList.set(i, computePoint(computePoint(computePoint(vertices2))));
+                if (i == size - 1 && length >= num) {
+                    float[] floatTmp = ArrayUtils.subArray(vertices2, length - num, length);
+                    if (floatTmp != null) {
+                        floatTmpList.set(i, ArrayUtils.add(floatTmpList.get(i), computePoint(computePoint(computePoint(floatTmp, num2), num2), num2)));
+                    }
                 }
 
                 lineDraw(floatTmpList.get(i));
@@ -156,12 +162,11 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
         GLES32.glDrawArrays(GLES32.GL_POINTS, 0, vertices2.length / 3 - 1);
     }
 
-    private float[] computePoint(float[] vertices) {
+    private float[] computePoint(float[] vertices, int num) {
         List<Float> floatPointList = new ArrayList<>();
         int size = vertices.length / 3;
-        int num = 6;
 
-        for (int j = 0; j < size - num + 1; j++) {
+        for (int j = 0; j < size - num / 2 + 1; j++) {
 
             float[] vertices3 = new float[num];
             for (int n = 1; n <= num / 2; n++) {
@@ -169,14 +174,13 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
                 vertices3[2 * n - 1] = vertices[3 * j + 3 * n - 2];
             }
 
-            float size3 = vertices3.length; // x.count + y.count
-            for (int k = 0; k < size3; k++) {
+            for (int k = 0; k < num; k++) {
 
                 if (k % 5 == 0) {
                     continue;
                 }
 
-                float percent = k / size3;
+                float percent = (float) k / num;
                 float[] result = Bezier.bezier(vertices3, percent);
                 floatPointList.add(result[0]);
                 floatPointList.add(result[1]);
