@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 
 
@@ -34,7 +35,7 @@ public class RadarView extends View {
     private final float y;
     private final float radius;
 
-    private final int lineXDistance;
+    private final float lineXDistance;
 
     /**
      * 旋转的角度
@@ -52,15 +53,15 @@ public class RadarView extends View {
     public RadarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        int mWidth = ScreenUtils.getScreenWidth();
-        int mHeight = ScreenUtils.getScreenHeight();
+        int mWidth = ScreenUtils.getAppScreenWidth();
+        int mHeight = ScreenUtils.getAppScreenHeight();
 
         x = (float) mWidth / 2;
         y = (float) mHeight / 2;
 
-        radius = (float) mWidth / 2 - 5;
+        radius = Math.min(x, y) - 10 - Math.max(BarUtils.getStatusBarHeight(), BarUtils.getActionBarHeight());
 
-        lineXDistance = mWidth / 2 / 2;
+        lineXDistance = Math.min(x, y) / 2;
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
