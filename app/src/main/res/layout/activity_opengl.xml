@@ -84,7 +84,7 @@
         android:layout_below="@id/tv_status"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="仅在支持 openGL ES 3.2或以上时，以下功能才可用"
+        android:text="仅在支持 openGL ES 3.0或以上时，以下功能才可用"
         android:textColor="@color/blue" />
 
 </RelativeLayout>

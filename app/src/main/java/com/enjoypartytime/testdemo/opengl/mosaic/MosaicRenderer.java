@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.opengl.GLES32;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
@@ -61,26 +61,26 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
 
         //着色器脚本
-        String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/VertexShader.glsl");
-        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicShader.glsl");
+        String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicVertexShader.glsl");
+        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicFragmentShader.glsl");
 
         //获取程序，封装了加载、链接等操作
         mProgram = GLUtil.createProgram(vertexShaderCode, fragmentShaderCode);
 
         // 获取顶点着色器的位置的句柄（这里可以理解为当前绘制的顶点位置）
-        vPositionHandle = GLES32.glGetAttribLocation(mProgram, "vPosition");
+        vPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
         // 获取变换矩阵的句柄
-        mMVPMatrixHandle = GLES32.glGetUniformLocation(mProgram, "uMVPMatrix");
+        mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");
         //纹理位置句柄
-        maTexCoordHandle = GLES32.glGetAttribLocation(mProgram, "aTexCoord");
+        maTexCoordHandle = GLES30.glGetAttribLocation(mProgram, "aTexCoord");
 
-        mStrength = GLES32.glGetUniformLocation(mProgram, "strength");
-        mWidth = GLES32.glGetUniformLocation(mProgram, "width");
-        mHeight = GLES32.glGetUniformLocation(mProgram, "height");
+        mStrength = GLES30.glGetUniformLocation(mProgram, "strength");
+        mWidth = GLES30.glGetUniformLocation(mProgram, "width");
+        mHeight = GLES30.glGetUniformLocation(mProgram, "height");
 
         int[] textures = new int[1]; //生成纹理id
 
-        GLES32.glGenTextures(  //创建纹理对象
+        GLES30.glGenTextures(  //创建纹理对象
                 1, //产生纹理id的数量
                 textures, //纹理id的数组
                 0  //偏移量
@@ -88,13 +88,9 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
         int mTextureId = textures[0];
 
         //绑定纹理id，将对象绑定到环境的纹理单元
-        GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, mTextureId);
-
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
         //设置MIN 采样方式
-        GLES32.glTexParameterf(GLES32.GL_TEXTURE_2D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
-
-        GLES32.glClearColor(0f, 0f, 0f, 1.0f);
-        GLES32.glEnable(GLES32.GL_TEXTURE_2D);
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
     }
 
     @Override
@@ -102,7 +98,7 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
         this.parentWidth = width;
         this.parentHeight = height;
 
-        GLES32.glViewport(0, 0, width, height);
+        GLES30.glViewport(0, 0, width, height);
         //通过投影设置，适配横屏
         float sWH = width / (float) height;
         float sWidthHeight = width / (float) height;
@@ -175,47 +171,48 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
 
         //加载图片
         GLUtils.texImage2D( //实际加载纹理进显存
-                GLES32.GL_TEXTURE_2D, //纹理类型
+                GLES30.GL_TEXTURE_2D, //纹理类型
                 0, //纹理的层次，0表示基本图像层，可以理解为直接贴图
                 mBitmap, //纹理图像
                 0 //纹理边框尺寸
         );
 
-        GLES32.glClearColor(GLES32.GL_COLOR_ATTACHMENT0, 1f, 1f, 1f);
+        GLES30.glClearColor(GLES30.GL_COLOR_ATTACHMENT0, 1f, 1f, 1f);
 
         // 将程序添加到OpenGL ES环境
-        GLES32.glUseProgram(mProgram);
+        GLES30.glUseProgram(mProgram);
 
         //设置数据
         // 启用顶点属性，最后对应禁用
-        GLES32.glEnableVertexAttribArray(vPositionHandle);
-        GLES32.glEnableVertexAttribArray(maTexCoordHandle);
+        GLES30.glEnableVertexAttribArray(vPositionHandle);
+        GLES30.glEnableVertexAttribArray(maTexCoordHandle);
 
         //设置三角形坐标数据（一个顶点三个坐标）
-        GLES32.glVertexAttribPointer(vPositionHandle, 3, GLES32.GL_FLOAT, false, 3 * 4, mVertexBuffer);
+        GLES30.glVertexAttribPointer(vPositionHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuffer);
         //设置纹理坐标数据
-        GLES32.glVertexAttribPointer(maTexCoordHandle, 2, GLES32.GL_FLOAT, false, 2 * 4, mTexCoordBuffer);
+        GLES30.glVertexAttribPointer(maTexCoordHandle, 2, GLES30.GL_FLOAT, false, 2 * 4, mTexCoordBuffer);
 
         // 将投影和视图转换传递给着色器，可以理解为给uMVPMatrix这个变量赋值为mvpMatrix
-        GLES32.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES32.glUniform1i(mWidth, imgWidth);
-        GLES32.glUniform1i(mHeight, imgHeight);
-        GLES32.glUniform1f(mStrength, strength);
+        GLES30.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+        GLES30.glUniform1i(mWidth, imgWidth);
+        GLES30.glUniform1i(mHeight, imgHeight);
+        GLES30.glUniform1f(mStrength, strength);
 
         //设置使用的纹理编号
-        GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+        GLES30.glEnable(GLES30.GL_BLEND);
 
         // 绘制三角形，三个顶点
-        GLES32.glDrawArrays(GLES32.GL_TRIANGLE_STRIP, 0, 4);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
 
         // 禁用顶点数组（好像不禁用也没啥问题）
-        GLES32.glDisableVertexAttribArray(vPositionHandle);
-        GLES32.glDisableVertexAttribArray(maTexCoordHandle);
+        GLES30.glDisableVertexAttribArray(vPositionHandle);
+        GLES30.glDisableVertexAttribArray(maTexCoordHandle);
 
     }
 
-    public void setImageURI(Uri imgUri) {
-        this.imgUri = imgUri;
+    public void setImageURI(String imgUriPath) {
+        this.imgUri = Uri.parse(imgUriPath);
     }
 
     public Uri getImgUri() {

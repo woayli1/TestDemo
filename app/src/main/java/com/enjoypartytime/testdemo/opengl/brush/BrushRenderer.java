@@ -1,10 +1,10 @@
 package com.enjoypartytime.testdemo.opengl.brush;
 
-import static android.opengl.GLES32.glUniform1f;
-import static android.opengl.GLES32.glUniform4f;
+import static android.opengl.GLES30.glUniform1f;
+import static android.opengl.GLES30.glUniform4f;
 
 import android.content.Context;
-import android.opengl.GLES32;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 
 import com.blankj.utilcode.util.ArrayUtils;
@@ -75,20 +75,20 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
 //        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "shader/bezier_fragment.glsl");
 
 
-        int vertexShader = loadShader(GLES32.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = loadShader(GLES32.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
         //创建一个空的OpenGL ES程序
-        mProgram = GLES32.glCreateProgram();
+        mProgram = GLES30.glCreateProgram();
         //将顶点着色器加入到程序
-        GLES32.glAttachShader(mProgram, vertexShader);
+        GLES30.glAttachShader(mProgram, vertexShader);
         //将片元着色器加入到程序
-        GLES32.glAttachShader(mProgram, fragmentShader);
+        GLES30.glAttachShader(mProgram, fragmentShader);
         //连接到着色器程序
-        GLES32.glLinkProgram(mProgram);
-        GLES32.glUseProgram(mProgram);
+        GLES30.glLinkProgram(mProgram);
+        GLES30.glUseProgram(mProgram);
 
-        GLES32.glLineWidth(lineWidth);//设置线宽
+//        GLES30.glLineWidth(lineWidth);//设置线宽
 
         //方案2 GPU计算
 //        mStartEndHandle = glGetUniformLocation(mProgram, "uStartEndData");
@@ -103,12 +103,12 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
         setParentWidth((float) width / 2);
         setParentHeight((float) height / 2);
         diffHeight = (float) (ScreenUtils.getScreenHeight() - height + 70) / 2;
-        GLES32.glViewport(0, 0, width, height);
+        GLES30.glViewport(0, 0, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        GLES32.glClear(GLES32.GL_COLOR_BUFFER_BIT);
+        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
         int size = floatList.size();
         for (int i = 0; i < size; i++) {
             float[] vertices2 = ArrayUtils.subArray(floatList.get(i), 0, ArrayUtils.lastIndexOf(floatList.get(i), 0.1f) + 1);
@@ -135,8 +135,8 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
         }
 
         //禁止顶点数组的句柄
-        GLES32.glDisableVertexAttribArray(mPositionHandle);
-        GLES32.glDisableVertexAttribArray(mColorHandle);
+        GLES30.glDisableVertexAttribArray(mPositionHandle);
+        GLES30.glDisableVertexAttribArray(mColorHandle);
     }
 
     //方案1 CPU计算
@@ -149,17 +149,17 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
         vertexBuffer.position(0);
 
         //获取顶点着色器的vPosition成员句柄
-        mPositionHandle = GLES32.glGetAttribLocation(mProgram, "vPosition");
+        mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
         //启用顶点的句柄
-        GLES32.glEnableVertexAttribArray(mPositionHandle);
+        GLES30.glEnableVertexAttribArray(mPositionHandle);
         //准备点的坐标数据
-        GLES32.glVertexAttribPointer(mPositionHandle, 3, GLES32.GL_FLOAT, false, 12, vertexBuffer);
+        GLES30.glVertexAttribPointer(mPositionHandle, 3, GLES30.GL_FLOAT, false, 12, vertexBuffer);
 
-        mColorHandle = GLES32.glGetUniformLocation(mProgram, "vColor");
-        GLES32.glUniform4fv(mColorHandle, 1, color, 0);
+        mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
+        GLES30.glUniform4fv(mColorHandle, 1, color, 0);
 
         //绘制点
-        GLES32.glDrawArrays(GLES32.GL_POINTS, 0, vertices2.length / 3 - 1);
+        GLES30.glDrawArrays(GLES30.GL_POINTS, 0, vertices2.length / 3);
     }
 
     private float[] computePoint(float[] vertices, int num) {
@@ -204,13 +204,13 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
         mBuffer = Buffers.makeInterleavedBuffer(mDataPoints, vertices2.length);
 
         final int[] buffers = new int[1];
-        GLES32.glGenBuffers(1, buffers, 0);
+        GLES30.glGenBuffers(1, buffers, 0);
 
-        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, buffers[0]);
-        GLES32.glBufferData(GLES32.GL_ARRAY_BUFFER, mBuffer.capacity() * 4,
-                mBuffer, GLES32.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, buffers[0]);
+        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, mBuffer.capacity() * 4,
+                mBuffer, GLES30.GL_STATIC_DRAW);
 
-        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, 0);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
         mBufferId = buffers[0];
         mBuffer = null;
 
@@ -243,27 +243,27 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
 
         final int stride = 4 * 1;
 
-        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, mBufferId);
-        GLES32.glEnableVertexAttribArray(mDataHandle);
-        GLES32.glVertexAttribPointer(mDataHandle,
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, mBufferId);
+        GLES30.glEnableVertexAttribArray(mDataHandle);
+        GLES30.glVertexAttribPointer(mDataHandle,
                 1,
-                GLES32.GL_FLOAT,
+                GLES30.GL_FLOAT,
                 false,
                 stride,
                 0);
 
         // Clear the currently bound buffer (so future OpenGL calls do not use this buffer).
-        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, 0);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 
-//        GLES20.glUniformMatrix4fv(mMvpHandle, 1, false, mvp, 0);
+//        GLES30.glUniformMatrix4fv(mMvpHandle, 1, false, mvp, 0);
 
-        GLES32.glDrawArrays(GLES32.GL_POINTS, 0, 1000 * 3);
+        GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 1000 * 3);
     }
 
     private int loadShader(int shaderType, String shaderCode) {
-        int shaderId = GLES32.glCreateShader(shaderType);
-        GLES32.glShaderSource(shaderId, shaderCode);
-        GLES32.glCompileShader(shaderId);
+        int shaderId = GLES30.glCreateShader(shaderType);
+        GLES30.glShaderSource(shaderId, shaderCode);
+        GLES30.glCompileShader(shaderId);
 
         if (!checkShader(shaderId)) {
             return 0;
@@ -280,18 +280,18 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
      */
     private boolean checkShader(int shaderId) {
         int[] logLength = new int[1];
-        GLES32.glGetShaderiv(shaderId, GLES32.GL_INFO_LOG_LENGTH, logLength, 0);
+        GLES30.glGetShaderiv(shaderId, GLES30.GL_INFO_LOG_LENGTH, logLength, 0);
 
         if (logLength[0] > 0) {
-            String log = GLES32.glGetShaderInfoLog(shaderId);
+            String log = GLES30.glGetShaderInfoLog(shaderId);
             LogUtils.e(log);
         }
 
         int[] status = new int[1];
-        GLES32.glGetShaderiv(shaderId, GLES32.GL_COMPILE_STATUS, status, 0);
+        GLES30.glGetShaderiv(shaderId, GLES30.GL_COMPILE_STATUS, status, 0);
 
-        if (status[0] == GLES32.GL_FALSE) {
-            GLES32.glDeleteShader(shaderId);
+        if (status[0] == GLES30.GL_FALSE) {
+            GLES30.glDeleteShader(shaderId);
             return false;
         }
 

@@ -1,15 +1,17 @@
-#version 100
+#version 300 es
 
 precision highp float;
 //纹理坐标
 uniform sampler2D Texture;
 //纹理采样器
-varying vec2 TextureCoordsVarying;
+in vec2 TextureCoordsVarying;
 //长宽
 uniform int width;
 uniform int height;
 //马赛克size大小
 uniform float strength;
+
+out vec4 FragColor;
 
 void main() {
 
@@ -28,7 +30,7 @@ void main() {
     //换算回纹理坐标，此时的纹理坐标是小马赛克的部分的纹理坐标，即某一个色块
     vec2 UVMosaic = vec2(XYMosaic.x / TexSize.x, XYMosaic.y / TexSize.y);
     //获取到马赛克后的纹理坐标的颜色值
-    vec4 color = texture2D(Texture, UVMosaic);
+    vec4 color = texture(Texture, UVMosaic);
     //将马赛克颜色值赋值给gl_FragColor
-    gl_FragColor = color;
+    FragColor = color;
 }

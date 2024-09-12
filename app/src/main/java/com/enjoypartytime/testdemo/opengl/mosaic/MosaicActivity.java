@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.SeekBar;
@@ -18,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
@@ -103,12 +105,23 @@ public class MosaicActivity extends Activity {
     }
 
     private void requestStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // 申请权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            //android 13及以上
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                // 申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE);
+            } else {
+                // 权限已经被授予
+                openGallery();
+            }
         } else {
-            // 权限已经被授予
-            openGallery();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // 申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            } else {
+                // 权限已经被授予
+                openGallery();
+            }
         }
     }
 
@@ -135,8 +148,10 @@ public class MosaicActivity extends Activity {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri imgUri = data.getData();
-                mosaicRenderer.setImageURI(imgUri);
-                imgGlSurfaceView.requestRender();
+                if (imgUri != null) {
+                    mosaicRenderer.setImageURI(imgUri.toString());
+                    imgGlSurfaceView.requestRender();
+                }
             }
         }
 

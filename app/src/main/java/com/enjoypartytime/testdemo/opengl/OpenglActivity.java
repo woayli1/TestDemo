@@ -40,8 +40,8 @@ public class OpenglActivity extends Activity {
 
         int glVersion = getGLESVersion();
         String version = "OpenGL ES 1.0";
-        if (glVersion > 196609) {
-            version = "OpenGL ES 3.2";
+
+        if (glVersion > 131072) {
 
             tvTips.setVisibility(View.GONE);
 
@@ -70,7 +70,16 @@ public class OpenglActivity extends Activity {
                 startActivity(intent);
             });
 
+            if (glVersion > 196609) {
+                version = "OpenGL ES 3.2";
+            } else if (glVersion > 196608) {
+                version = "OpenGL ES 3.1";
+            } else {
+                version = "OpenGL ES 3.0";
+            }
+
         } else {
+
             tvTips.setVisibility(View.VISIBLE);
 
             tvTriangle.setTextColor(getResources().getColor(R.color.lightGray, null));
@@ -79,11 +88,7 @@ public class OpenglActivity extends Activity {
             tvBrush.setTextColor(getResources().getColor(R.color.lightGray, null));
             tvLive2d.setTextColor(getResources().getColor(R.color.lightGray, null));
 
-            if (glVersion > 196608) {
-                version = "OpenGL ES 3.1";
-            } else if (glVersion > 131072) {
-                version = "OpenGL ES 3.0";
-            } else if (glVersion > 65537) {
+            if (glVersion > 65537) {
                 version = "OpenGL ES 2.0";
             } else if (glVersion > 65536) {
                 version = "OpenGL ES 1.1";
