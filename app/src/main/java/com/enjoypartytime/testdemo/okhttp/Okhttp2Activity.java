@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.TextView;
@@ -60,12 +61,23 @@ public class Okhttp2Activity extends Activity {
     }
 
     private void requestStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // 申请权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            //android 13及以上
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                // 申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE);
+            } else {
+                // 权限已经被授予
+                openGallery();
+            }
         } else {
-            // 权限已经被授予
-            openGallery();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // 申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            } else {
+                // 权限已经被授予
+                openGallery();
+            }
         }
     }
 
@@ -103,8 +115,7 @@ public class Okhttp2Activity extends Activity {
         RequestBody requestBody1 = RequestBody.create(file1, MediaType.parse("image/" + ImageUtils.getImageType(file1)));
 
         MultipartBody multipartBody = new MultipartBody.Builder()
-                .addFormDataPart("file1", file1.getName(), requestBody1)
-                .build();
+                .addFormDataPart("file1", file1.getName(), requestBody1).build();
 
         Request request = new Request.Builder().url("https://www.httpbin.org/post")
                 .post(multipartBody).build();
