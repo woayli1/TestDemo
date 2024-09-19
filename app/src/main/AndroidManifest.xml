@@ -77,6 +77,8 @@
         <activity android:name=".opengl.live2d.Live2DActivity" />
         <activity android:name=".opengl.brush.BrushActivity" />
 
+        <activity android:name=".opengl.live2d.Live2DBasicActivity" />
+
         <activity android:name=".canvas.CanvasActivity" />
         <activity android:name=".canvas.RadarActivity" />
         <activity android:name=".canvas.brush.BrushCanvasActivity" />

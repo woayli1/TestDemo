@@ -1,12 +1,12 @@
 package com.enjoypartytime.testdemo.opengl.live2d;
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.enjoypartytime.testdemo.R;
 
 /**
@@ -16,36 +16,21 @@ import com.enjoypartytime.testdemo.R;
  */
 public class Live2DActivity extends Activity {
 
-    private GLSurfaceView glSurfaceView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_2d);
 
-        glSurfaceView = findViewById(R.id.gl_surface_view);
+        TextView tvLive2dBasic = findViewById(R.id.tv_live_2d_basic);
+        TextView tvLive2dClickChange = findViewById(R.id.tv_live_2d_click_change);
+        TextView tvLive2dClickResponse = findViewById(R.id.tv_live_2d_click_response);
+        TextView tvLive2dMoveResponse = findViewById(R.id.tv_live_2d_move_response);
+        TextView tvLive2dMore = findViewById(R.id.tv_live_2d_more);
 
-        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        glSurfaceView.setZOrderOnTop(true);
+        tvLive2dBasic.setOnClickListener(view -> ActivityUtils.startActivity(Live2DActivity.this, Live2DBasicActivity.class));
 
-        glSurfaceView.setEGLContextClientVersion(3);
-
-        Live2DRenderer live2DRenderer = new Live2DRenderer();
-        glSurfaceView.setRenderer(live2DRenderer);
-        glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        glSurfaceView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        glSurfaceView.onPause();
-    }
 }
