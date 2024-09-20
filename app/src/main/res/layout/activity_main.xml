@@ -8,81 +8,106 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <TextView
-        android:id="@+id/tv_jump"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 JumpActivity"
-        android:textSize="20sp" />
+        android:scrollbars="none">
 
-    <TextView
-        android:id="@+id/tv_ok_http"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 okHttp"
-        android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_media"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 Media"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_jump"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 JumpActivity"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tv_mvp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 MVP"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_ok_http"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 okHttp"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tv_shop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 Shop"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_media"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 Media"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tv_opengl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 OpenGl"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_mvp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 MVP"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tv_canvas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:text="跳转到 Canvas"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 Shop"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_opengl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 OpenGl"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_canvas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 Canvas"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_diy_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 DIY View"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.enjoypartytime.testdemo.canvas.CanvasActivity;
+import com.enjoypartytime.testdemo.diyView.DiyViewActivity;
 import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
@@ -59,6 +60,12 @@ public class MainActivity extends Activity {
         TextView tvCanvas = findViewById(R.id.tv_canvas);
         tvCanvas.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, CanvasActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvDiyView = findViewById(R.id.tv_diy_view);
+        tvDiyView.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, DiyViewActivity.class);
             startActivity(intent);
         });
 

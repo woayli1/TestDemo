@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.enjoypartytime.testdemo.diyView.view.FlowLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="酸奶" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="颜色码对照表" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="应用工具" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="英文代码" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="RGB" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="各种单位转换" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="view" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="消息" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="获取测量视图宽度" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_diy_view_flow_layout_text"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="背景色" />
+
+    </com.enjoypartytime.testdemo.diyView.view.FlowLayout>
+
+
+</LinearLayout>

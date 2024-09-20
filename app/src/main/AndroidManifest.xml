@@ -83,6 +83,9 @@
         <activity android:name=".canvas.RadarActivity" />
         <activity android:name=".canvas.brush.BrushCanvasActivity" />
 
+        <activity android:name=".diyView.DiyViewActivity" />
+        <activity android:name=".diyView.FlowLayoutActivity" />
+
     </application>
 
 </manifest>
