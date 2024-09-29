@@ -26,5 +26,11 @@ public class DiyViewActivity extends Activity {
             Intent intent = new Intent(DiyViewActivity.this, FlowLayoutActivity.class);
             startActivity(intent);
         });
+
+        TextView tvKoi = findViewById(R.id.tv_koi);
+        tvKoi.setOnClickListener(view -> {
+            Intent intent = new Intent(DiyViewActivity.this, KoiActivity.class);
+            startActivity(intent);
+        });
     }
 }

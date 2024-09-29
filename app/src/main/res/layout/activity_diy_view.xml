@@ -15,5 +15,16 @@
         android:text="FlowLayout"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/tv_koi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="绘制锦鲤游动"
+        android:textSize="20sp" />
+
 
 </LinearLayout>
