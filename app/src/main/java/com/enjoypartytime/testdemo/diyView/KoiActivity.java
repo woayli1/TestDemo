@@ -2,12 +2,10 @@ package com.enjoypartytime.testdemo.diyView;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.diyView.view.KoiDrawable;
 
 /**
  * author gc

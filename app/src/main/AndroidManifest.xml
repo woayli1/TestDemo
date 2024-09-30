@@ -87,6 +87,8 @@
         <activity android:name=".diyView.FlowLayoutActivity" />
         <activity android:name=".diyView.KoiActivity" />
 
+        <activity android:name=".lazyLoad.LazyLoadActivity" />
+
     </application>
 
 </manifest>

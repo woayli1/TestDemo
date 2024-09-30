@@ -106,6 +106,17 @@
                 android:text="跳转到 DIY View"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/tv_lazy_load"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="5dp"
+                android:text="跳转到 懒加载"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
     </ScrollView>
