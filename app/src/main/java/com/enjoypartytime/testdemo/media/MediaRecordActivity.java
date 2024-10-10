@@ -32,10 +32,11 @@ public class MediaRecordActivity extends Activity {
         TextView tvRecord = findViewById(R.id.tv_record);
         CameraSurfaceView cameraView = findViewById(R.id.camera_view);
 
-        List<CameraConfig> mCameraConfigList = CameraUtil.getCameraInfo(this);
+        List<CameraConfig> mCameraConfigList = CameraUtil.getCameraInfo(getApplicationContext());
 
         CameraConfig config = mCameraConfigList.get(0);
-        mCameraModule = new CameraModule(this, config);
+        int displayRotation = getWindowManager().getDefaultDisplay().getRotation();
+        mCameraModule = new CameraModule(getApplicationContext(), displayRotation, config);
         cameraView.setCameraModule(mCameraModule);
 
         tvRecord.setOnClickListener(view -> {

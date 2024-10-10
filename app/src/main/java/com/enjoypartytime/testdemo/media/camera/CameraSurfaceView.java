@@ -78,6 +78,7 @@ public class CameraSurfaceView extends AutoFitSurfaceView {
             Log.v(TAG, "surfaceDestroyed");
             if (mCameraModule != null) {
                 mCameraModule.releaseCamera();
+                mCameraModule = null;
             }
         }
     };

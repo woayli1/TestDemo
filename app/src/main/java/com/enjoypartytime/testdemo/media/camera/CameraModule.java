@@ -1,7 +1,6 @@
 package com.enjoypartytime.testdemo.media.camera;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
@@ -50,7 +49,8 @@ public class CameraModule {
     private final int CAMERA_STATE_PREVIEW = 0x005;
 
     /* common */
-    private Activity mActivity;
+    private Context mContext;
+    private int displayRotation;
     private CameraManager mCameraManager;
     private CameraCharacteristics mCameraCharacteristics;
     private CameraDevice mCameraDevice;
@@ -97,9 +97,10 @@ public class CameraModule {
         }
     };
 
-    public CameraModule(Activity activity, @NonNull CameraConfig config) {
-        mActivity = activity;
-        mCameraManager = (CameraManager) mActivity.getSystemService(Context.CAMERA_SERVICE);
+    public CameraModule(Context context,int rotation, @NonNull CameraConfig config) {
+        mContext = context;
+        displayRotation = rotation;
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         mCameraConfig = config;
         mPreviewSize = config.getPreviewSize();
     }
@@ -118,7 +119,7 @@ public class CameraModule {
             Log.e(TAG, "only could open camera when closed");
             return;
         }
-        if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "Open camera failed! No permission CAMERA.");
             return;
         }
@@ -163,10 +164,9 @@ public class CameraModule {
     }
 
     private void initDisplayRotation(CameraCharacteristics cameraCharacteristics) {
-        if (cameraCharacteristics == null || mActivity == null) {
+        if (cameraCharacteristics == null) {
             return;
         }
-        int displayRotation = mActivity.getWindowManager().getDefaultDisplay().getRotation();
         switch (displayRotation) {
             case Surface.ROTATION_0:
                 displayRotation = 90;
