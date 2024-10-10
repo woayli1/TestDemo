@@ -97,8 +97,12 @@ public class BrushCanvasView extends View {
         canvas.drawCircle(mouseCurrentX, mouseCurrentY, 10, mPaintMouse);//绘制鼠标中心
 
         time++;
-        if (!mouseX.isEmpty() && mouseX.peek() != null) {
-            boolean is_add_mouse = Math.abs(mouseX.peek() - mouseCurrentX) < 0.01;//鼠标不动时不记录坐标
+        if (mouseX != null && !mouseX.isEmpty() && mouseX.peek() != null) {
+            Float peek = mouseX.peek();
+            boolean is_add_mouse = false;
+            if (peek != null) {
+                is_add_mouse = Math.abs(peek - mouseCurrentX) < 0.01;//鼠标不动时不记录坐标
+            }
             if (!is_add_mouse) {
                 mouseX.offer(mouseCurrentX);
                 mouseY.offer(mouseCurrentY);
@@ -108,7 +112,9 @@ public class BrushCanvasView extends View {
                 mouseY.poll();
             }
         } else if (mouse_begin) {
-            mouseX.offer(mouseCurrentX);
+            if (mouseX != null) {
+                mouseX.offer(mouseCurrentX);
+            }
             mouseY.offer(mouseCurrentY);
         }
     }
