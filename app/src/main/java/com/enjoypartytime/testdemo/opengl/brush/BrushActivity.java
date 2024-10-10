@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.util.ThreadUtils;
 import com.enjoypartytime.testdemo.R;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * author gc
@@ -25,6 +23,9 @@ public class BrushActivity extends Activity {
     private BrushRenderer brushRenderer;
 
     private boolean isMove = false;
+
+    private Handler handler;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,30 +53,18 @@ public class BrushActivity extends Activity {
         brushGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         brushGlSurfaceView.requestRender();
 
-        ThreadUtils.executeByFixedAtFixRate(1, new ThreadUtils.Task<String>() {
+        handler = new Handler();
+        runnable = new Runnable() {
             @Override
-            public String doInBackground() {
+            public void run() {
                 if (isMove) {
                     brushGlSurfaceView.requestRender();
                 }
-                return "";
+                handler.postDelayed(this, 20);//每20ms循环一次，50fps
             }
+        };
 
-            @Override
-            public void onSuccess(String result) {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onFail(Throwable t) {
-
-            }
-        }, 20, TimeUnit.MILLISECONDS);
+        handler.postDelayed(runnable, 20);
     }
 
     @Override
@@ -88,6 +77,18 @@ public class BrushActivity extends Activity {
     protected void onPause() {
         super.onPause();
         brushGlSurfaceView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        brushRenderer = null;
+
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+            handler = null;
+            runnable = null;
+        }
     }
 
     @Override

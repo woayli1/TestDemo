@@ -60,15 +60,6 @@ public class KoiRelativeLayout extends RelativeLayout {
         ivKoi.setImageDrawable(koiDrawable);
         addView(ivKoi);
 
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                invalidate();
-                handler.postDelayed(this, 40);//每40ms循环一次，25fps
-            }
-        };
-        handler.postDelayed(runnable, 40);
     }
 
     @Override

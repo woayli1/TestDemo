@@ -34,37 +34,13 @@ public class BrushCanvasView extends View {
 
     private int time = 0;//累加时间
 
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            time++;
-            invalidate();//告诉主线程重新绘制
-            if (!mouseX.isEmpty() && mouseX.peek() != null) {
-                boolean is_add_mouse = Math.abs(mouseX.peek() - mouseCurrentX) < 0.01;//鼠标不动时不记录坐标
-                if (!is_add_mouse) {
-                    mouseX.offer(mouseCurrentX);
-                    mouseY.offer(mouseCurrentY);
-                }
-                if (mouseX.size() > 20 || is_add_mouse) {
-                    mouseX.poll();
-                    mouseY.poll();
-                }
-            } else if (mouse_begin) {
-                mouseX.offer(mouseCurrentX);
-                mouseY.offer(mouseCurrentY);
-            }
-            handler.postDelayed(this, 20);//每20ms循环一次，50fps
-        }
-    };
-
     public BrushCanvasView(Context context) {
         super(context);
     }
 
     public BrushCanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        handler.postDelayed(runnable, 20);
+
         mPaintMouse = new Paint();//对画笔初始化
         mPaintMouse.setColor(Color.RED);//设置画笔颜色
         mPaintMouse.setStrokeWidth(10);//设置画笔宽度
@@ -121,5 +97,20 @@ public class BrushCanvasView extends View {
         }
         canvas.drawCircle(mouseCurrentX, mouseCurrentY, 10, mPaintMouse);//绘制鼠标中心
 
+        time++;
+        if (!mouseX.isEmpty() && mouseX.peek() != null) {
+            boolean is_add_mouse = Math.abs(mouseX.peek() - mouseCurrentX) < 0.01;//鼠标不动时不记录坐标
+            if (!is_add_mouse) {
+                mouseX.offer(mouseCurrentX);
+                mouseY.offer(mouseCurrentY);
+            }
+            if (mouseX.size() > 20 || is_add_mouse) {
+                mouseX.poll();
+                mouseY.poll();
+            }
+        } else if (mouse_begin) {
+            mouseX.offer(mouseCurrentX);
+            mouseY.offer(mouseCurrentY);
+        }
     }
 }
