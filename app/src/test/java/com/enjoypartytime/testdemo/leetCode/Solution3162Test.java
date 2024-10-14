@@ -13,13 +13,13 @@ public class Solution3162Test {
     @Test
     public void solution3162Test() {
         System.out.println("---------------------------");
-        System.out.println(numberOfPairs(new int[]{1, 3, 4}, new int[]{1, 3, 4}, 1));
-        System.out.println(numberOfPairs(new int[]{1, 2, 4, 12}, new int[]{2, 4}, 3));
+        System.out.println(numberOfPairs(new int[]{1, 3, 4}, new int[]{1, 3, 4}, 1)); //5
+        System.out.println(numberOfPairs(new int[]{1, 2, 4, 12}, new int[]{2, 4}, 3)); //2
         System.out.println("---------------------------");
     }
 
-    public long numberOfPairs(int[] nums1, int[] nums2, int k) {
-        long res = 0;
+    public int numberOfPairs(int[] nums1, int[] nums2, int k) {
+        int res = 0;
         for (int value : nums1) {
             for (int i : nums2) {
                 if (value % (i * k) == 0) {
