@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * date 2024/10/12
  * 搜索插入位置
  */
-public class solution35Test {
+public class Solution35Test {
 
     @Test
     public void solution35Test() {
