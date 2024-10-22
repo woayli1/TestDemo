@@ -19,7 +19,7 @@ public class Solution2Test {
         System.out.println("---------------------------");
     }
 
-    public class ListNode {
+    public static class ListNode {
         int val;
         ListNode next;
 
