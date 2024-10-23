@@ -24,19 +24,14 @@ public class Solution4Test {
         int length1 = nums1.length;
         int length2 = nums2.length;
         int[] tmpNums = new int[length1 + length2];
-        for (int i = 0; i < length1; i++) {
-            tmpNums[i] = nums1[i];
-        }
-
-        for (int i = 0; i < length2; i++) {
-            tmpNums[length1 + i] = nums2[i];
-        }
+        System.arraycopy(nums1, 0, tmpNums, 0, length1);
+        System.arraycopy(nums2, 0, tmpNums, length1, length2);
 
         Arrays.sort(tmpNums);
 
-        if(tmpNums.length % 2 == 0){
+        if (tmpNums.length % 2 == 0) {
             return (tmpNums[tmpNums.length / 2] + tmpNums[tmpNums.length / 2 - 1]) / 2.0;
-        }else{
+        } else {
             return tmpNums[tmpNums.length / 2];
         }
     }
