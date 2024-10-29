@@ -23,26 +23,24 @@ public class Solution40Test {
     }
 
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List<Integer> list = Arrays.stream(candidates).sorted().boxed().toList();
-        List<List<Integer>> res = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) <= target) {
-                boolean[] dp = new boolean[target + 1];
-                for (int j = i + 1; j < list.size(); j++) {
-                    if (list.get(j) <= target) {
-                        dp[list.get(i) + list.get(j)] = list.get(i) + list.get(j) < target;
-                        if (dp[target - list.get(j)]) {
-                            List<Integer> tmp = new ArrayList<>();
-                            tmp.add(list.get(i));
-                            tmp.add(list.get(j));
-                            res.add(tmp);
-                        }
-                    }
-                }
-            }
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(candidates);
+        dfs(candidates, 0, target, new ArrayList<>(), ans);
+        return ans;
+    }
+
+    private void dfs(int[] candidates, int index, int target, List<Integer> combination, List<List<Integer>> ans) {
+        if (target == 0) {
+            ans.add(new ArrayList<>(combination));
+            return;
         }
-
-        return res;
-
+        for (int i = index; i < candidates.length && target >= candidates[i]; ++i) {
+            if (i > index && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            combination.add(candidates[i]);
+            dfs(candidates, i + 1, target - candidates[i], combination, ans);
+            combination.remove(combination.size() - 1);
+        }
     }
 }
