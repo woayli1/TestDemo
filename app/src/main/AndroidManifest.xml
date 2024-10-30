@@ -89,6 +89,8 @@
 
         <activity android:name=".lazyLoad.LazyLoadActivity" />
 
+        <activity android:name=".myCoordinatorLayout.CoordinatorLayoutActivity" />
+
     </application>
 
 </manifest>

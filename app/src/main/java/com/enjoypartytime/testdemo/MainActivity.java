@@ -10,6 +10,7 @@ import com.enjoypartytime.testdemo.diyView.DiyViewActivity;
 import com.enjoypartytime.testdemo.jump.JumpActivity;
 import com.enjoypartytime.testdemo.lazyLoad.LazyLoadActivity;
 import com.enjoypartytime.testdemo.media.MediaActivity;
+import com.enjoypartytime.testdemo.myCoordinatorLayout.CoordinatorLayoutActivity;
 import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
 import com.enjoypartytime.testdemo.mvp.MvpActivity;
 import com.enjoypartytime.testdemo.opengl.OpenglActivity;
@@ -73,6 +74,12 @@ public class MainActivity extends Activity {
         TextView tvLazyLoad = findViewById(R.id.tv_lazy_load);
         tvLazyLoad.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LazyLoadActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvCoordinatorLayout = findViewById(R.id.tv_coordinatorLayout);
+        tvCoordinatorLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CoordinatorLayoutActivity.class);
             startActivity(intent);
         });
 
