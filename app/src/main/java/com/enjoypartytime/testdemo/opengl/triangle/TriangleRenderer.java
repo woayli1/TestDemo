@@ -45,8 +45,7 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-//        GLES30.glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
-        GLES30.glClearColor(0, 0, 0, 0);
+        GLES30.glClearColor(0f, 0f, 0f, 1f);
 
         //申请底层空间
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(triangleCoords.length * 4);

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.2"
 banner = "2.2.3"
+cameraCore = "1.4.0"
 converterGson = "2.11.0"
 glide = "4.16.0"
 gradle = "8.5.2"
@@ -20,6 +21,10 @@ xpopup = "2.10.0"
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "converterGson" }
 banner = { module = "io.github.youth5201314:banner", version.ref = "banner" }
+camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
+camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
+camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
+camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }

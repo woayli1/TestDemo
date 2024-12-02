@@ -66,6 +66,8 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
+        GLES30.glClearColor(0f, 0f, 0f, 1f);
+
         //方案1 CPU计算
         String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/brush_vertex_shader.glsl");
         String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/brush_fragment_shader.glsl");

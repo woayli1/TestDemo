@@ -59,6 +59,7 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
+        GLES30.glClearColor(0f, 0f, 0f, 1f);
 
         //着色器脚本
         String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicVertexShader.glsl");

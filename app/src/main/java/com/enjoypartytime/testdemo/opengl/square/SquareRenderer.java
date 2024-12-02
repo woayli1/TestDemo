@@ -58,6 +58,8 @@ public class SquareRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
+        GLES30.glClearColor(0f, 0f, 0f, 1f);
+
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(triangleCoords.length * 4);
         byteBuffer.order(ByteOrder.nativeOrder());
 
