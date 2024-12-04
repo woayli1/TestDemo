@@ -56,9 +56,7 @@ public class CameraXFilterActivity extends AppCompatActivity {
 
         tvClose.setOnClickListener(view -> finish());
 
-        tvFilter.setOnClickListener(view -> {
-            attachPopupView.show();
-        });
+        tvFilter.setOnClickListener(view -> attachPopupView.show());
     }
 
 }

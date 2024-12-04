@@ -15,10 +15,6 @@ public class ShaderManager {
     public static final int CAMERA_SHADER_NEGATIVE = 4;  //底片效果
     public static final int CAMERA_SHADER_BLACK_WHITE = 5;  //黑白效果
     public static final int CAMERA_SHADER_GRAY = 6;  //灰色效果
-    public static final int CAMERA_LIGHT_SHADER = 7;  //
-    public static final int CAMERA_BUZZ_SHADER = 8;  //
-    public static final int CAMERA_BUZZ_DOUYIN_OUT = 9;  //
-    public static final int CAMERA_BUZZ_DOUYIN_THREE = 10;  //
 
     private static SparseArray<Param> mParamSparseArray;
 
