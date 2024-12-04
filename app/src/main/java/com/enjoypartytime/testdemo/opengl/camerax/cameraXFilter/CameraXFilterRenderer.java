@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.opengl.camerax;
+package com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -9,20 +9,19 @@ import android.view.Surface;
 import androidx.annotation.NonNull;
 import androidx.camera.core.Preview;
 import androidx.camera.core.SurfaceRequest;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.BaseCameraXFilter;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterBlackWhite;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterGray;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterNegative;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterNone;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterX2;
-import com.enjoypartytime.testdemo.opengl.camerax.filter.CameraXFilterY2;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.BaseCameraXFilter;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterBlackWhite;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterGray;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterNegative;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterNone;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterX2;
+import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter.CameraXFilterY2;
 import com.enjoypartytime.testdemo.utils.GLUtil;
 import com.enjoypartytime.testdemo.utils.ShaderManager;
-
-import java.util.concurrent.Executors;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -32,12 +31,12 @@ import javax.microedition.khronos.opengles.GL10;
  * company enjoyPartyTime
  * date 2024/11/26
  */
-public class CameraXRenderer implements GLSurfaceView.Renderer, Preview.SurfaceProvider, SurfaceTexture.OnFrameAvailableListener {
+public class CameraXFilterRenderer implements GLSurfaceView.Renderer, Preview.SurfaceProvider, SurfaceTexture.OnFrameAvailableListener {
 
-    private final Context mContext;
+    private Context mContext;
     private SurfaceTexture mCameraTexture;
     private BaseCameraXFilter mCameraXFilter;
-    private final Callback mCallback;
+    private Callback mCallback;
 
     private final int[] textures = new int[1];
     private final float[] mtx = new float[16];
@@ -46,7 +45,7 @@ public class CameraXRenderer implements GLSurfaceView.Renderer, Preview.SurfaceP
     private boolean isFilterChange = false;
     private int mFilterType = 1;
 
-    public CameraXRenderer(Context context, Callback mCallback) {
+    public CameraXFilterRenderer(Context context, Callback mCallback) {
         this.mContext = context;
         this.mCallback = mCallback;
     }
@@ -55,7 +54,6 @@ public class CameraXRenderer implements GLSurfaceView.Renderer, Preview.SurfaceP
         GLES30.glClearColor(0f, 0f, 0f, 1f);
         textures[0] = GLUtil.getOESTextureId();
 
-        ShaderManager.init(mContext);
         mCameraTexture = new SurfaceTexture(textures[0]);
 
         //初始化
@@ -64,6 +62,7 @@ public class CameraXRenderer implements GLSurfaceView.Renderer, Preview.SurfaceP
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        ShaderManager.init(mContext);
         init();
     }
 
@@ -114,10 +113,12 @@ public class CameraXRenderer implements GLSurfaceView.Renderer, Preview.SurfaceP
                 if (isPause) {
                     surface.release();
                     mCameraTexture.release();
+                    mContext = null;
+                    mCallback = null;
                 }
             };
 
-            request.provideSurface(surface, Executors.newSingleThreadExecutor(), resultConsumer);
+            request.provideSurface(surface, ContextCompat.getMainExecutor(mContext), resultConsumer);
         }
     }
 

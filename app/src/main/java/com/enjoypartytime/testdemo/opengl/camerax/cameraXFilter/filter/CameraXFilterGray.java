@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.opengl.camerax.filter;
+package com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter;
 
 import com.enjoypartytime.testdemo.utils.ShaderManager;
 

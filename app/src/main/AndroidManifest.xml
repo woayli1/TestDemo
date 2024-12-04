@@ -74,8 +74,10 @@
         <activity android:name=".opengl.mosaic.MosaicActivity" />
         <activity android:name=".opengl.live2d.Live2DActivity" />
         <activity android:name=".opengl.brush.BrushActivity" />
+        <activity android:name=".opengl.camerax.CameraXMainActivity" />
+        <activity android:name=".opengl.camerax.CameraXActivity" />
         <activity
-            android:name=".opengl.camerax.CameraXActivity"
+            android:name=".opengl.camerax.cameraXFilter.CameraXFilterActivity"
             android:theme="@style/Base.Theme.TestDemo" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />

@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.opengl.camerax.filter;
+package com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.filter;
 
 import android.opengl.GLES11Ext;
 import android.opengl.GLES30;

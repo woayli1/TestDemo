@@ -20,7 +20,7 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.brush.BrushActivity;
-import com.enjoypartytime.testdemo.opengl.camerax.CameraXActivity;
+import com.enjoypartytime.testdemo.opengl.camerax.CameraXMainActivity;
 import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
 import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
@@ -186,7 +186,7 @@ public class OpenglActivity extends Activity {
         if (ObjectUtils.isNotEmpty(permissions)) {
             requestPermissions(permissions, PERMISSION_REQUEST_CODE);
         } else {
-            Intent intent = new Intent(OpenglActivity.this, CameraXActivity.class);
+            Intent intent = new Intent(OpenglActivity.this, CameraXMainActivity.class);
             startActivity(intent);
         }
     }

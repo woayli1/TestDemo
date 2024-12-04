@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.opengl.camerax;
+package com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -19,32 +19,32 @@ import java.util.concurrent.ExecutionException;
  * company enjoyPartyTime
  * date 2024/11/27
  */
-public class CameraXView extends GLSurfaceView {
+public class CameraXFilterView extends GLSurfaceView {
 
-    private CameraXRenderer cameraXRender;
+    private CameraXFilterRenderer cameraXFilterRenderer;
 
-    public CameraXView(Context context) {
+    public CameraXFilterView(Context context) {
         super(context);
     }
 
-    public CameraXView(Context context, AttributeSet attrs) {
+    public CameraXFilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        cameraXRender.onPause();
+    public void onResume() {
+        super.onResume();
+        cameraXFilterRenderer.onResume();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        cameraXRender.onResume();
+    public void onPause() {
+        super.onPause();
+        cameraXFilterRenderer.onPause();
     }
 
-    private final CameraXRenderer.Callback mCallback = new CameraXRenderer.Callback() {
+    private final CameraXFilterRenderer.Callback mCallback = new CameraXFilterRenderer.Callback() {
         @Override
         public void onSurfaceChanged() {
             setupCamera();
@@ -59,13 +59,13 @@ public class CameraXView extends GLSurfaceView {
     private void init() {
         setEGLContextClientVersion(3);
 
-        cameraXRender = new CameraXRenderer(getContext(), mCallback);
-        setRenderer(cameraXRender);
+        cameraXFilterRenderer = new CameraXFilterRenderer(getContext(), mCallback);
+        setRenderer(cameraXFilterRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     public void setFilterType(int filterType) {
-        cameraXRender.setFilterType(filterType);
+        cameraXFilterRenderer.setFilterType(filterType);
     }
 
     //相机处理
@@ -75,7 +75,7 @@ public class CameraXView extends GLSurfaceView {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderListenableFuture.get();
                 Preview preview = new Preview.Builder().build();
-                preview.setSurfaceProvider(cameraXRender);
+                preview.setSurfaceProvider(cameraXFilterRenderer);
                 cameraProvider.unbindAll();
                 cameraProvider.bindToLifecycle((LifecycleOwner) getContext(), CameraSelector.DEFAULT_BACK_CAMERA, preview);
             } catch (ExecutionException | InterruptedException e) {
