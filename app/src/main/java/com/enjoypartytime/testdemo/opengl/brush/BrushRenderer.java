@@ -66,7 +66,7 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES30.glClearColor(0f, 0f, 0f, 1f);
+//        GLES30.glClearColor(0f, 0f, 0f, 1f);
 
         //方案1 CPU计算
         String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/brush_vertex_shader.glsl");
@@ -243,7 +243,7 @@ public class BrushRenderer implements GLSurfaceView.Renderer {
 
         glUniform1f(mAmpsHandle, 1.0f);
 
-        final int stride = 4 * 1;
+        final int stride = 4;
 
         GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, mBufferId);
         GLES30.glEnableVertexAttribArray(mDataHandle);

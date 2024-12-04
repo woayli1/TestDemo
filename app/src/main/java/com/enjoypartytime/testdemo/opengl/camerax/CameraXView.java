@@ -10,7 +10,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
@@ -26,13 +25,23 @@ public class CameraXView extends GLSurfaceView {
 
     public CameraXView(Context context) {
         super(context);
-        LogUtils.i("CameraXView:1");
     }
 
     public CameraXView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LogUtils.i("CameraXView:2");
         init();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cameraXRender.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cameraXRender.onResume();
     }
 
     private final CameraXRenderer.Callback mCallback = new CameraXRenderer.Callback() {
@@ -49,10 +58,14 @@ public class CameraXView extends GLSurfaceView {
 
     private void init() {
         setEGLContextClientVersion(3);
-        setZOrderOnTop(true);
+
         cameraXRender = new CameraXRenderer(getContext(), mCallback);
         setRenderer(cameraXRender);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    public void setFilterType(int filterType) {
+        cameraXRender.setFilterType(filterType);
     }
 
     //相机处理
@@ -64,7 +77,7 @@ public class CameraXView extends GLSurfaceView {
                 Preview preview = new Preview.Builder().build();
                 preview.setSurfaceProvider(cameraXRender);
                 cameraProvider.unbindAll();
-                cameraProvider.bindToLifecycle((LifecycleOwner) getContext(), CameraSelector.DEFAULT_FRONT_CAMERA, preview);
+                cameraProvider.bindToLifecycle((LifecycleOwner) getContext(), CameraSelector.DEFAULT_BACK_CAMERA, preview);
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

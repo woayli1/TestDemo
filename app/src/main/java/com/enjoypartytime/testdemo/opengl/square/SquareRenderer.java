@@ -33,14 +33,14 @@ public class SquareRenderer implements GLSurfaceView.Renderer {
     private static final int COORDS_PER_VERTEX = 3;
     private static final float[] triangleCoords = {-0.5f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.0f};
 
-    private static short[] index = {0, 1, 2, 0, 2, 3};
+    private static final short[] index = {0, 1, 2, 0, 2, 3};
 
     private int mPositionHandle;
     private int mColorHandle;
 
-    private float[] mViewMatrix = new float[16];
-    private float[] mPrpjectMatrix = new float[16];
-    private float[] mMVPMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
+    private final float[] mProjectMatrix = new float[16];
+    private final float[] mMVPMatrix = new float[16];
 
     //顶点个数
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
@@ -50,7 +50,7 @@ public class SquareRenderer implements GLSurfaceView.Renderer {
     private int mMatrixHandle;
 
     //设置颜色，依次为红绿蓝 和 透明通道
-    private float[] color = {1.0f, 0f, 0f, 1.0f};
+    private final float[] color = {1.0f, 0f, 0f, 1.0f};
 
     public SquareRenderer(Context context) {
         this.mContext = context;
@@ -92,11 +92,11 @@ public class SquareRenderer implements GLSurfaceView.Renderer {
         //计算宽高比
         float ratio = (float) i / i1;
         //设置透视投影
-        Matrix.frustumM(mPrpjectMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
         //设置相机位置
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7f, 0f, 0f, 0f, 0f, 1f, 1f);
         //计算变换矩阵
-        Matrix.multiplyMM(mMVPMatrix, 0, mPrpjectMatrix, 0, mViewMatrix, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectMatrix, 0, mViewMatrix, 0);
     }
 
     @Override

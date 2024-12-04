@@ -36,7 +36,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestDemo"
+        android:theme="@style/Theme.MainDemo"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -74,7 +74,9 @@
         <activity android:name=".opengl.mosaic.MosaicActivity" />
         <activity android:name=".opengl.live2d.Live2DActivity" />
         <activity android:name=".opengl.brush.BrushActivity" />
-        <activity android:name=".opengl.camerax.CameraXActivity" />
+        <activity
+            android:name=".opengl.camerax.CameraXActivity"
+            android:theme="@style/Base.Theme.TestDemo" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />
 

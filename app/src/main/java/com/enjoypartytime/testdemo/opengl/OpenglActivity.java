@@ -87,10 +87,7 @@ public class OpenglActivity extends Activity {
                 startActivity(intent);
             });
 
-            tvCameraX.setOnClickListener(view -> {
-                requestNeedPermissions();
-            });
-
+            tvCameraX.setOnClickListener(view -> requestNeedPermissions());
 
             if (glVersion > 196609) {
                 version = "OpenGL ES 3.2";
