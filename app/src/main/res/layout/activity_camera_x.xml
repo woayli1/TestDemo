@@ -1,37 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/rl_close"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:paddingHorizontal="10dp"
-        tools:ignore="UselessParent">
-
-        <TextView
-            android:id="@+id/tv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:text="关闭"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
+    android:fitsSystemWindows="true">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="20dp" />
+        android:layout_height="match_parent" />
 
-</LinearLayout>
+    <com.enjoypartytime.testdemo.opengl.camerax.view.TouchView
+        android:id="@+id/touch_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
+
+</FrameLayout>
