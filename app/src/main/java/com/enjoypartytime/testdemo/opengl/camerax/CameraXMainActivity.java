@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.opengl.camerax.bigEye.BigEyeActivity;
 import com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.CameraXFilterActivity;
 
 /**
@@ -24,6 +25,7 @@ public class CameraXMainActivity extends AppCompatActivity {
 
         TextView tvCameraX = findViewById(R.id.tv_camera_x);
         TextView tvCameraXFilter = findViewById(R.id.tv_camera_x_filter);
+        TextView tvBigEye = findViewById(R.id.tv_big_eye);
 
         tvCameraX.setOnClickListener(view -> {
             Intent intent = new Intent(CameraXMainActivity.this, CameraXActivity.class);
@@ -32,6 +34,11 @@ public class CameraXMainActivity extends AppCompatActivity {
 
         tvCameraXFilter.setOnClickListener(view -> {
             Intent intent = new Intent(CameraXMainActivity.this, CameraXFilterActivity.class);
+            startActivity(intent);
+        });
+
+        tvBigEye.setOnClickListener(view -> {
+            Intent intent = new Intent(CameraXMainActivity.this, BigEyeActivity.class);
             startActivity(intent);
         });
     }

@@ -117,17 +117,6 @@
                 android:text="跳转到 懒加载"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv_coordinatorLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="5dp"
-                android:text="跳转到 协调者布局\nCoordinatorLayout"
-                android:textSize="20sp" />
-
         </LinearLayout>
 
     </ScrollView>

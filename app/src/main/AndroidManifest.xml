@@ -79,6 +79,7 @@
         <activity
             android:name=".opengl.camerax.cameraXFilter.CameraXFilterActivity"
             android:theme="@style/Base.Theme.TestDemo" />
+        <activity android:name=".opengl.camerax.bigEye.BigEyeActivity" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />
 
@@ -88,11 +89,10 @@
 
         <activity android:name=".diyView.DiyViewActivity" />
         <activity android:name=".diyView.FlowLayoutActivity" />
+        <activity android:name=".diyView.CoordinatorLayoutActivity" />
         <activity android:name=".diyView.KoiActivity" />
 
         <activity android:name=".lazyLoad.LazyLoadActivity" />
-
-        <activity android:name=".myCoordinatorLayout.CoordinatorLayoutActivity" />
 
     </application>
 

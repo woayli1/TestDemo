@@ -27,10 +27,17 @@ public class DiyViewActivity extends Activity {
             startActivity(intent);
         });
 
+        TextView tvCoordinatorLayout = findViewById(R.id.tv_coordinatorLayout);
+        tvCoordinatorLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(DiyViewActivity.this, CoordinatorLayoutActivity.class);
+            startActivity(intent);
+        });
+
         TextView tvKoi = findViewById(R.id.tv_koi);
         tvKoi.setOnClickListener(view -> {
             Intent intent = new Intent(DiyViewActivity.this, KoiActivity.class);
             startActivity(intent);
         });
+
     }
 }
