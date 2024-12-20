@@ -1,15 +1,13 @@
 package com.enjoypartytime.testdemo.okhttp;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.base.BaseActivity;
 import com.enjoypartytime.testdemo.okhttp.retrofit.RetrofitActivity;
 
 import java.io.IOException;
@@ -26,21 +24,25 @@ import okhttp3.Response;
  * company enjoyPartyTime
  * date 2024/8/21
  */
-public class OkhttpActivity extends Activity {
+public class OkhttpActivity extends BaseActivity {
 
     protected OkHttpClient okHttpClient;
+    private TextView tvRes;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ok_http);
+    protected int getLayoutId() {
+        return R.layout.activity_ok_http;
+    }
 
+    @Override
+    protected void initViews() {
         TextView tvGetSync = findViewById(R.id.tv_get_sync);
         TextView tvGetAsync = findViewById(R.id.tv_get_async);
         TextView tvPostSync = findViewById(R.id.tv_post_sync);
         TextView tvPostAsync = findViewById(R.id.tv_post_async);
         TextView tvOkHttpMore = findViewById(R.id.tv_ok_http_more);
         TextView tvRetrofit = findViewById(R.id.tv_retrofit);
+        tvRes = findViewById(R.id.tv_res);
 
         tvGetSync.setOnClickListener(view -> getSync());
         tvGetAsync.setOnClickListener(view -> getAsync());
@@ -59,13 +61,20 @@ public class OkhttpActivity extends Activity {
     }
 
     public void getSync() {
+        showProgress();
         new Thread(() -> {
-            Request request = new Request.Builder().url("https://www.httpbin.org/get?a=1&b=2").build();
+            Request request = new Request.Builder().url("https://www.httpbin.org/get?a=1&b=2")
+                    .build();
             Call call = okHttpClient.newCall(request);
             try {
                 Response response = call.execute();
                 if (response.body() != null) {
-                    LogUtils.i("getSync：" + response.body().string());
+                    String msg = "GET同步：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -74,6 +83,7 @@ public class OkhttpActivity extends Activity {
     }
 
     public void getAsync() {
+        showProgress();
         Request request = new Request.Builder().url("https://www.httpbin.org/get?a=1&b=2").build();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -86,7 +96,12 @@ public class OkhttpActivity extends Activity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        LogUtils.i("getAsync：" + response.body().string());
+                        String msg = "GET异步：" + response.body().string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
                     }
                 }
             }
@@ -94,14 +109,21 @@ public class OkhttpActivity extends Activity {
     }
 
     public void postSync() {
+        showProgress();
         new Thread(() -> {
             FormBody body = new FormBody.Builder().add("a", "1").add("b", "2").build();
-            Request request = new Request.Builder().url("https://www.httpbin.org/post").post(body).build();
+            Request request = new Request.Builder().url("https://www.httpbin.org/post").post(body)
+                    .build();
             Call call = okHttpClient.newCall(request);
             try {
                 Response response = call.execute();
                 if (response.body() != null) {
-                    LogUtils.i("postSync：" + response.body().string());
+                    String msg = "POST同步：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -111,8 +133,10 @@ public class OkhttpActivity extends Activity {
     }
 
     public void postAsync() {
+        showProgress();
         FormBody body = new FormBody.Builder().add("a", "1").add("b", "2").build();
-        Request request = new Request.Builder().url("https://www.httpbin.org/post").post(body).build();
+        Request request = new Request.Builder().url("https://www.httpbin.org/post").post(body)
+                .build();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -124,7 +148,12 @@ public class OkhttpActivity extends Activity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        LogUtils.i("postAsync：" + response.body().string());
+                        String msg = "POST异步：" + response.body().string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
                     }
                 }
             }

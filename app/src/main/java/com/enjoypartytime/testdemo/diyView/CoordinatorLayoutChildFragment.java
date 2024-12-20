@@ -39,9 +39,7 @@ public class CoordinatorLayoutChildFragment extends Fragment {
         SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.coordinator_swipe_refresh_layout);
         RecyclerView recyclerView = rootView.findViewById(R.id.coordinator_recycler_view);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            swipeRefreshLayout.setRefreshing(false);
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         List<String> stringList = new ArrayList<>();

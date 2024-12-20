@@ -23,7 +23,6 @@ public class Live2DBasicActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_2d_basic);
 
-
         glSurfaceView = findViewById(R.id.gl_surface_view);
 
         glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);

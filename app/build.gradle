@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace 'com.enjoypartytime.testdemo'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.enjoypartytime.testdemo"
@@ -23,6 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
 }
 
@@ -32,6 +36,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.core.ktx
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -60,5 +65,5 @@ dependencies {
     implementation libs.camera.view
 
     implementation project(":Framework:framework")
-    implementation(fileTree(dir: '../libs', include: ['*.aar']))
+    implementation(fileTree(dir: 'libs', include: ['*.aar']))
 }

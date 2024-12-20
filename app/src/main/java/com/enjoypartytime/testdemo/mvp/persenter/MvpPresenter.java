@@ -23,19 +23,19 @@ public class MvpPresenter implements IPresenter, Callback {
 
     @Override
     public void login(String username, String password) {
-        shopView.showProgress();
+        shopView.showViewProgress();
         shopModel.login(username, password, this);
     }
 
     @Override
     public void onSuccess(UserBean userBean) {
-        shopView.hideProgress();
+        shopView.hideViewProgress();
         shopView.loginSuccess(userBean);
     }
 
     @Override
     public void onFailure(String msg) {
-        shopView.hideProgress();
+        shopView.hideViewProgress();
         shopView.loginFailure(msg);
     }
 }

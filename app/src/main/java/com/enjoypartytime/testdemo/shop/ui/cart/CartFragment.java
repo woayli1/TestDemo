@@ -1,7 +1,7 @@
 package com.enjoypartytime.testdemo.shop.ui.cart;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.shop.base.BaseFragment;
+import com.enjoypartytime.testdemo.base.BaseFragment;
 
 /**
  * author gc

@@ -4,7 +4,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.shop.adapter.ShopAdapter;
-import com.enjoypartytime.testdemo.shop.base.BaseActivity;
+import com.enjoypartytime.testdemo.base.BaseActivity;
 import com.enjoypartytime.testdemo.shop.ui.cart.CartFragment;
 import com.enjoypartytime.testdemo.shop.ui.home.HomeFragment;
 import com.enjoypartytime.testdemo.shop.ui.mime.MineFragment;

@@ -1,12 +1,10 @@
 package com.enjoypartytime.testdemo.okhttp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.TextView;
 
@@ -21,6 +19,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.UriUtils;
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.base.BaseActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,20 +38,25 @@ import okhttp3.Response;
  * company enjoyPartyTime
  * date 2024/8/21
  */
-public class Okhttp2Activity extends Activity {
+public class Okhttp2Activity extends BaseActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static final int GALLERY_REQUEST_CODE = 2;
 
     private OkHttpClient okHttpClient;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ok_http_2);
+    private TextView tvRes;
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_ok_http_2;
+    }
+
+    @Override
+    protected void initViews() {
         TextView tvUploadImg = findViewById(R.id.tv_upload_img);
         TextView tvUploadJson = findViewById(R.id.tv_upload_json);
+        tvRes = findViewById(R.id.tv_res);
 
         tvUploadImg.setOnClickListener(view -> requestStoragePermission());
         tvUploadJson.setOnClickListener(view -> uploadJson());
@@ -110,6 +114,7 @@ public class Okhttp2Activity extends Activity {
     }
 
     private void uploadImg(Uri imgUri) {
+        showProgress();
         File file1 = UriUtils.uri2File(imgUri);
 
         RequestBody requestBody1 = RequestBody.create(file1, MediaType.parse("image/" + ImageUtils.getImageType(file1)));
@@ -130,7 +135,12 @@ public class Okhttp2Activity extends Activity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        LogUtils.i("uploadImg：" + response.body().string());
+                        String msg = "图片上传：" + response.body().string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
                     }
                 }
             }
@@ -138,6 +148,7 @@ public class Okhttp2Activity extends Activity {
     }
 
     private void uploadJson() {
+        showProgress();
         RequestBody requestBody = RequestBody.create("{\"a\":1,\"b\":2}", MediaType.parse("application/json"));
 
         Request request = new Request.Builder().url("https://www.httpbin.org/post")
@@ -153,7 +164,12 @@ public class Okhttp2Activity extends Activity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        LogUtils.i("uploadJson：" + response.body().string());
+                        String msg = "字符串上传：" + response.body().string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
                     }
                 }
             }

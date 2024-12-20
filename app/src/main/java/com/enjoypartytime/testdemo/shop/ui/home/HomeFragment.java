@@ -15,7 +15,7 @@ import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.shop.adapter.HomeAdapter;
 import com.enjoypartytime.testdemo.shop.adapter.HomeAdapterDiffCallBack;
 import com.enjoypartytime.testdemo.shop.adapter.HomeSpanSizeLookup;
-import com.enjoypartytime.testdemo.shop.base.BaseFragment;
+import com.enjoypartytime.testdemo.base.BaseFragment;
 import com.enjoypartytime.testdemo.shop.bean.GoodsBean;
 import com.enjoypartytime.testdemo.shop.ui.detail.GoodsDetailActivity;
 
@@ -32,6 +32,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
     private List<GoodsBean> goodsBeanList;
     private HomePresenter homePresenter;
     private HomeAdapter homeAdapter;
+    private SwipeRefreshLayout homeSwipeRefreshLayout;
     private HomeSpanSizeLookup homeSpanSizeLookup;
 
     @Override
@@ -41,7 +42,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
 
     @Override
     protected void initViews() {
-        SwipeRefreshLayout homeSwipeRefreshLayout = find(R.id.home_swipe_refresh_layout);
+        homeSwipeRefreshLayout = find(R.id.home_swipe_refresh_layout);
         RecyclerView homeRecyclerView = find(R.id.home_recycler_view);
         ImageView ivHome = find(R.id.iv_home);
         EditText etHome = find(R.id.et_home);
@@ -63,6 +64,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
         homePresenter = new HomePresenter(this);
 
         homePresenter.getData();
+        showProgress();
         homeSwipeRefreshLayout.setOnRefreshListener(() -> {
             homeSwipeRefreshLayout.setRefreshing(false);
             homePresenter.getData();
@@ -80,6 +82,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
 
     @Override
     public void getGoodsSuccess(List<GoodsBean> goodsBeanNewList) {
+        hideProgress();
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new HomeAdapterDiffCallBack(goodsBeanList, goodsBeanNewList), true);
         diffResult.dispatchUpdatesTo(homeAdapter);
 

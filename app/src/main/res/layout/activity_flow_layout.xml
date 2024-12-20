@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.enjoypartytime.testdemo.diyView.view.FlowLayout
@@ -89,6 +90,8 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="3dp"
             android:text="背景色" />
+
+
 
     </com.enjoypartytime.testdemo.diyView.view.FlowLayout>
 

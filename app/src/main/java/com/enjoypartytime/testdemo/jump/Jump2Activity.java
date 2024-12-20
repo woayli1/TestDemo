@@ -24,7 +24,6 @@ public class Jump2Activity extends Activity {
         Log.d(TAG, "AAA-->:" + TAG + " -->onCreate");
     }
 
-
     @Override
     protected void onRestart() {
         super.onRestart();

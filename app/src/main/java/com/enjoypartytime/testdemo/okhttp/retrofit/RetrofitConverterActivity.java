@@ -1,17 +1,15 @@
 package com.enjoypartytime.testdemo.okhttp.retrofit;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.base.BaseActivity;
 
 import org.reactivestreams.Publisher;
 
@@ -37,21 +35,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * company enjoyPartyTime
  * date 2024/8/22
  */
-public class RetrofitConverterActivity extends Activity {
+public class RetrofitConverterActivity extends BaseActivity {
 
-    Retrofit retrofit, retrofitConverter;
-    HttpConverterService httpConverterService, httpConverterServiceConverter;
+    private HttpConverterService httpConverterService, httpConverterServiceConverter;
+    private TextView tvRes;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retrofit_converter);
+    protected int getLayoutId() {
+        return R.layout.activity_retrofit_converter;
+    }
 
+    @Override
+    protected void initViews() {
         TextView tvRetrofitConverterPost = findViewById(R.id.tv_retrofit_converter_post);
         TextView tvRetrofitConverterPostBean = findViewById(R.id.tv_retrofit_converter_post_bean);
         TextView tvRetrofitConverterPostFlowable = findViewById(R.id.tv_retrofit_converter_post_flowable);
         TextView tvRetrofitConverterDownload = findViewById(R.id.tv_retrofit_converter_download);
         TextView tvRetrofitConverterDownloadFlowable = findViewById(R.id.tv_retrofit_converter_download_flowable);
+        tvRes = findViewById(R.id.tv_res);
 
         tvRetrofitConverterPost.setOnClickListener(view -> converterPost());
         tvRetrofitConverterPostBean.setOnClickListener(view -> converterPostBean());
@@ -60,28 +61,40 @@ public class RetrofitConverterActivity extends Activity {
         tvRetrofitConverterDownloadFlowable.setOnClickListener(view -> converterDownloadFlowable());
 
 
-        retrofit = new Retrofit.Builder().baseUrl("https://www.httpbin.org/").build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://www.httpbin.org/").build();
         httpConverterService = retrofit.create(HttpConverterService.class);
 
 
-        retrofitConverter = new Retrofit.Builder().baseUrl("https://www.httpbin.org/")
+        //gson转换器
+        //适配器
+        Retrofit retrofitConverter = new Retrofit.Builder().baseUrl("https://www.httpbin.org/")
                 .addConverterFactory(GsonConverterFactory.create()) //gson转换器
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) //适配器
                 .build();
         httpConverterServiceConverter = retrofitConverter.create(HttpConverterService.class);
-
     }
 
     private void converterPost() {
+        showProgress();
         Call<ResponseBody> call = httpConverterService.post("aaa", "123");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
                 try {
-                    String res = response.body().string();
-                    LogUtils.i("converterPost：" + res);
-                    ConverterBean converterBean = GsonUtils.fromJson(res, ConverterBean.class);
+                    String msg = "Converter Post：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
+
+                    ConverterBean converterBean = GsonUtils.fromJson(response.body()
+                            .string(), ConverterBean.class);
                     LogUtils.i(GsonUtils.toJson(converterBean));
+
+                    if (ObjectUtils.isNotEmpty(disposable)) {
+                        disposable.dispose();
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -95,13 +108,21 @@ public class RetrofitConverterActivity extends Activity {
     }
 
     private void converterPostBean() {
-
+        showProgress();
         Call<ConverterBean> call = httpConverterServiceConverter.postBean("aaa", "123");
         call.enqueue(new Callback<ConverterBean>() {
             @Override
             public void onResponse(@NonNull Call<ConverterBean> call, @NonNull Response<ConverterBean> response) {
-                ConverterBean converterBean = response.body();
-                LogUtils.i(GsonUtils.toJson(converterBean));
+                String msg = "Converter Post Bean：" + GsonUtils.toJson(response.body());
+                runOnUiThread(() -> {
+                    hideProgress();
+                    tvRes.setText(msg);
+                });
+                LogUtils.i(msg);
+
+                if (ObjectUtils.isNotEmpty(disposable)) {
+                    disposable.dispose();
+                }
             }
 
             @Override
@@ -114,16 +135,23 @@ public class RetrofitConverterActivity extends Activity {
     Disposable disposable = null;
 
     private void converterPostFlowable() {
+        showProgress();
         disposable = httpConverterServiceConverter.postFlowable("aaa", "123")
                 .flatMap((Function<ConverterBean, Publisher<ResponseBody>>) converterBean -> httpConverterServiceConverter.postFlowable2("bbb", "111"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseBody -> {
                     try {
-                        String res = responseBody.string();
-                        LogUtils.i("converterPost：" + res);
-                        ConverterBean converterBean = GsonUtils.fromJson(res, ConverterBean.class);
+                        String msg = "Converter Post Flowable：" + responseBody.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
+
+                        ConverterBean converterBean = GsonUtils.fromJson(responseBody.string(), ConverterBean.class);
                         LogUtils.i(GsonUtils.toJson(converterBean));
+
                         if (ObjectUtils.isNotEmpty(disposable)) {
                             disposable.dispose();
                         }
@@ -135,13 +163,15 @@ public class RetrofitConverterActivity extends Activity {
     }
 
     private void converterDownload() {
+        showProgress();
         Call<ResponseBody> call = httpConverterService.getDownload("https://media.w3.org/2010/05/sintel/trailer.mp4");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 InputStream inputStream = response.body().byteStream();
                 try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(PathUtils.getExternalDownloadsPath() + "/trailer2.mp4");
+                    String path = PathUtils.getExternalDownloadsPath() + "/trailer2.mp4";
+                    FileOutputStream fileOutputStream = new FileOutputStream(path);
                     int len;
                     byte[] buffer = new byte[4096];
                     while ((len = inputStream.read(buffer)) != -1) {
@@ -149,7 +179,14 @@ public class RetrofitConverterActivity extends Activity {
                     }
                     fileOutputStream.close();
                     inputStream.close();
-                    LogUtils.d("下载完成");
+
+                    String msg = "下载完成 路径:" + path;
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -165,6 +202,7 @@ public class RetrofitConverterActivity extends Activity {
     Disposable disposableDownload = null;
 
     private void converterDownloadFlowable() {
+        showProgress();
         disposableDownload = httpConverterServiceConverter
                 .getDownloadWithRxJava("https://media.w3.org/2010/05/sintel/trailer.mp4")
                 .map(responseBody -> {
@@ -185,7 +223,13 @@ public class RetrofitConverterActivity extends Activity {
                     }
                     return file;
                 }).subscribe(file -> {
-                    LogUtils.d("下载完成");
+                    String msg = "下载完成 Flowable 路径:" + file.getAbsolutePath();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
+
                     if (ObjectUtils.isNotEmpty(disposableDownload)) {
                         disposableDownload.dispose();
                     }

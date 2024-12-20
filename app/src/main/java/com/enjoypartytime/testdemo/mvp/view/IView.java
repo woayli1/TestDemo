@@ -9,9 +9,9 @@ import com.enjoypartytime.testdemo.mvp.bean.UserBean;
  */
 public interface IView {
 
-    void showProgress();
+    void showViewProgress();
 
-    void hideProgress();
+    void hideViewProgress();
 
     void loginSuccess(UserBean userBean);
 

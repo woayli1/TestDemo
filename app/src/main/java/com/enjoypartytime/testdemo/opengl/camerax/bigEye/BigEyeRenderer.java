@@ -1,22 +1,18 @@
 package com.enjoypartytime.testdemo.opengl.camerax.bigEye;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.opengl.GLES30;
-import android.opengl.GLSurfaceView;
-import android.opengl.GLUtils;
-import android.opengl.Matrix;
-import android.util.Log;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ObjectUtils;
-import com.blankj.utilcode.util.ToastUtils;
+import com.enjoypartytime.testdemo.utils.bigeye.FaceData;
 import com.enjoypartytime.testdemo.utils.GLUtil;
+import com.enjoypartytime.testdemo.utils.bigeye.ImageData;
+import com.enjoypartytime.testdemo.utils.bigeye.InitData;
+import com.enjoypartytime.testdemo.utils.bigeye.ScaleType;
 
-import java.io.FileNotFoundException;
-import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,205 +22,64 @@ import javax.microedition.khronos.opengles.GL10;
  * company enjoyPartyTime
  * date 2024/12/6
  */
-public class BigEyeRenderer implements GLSurfaceView.Renderer {
+public class BigEyeRenderer extends BigEyeShapeRender {
 
-    private Uri imgUri;
-    private float strength = 2;
-    private int imgWidth, imgHeight;
-    private int parentWidth, parentHeight;
-    private Bitmap mBitmap;
-    private final Context mContext;
+    private InitData initData;
+    private Context mContext;
 
-    //这个可以理解为一个OpenGL程序句柄
-    private int mProgram;
-    //当前绘制的顶点位置句柄
-    private int vPositionHandle;
-    //变换矩阵句柄
-    private int mMVPMatrixHandle;
-    //纹理坐标句柄
-    private int maTexCoordHandle;
+    private LinkedBlockingDeque<ImageData> pendingRenderFrames;
+    private LinkedBlockingDeque<FaceData> pendingRenderFaceData;
+    private List<KalmanPointFilter> pointFilters;
 
-    private int mStrength, mWidth, mHeight;
+    private BigEyeOpenGLView owner;
+    private ScaleType scaleType = ScaleType.CenterCrop;
+    private boolean mirror = true;
+    private boolean renderFaceFrame = false;
 
-    /**
-     * 投影和相机视图相关矩阵
-     **/
-    private final float[] mMVPMatrix = new float[16];
-    private final float[] mProjectMatrix = new float[16];
-    private final float[] mViewMatrix = new float[16];
+    private AtomicReference<Float> enlargeEyesStrength;
+    private AtomicReference<Float> thinFaceStrength;
+    private AtomicReference<Float> whiteningStrength;
+    private AtomicReference<Float> skinSmoothStrength;
 
-    public BigEyeRenderer(Context context) {
-        this.mContext = context;
+    private static final float MIN_ENLARGE_EYES_STRENGTH = 0.0f;
+    private static final float MAX_ENLARGE_EYES_STRENGTH = 30.0f;
+
+    private static final float MIN_THIN_FACE_STRENGTH = 1.0f;
+    private static final float MAX_THIN_FACE_STRENGTH = 60.0f;
+
+    private static final float MIN_WHITENING_STRENGTH = 1.0f;
+    private static final float MAX_WHITENING_STRENGTH = 6.0f;
+
+    private static final float MIN_SKIN_SMOOTH_STRENGTH = 0.0f;
+    private static final float MAX_SKIN_SMOOTH_STRENGTH = 15.0f;
+
+    @Override
+    public void onSurfaceCreated(BigEyeOpenGLView owner, GL10 gl, EGLConfig config) {
+        isActive = new AtomicBoolean(false);
+        width = 0;
+        height = 0;
+
+        pendingRenderFrames = new LinkedBlockingDeque<>();
+        pendingRenderFaceData = new LinkedBlockingDeque<>();
+        pointFilters = new ArrayList<>(256);
+
+        enlargeEyesStrength = new AtomicReference<>((MIN_ENLARGE_EYES_STRENGTH + MAX_ENLARGE_EYES_STRENGTH) / 2.0f);
+        thinFaceStrength = new AtomicReference<>((MIN_THIN_FACE_STRENGTH + MAX_THIN_FACE_STRENGTH) / 2.0f);
+        whiteningStrength = new AtomicReference<>((MIN_WHITENING_STRENGTH + MAX_WHITENING_STRENGTH) / 2.0f);
+        skinSmoothStrength = new AtomicReference<>((MIN_SKIN_SMOOTH_STRENGTH + MAX_SKIN_SMOOTH_STRENGTH) / 2.0f);
+
+        super.onSurfaceCreated(owner, gl, config);
+
+        this.owner = owner;
+        mContext = this.owner.getContext();
+
+        int cameraProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeVertexShader.glsl", "Shaders/BigEyeFragmentShader.glsl");
+        int faceProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeFaceVertexShader.glsl", "Shaders/BigEyeFaceFragmentShader.glsl");
     }
 
     @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES30.glClearColor(0f, 0f, 0f, 1f);
+    public void onDrawFrame(BigEyeOpenGLView owner, GL10 gl) {
 
-        //着色器脚本
-        String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/BigEyeVertexShader.glsl");
-        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/BigEyeFragmentShader.glsl");
-
-        //获取程序，封装了加载、链接等操作
-        mProgram = GLUtil.createProgram(vertexShaderCode, fragmentShaderCode);
-
-        // 获取顶点着色器的位置的句柄（这里可以理解为当前绘制的顶点位置）
-        vPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
-        // 获取变换矩阵的句柄
-        mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");
-        //纹理位置句柄
-        maTexCoordHandle = GLES30.glGetAttribLocation(mProgram, "aTexCoord");
-
-        mStrength = GLES30.glGetUniformLocation(mProgram, "strength");
-        mWidth = GLES30.glGetUniformLocation(mProgram, "width");
-        mHeight = GLES30.glGetUniformLocation(mProgram, "height");
-
-        int[] textures = new int[1]; //生成纹理id
-
-        GLES30.glGenTextures(  //创建纹理对象
-                1, //产生纹理id的数量
-                textures, //纹理id的数组
-                0  //偏移量
-        );
-        int mTextureId = textures[0];
-
-        //绑定纹理id，将对象绑定到环境的纹理单元
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
-        //设置MIN 采样方式
-        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl10, int width, int height) {
-        this.parentWidth = width;
-        this.parentHeight = height;
-
-        GLES30.glViewport(0, 0, width, height);
-        //通过投影设置，适配横屏
-        float sWH = width / (float) height;
-        float sWidthHeight = width / (float) height;
-        if (width > height) {
-            if (sWH > sWidthHeight) {
-                Matrix.orthoM(mProjectMatrix, 0, -sWidthHeight * sWH, sWidthHeight * sWH, -1, 1, 3, 7);
-            } else {
-                Matrix.orthoM(mProjectMatrix, 0, -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 7);
-            }
-        } else {
-            if (sWH > sWidthHeight) {
-                Matrix.orthoM(mProjectMatrix, 0, -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 7);
-            } else {
-                Matrix.orthoM(mProjectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 7);
-            }
-        }
-        //设置相机位置
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-        //计算变换矩阵
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectMatrix, 0, mViewMatrix, 0);
-
-    }
-
-    @Override
-    public void onDrawFrame(GL10 gl10) {
-
-
-        if (ObjectUtils.isEmpty(imgUri)) {
-            return;
-        }
-        try {
-            mBitmap = BitmapFactory.decodeStream(mContext.getContentResolver()
-                    .openInputStream(imgUri));
-        } catch (FileNotFoundException e) {
-            LogUtils.e(e);
-        }
-
-        if (ObjectUtils.isEmpty(mBitmap)) {
-            ToastUtils.showShort("图片初始化错误！");
-        } else {
-            imgWidth = mBitmap.getWidth();
-            imgHeight = mBitmap.getHeight();
-        }
-
-        if (mBitmap == null) {
-            Log.e("lxb", "initTexture: mBitmap == null");
-            return;
-        }
-
-        //顶点位置
-        float[] vertices = new float[]{
-                -(float) imgWidth / parentWidth / 2, (float) imgHeight / parentHeight / 2, 0,
-                -(float) imgWidth / parentWidth / 2, -(float) imgHeight / parentHeight / 2, 0,
-                (float) imgWidth / parentWidth / 2, (float) imgHeight / parentHeight / 2, 0,
-                (float) imgWidth / parentWidth / 2, -(float) imgHeight / parentHeight / 2, 0,
-        };
-
-        //纹理顶点数组
-        float[] colors = new float[]{
-                0, 0,
-                0, 1,
-                1, 0,
-                1, 1,
-        };
-
-        //顶点坐标数据要转化成FloatBuffer格式
-        FloatBuffer mVertexBuffer = GLUtil.floatArray2FloatBuffer(vertices);
-        //顶点纹理坐标缓存
-        FloatBuffer mTexCoordBuffer = GLUtil.floatArray2FloatBuffer(colors);
-
-        //加载图片
-        GLUtils.texImage2D( //实际加载纹理进显存
-                GLES30.GL_TEXTURE_2D, //纹理类型
-                0, //纹理的层次，0表示基本图像层，可以理解为直接贴图
-                mBitmap, //纹理图像
-                0 //纹理边框尺寸
-        );
-
-        GLES30.glClearColor(GLES30.GL_COLOR_ATTACHMENT0, 1f, 1f, 1f);
-
-        // 将程序添加到OpenGL ES环境
-        GLES30.glUseProgram(mProgram);
-
-        //设置数据
-        // 启用顶点属性，最后对应禁用
-        GLES30.glEnableVertexAttribArray(vPositionHandle);
-        GLES30.glEnableVertexAttribArray(maTexCoordHandle);
-
-        //设置三角形坐标数据（一个顶点三个坐标）
-        GLES30.glVertexAttribPointer(vPositionHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, mVertexBuffer);
-        //设置纹理坐标数据
-        GLES30.glVertexAttribPointer(maTexCoordHandle, 2, GLES30.GL_FLOAT, false, 2 * 4, mTexCoordBuffer);
-
-        // 将投影和视图转换传递给着色器，可以理解为给uMVPMatrix这个变量赋值为mvpMatrix
-        GLES30.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES30.glUniform1i(mWidth, imgWidth);
-        GLES30.glUniform1i(mHeight, imgHeight);
-        GLES30.glUniform1f(mStrength, strength);
-
-        //设置使用的纹理编号
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        GLES30.glEnable(GLES30.GL_BLEND);
-
-        // 绘制三角形，三个顶点
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
-
-        // 禁用顶点数组（好像不禁用也没啥问题）
-        GLES30.glDisableVertexAttribArray(vPositionHandle);
-        GLES30.glDisableVertexAttribArray(maTexCoordHandle);
-
-    }
-
-    public void setImageURI(String imgUriPath) {
-        this.imgUri = Uri.parse(imgUriPath);
-    }
-
-    public Uri getImgUri() {
-        return imgUri;
-    }
-
-    public void setStrength(int i) {
-        if (i == 0) {
-            i = 1;
-        }
-        this.strength = i;
     }
 
 }

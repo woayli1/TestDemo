@@ -1,15 +1,13 @@
 package com.enjoypartytime.testdemo.okhttp.retrofit;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.base.BaseActivity;
 
 import java.io.IOException;
 
@@ -25,16 +23,18 @@ import retrofit2.Retrofit;
  * company enjoyPartyTime
  * date 2024/8/21
  */
-public class RetrofitActivity extends Activity {
+public class RetrofitActivity extends BaseActivity {
 
-    Retrofit retrofit;
-    HttpBinService httpBinService;
+    private HttpBinService httpBinService;
+    private TextView tvRes;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retrofit);
+    protected int getLayoutId() {
+        return R.layout.activity_retrofit;
+    }
 
+    @Override
+    protected void initViews() {
         TextView tvRetrofitGet = findViewById(R.id.tv_retrofit_get);
         TextView tvRetrofitPost = findViewById(R.id.tv_retrofit_post);
         TextView tvRetrofitBody = findViewById(R.id.tv_retrofit_body);
@@ -42,6 +42,7 @@ public class RetrofitActivity extends Activity {
         TextView tvRetrofitHeaders = findViewById(R.id.tv_retrofit_headers);
         TextView tvRetrofitUrl = findViewById(R.id.tv_retrofit_url);
         TextView tvRetrofitConverter = findViewById(R.id.tv_retrofit_converter);
+        tvRes = findViewById(R.id.tv_res);
 
         tvRetrofitGet.setOnClickListener(view -> retrofitGet());
         tvRetrofitPost.setOnClickListener(view -> retrofitPost());
@@ -54,17 +55,23 @@ public class RetrofitActivity extends Activity {
             startActivity(intent);
         });
 
-        retrofit = new Retrofit.Builder().baseUrl("https://www.httpbin.org/").build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://www.httpbin.org/").build();
         httpBinService = retrofit.create(HttpBinService.class);
     }
 
     private void retrofitGet() {
+        showProgress();
         Call<ResponseBody> responseBodyCall = httpBinService.get("aaa", "123");
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
-                    LogUtils.i("retrofitGet：" + response.body().string());
+                    String msg = "Retrofit Get：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -79,12 +86,18 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitPost() {
+        showProgress();
         Call<ResponseBody> responseBodyCall = httpBinService.post("aaa", "123");
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
-                    LogUtils.i("retrofitPost：" + response.body().string());
+                    String msg = "Retrofit Post：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -98,12 +111,18 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitBody() {
+        showProgress();
         FormBody formBody = new FormBody.Builder().add("a", "1").add("b", "2").build();
         httpBinService.postBody(formBody).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
-                    LogUtils.i("retrofitBody：" + response.body().string());
+                    String msg = "Retrofit Body：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -117,12 +136,18 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitPath() {
+        showProgress();
         httpBinService.postInPath("post", "android", "aaa", "123")
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                         try {
-                            LogUtils.i("retrofitPath：" + response.body().string());
+                            String msg = "Retrofit Path：" + response.body().string();
+                            runOnUiThread(() -> {
+                                hideProgress();
+                                tvRes.setText(msg);
+                            });
+                            LogUtils.i(msg);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -136,11 +161,17 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitHeaders() {
+        showProgress();
         httpBinService.postWithHeaders().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
-                    LogUtils.i("retrofitHeaders：" + response.body().string());
+                    String msg = "Retrofit Headers：" + response.body().string();
+                    runOnUiThread(() -> {
+                        hideProgress();
+                        tvRes.setText(msg);
+                    });
+                    LogUtils.i(msg);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -154,12 +185,18 @@ public class RetrofitActivity extends Activity {
     }
 
     private void retrofitUrl() {
+        showProgress();
         httpBinService.postWithUrl("https://www.httpbin.org/post")
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                         try {
-                            LogUtils.i("retrofitHeaders：" + response.body().string());
+                            String msg = "Retrofit Url：" + response.body().string();
+                            runOnUiThread(() -> {
+                                hideProgress();
+                                tvRes.setText(msg);
+                            });
+                            LogUtils.i(msg);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

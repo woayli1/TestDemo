@@ -36,10 +36,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MainDemo"
+        android:theme="@style/Base.Theme.TestDemo"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.WhiteBG"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,11 +75,10 @@
         <activity android:name=".opengl.mosaic.MosaicActivity" />
         <activity android:name=".opengl.live2d.Live2DActivity" />
         <activity android:name=".opengl.brush.BrushActivity" />
+
         <activity android:name=".opengl.camerax.CameraXMainActivity" />
         <activity android:name=".opengl.camerax.CameraXActivity" />
-        <activity
-            android:name=".opengl.camerax.cameraXFilter.CameraXFilterActivity"
-            android:theme="@style/Base.Theme.TestDemo" />
+        <activity android:name=".opengl.camerax.cameraXFilter.CameraXFilterActivity" />
         <activity android:name=".opengl.camerax.bigEye.BigEyeActivity" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />

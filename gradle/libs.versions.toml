@@ -17,6 +17,8 @@ rxandroid = "3.0.2"
 swiperefreshlayout = "1.1.0"
 utilcodex = "1.31.1"
 xpopup = "2.10.0"
+kotlin = "2.1.0"
+coreKtx = "1.15.0"
 
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "converterGson" }
@@ -43,7 +45,9 @@ rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroi
 swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 xpopup = { module = "com.github.li-xiaojun:XPopup", version.ref = "xpopup" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
