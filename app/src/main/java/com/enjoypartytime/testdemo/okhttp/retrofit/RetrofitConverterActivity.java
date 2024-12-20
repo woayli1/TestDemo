@@ -80,20 +80,21 @@ public class RetrofitConverterActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
-                try {
-                    String msg = "Converter Post：" + response.body().string();
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        String msg = "Converter Post：" + body.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
 
-                    ConverterBean converterBean = GsonUtils.fromJson(response.body()
-                            .string(), ConverterBean.class);
-                    LogUtils.i(GsonUtils.toJson(converterBean));
+                        ConverterBean converterBean = GsonUtils.fromJson(body.string(), ConverterBean.class);
+                        LogUtils.i(GsonUtils.toJson(converterBean));
 
-                    if (ObjectUtils.isNotEmpty(disposable)) {
-                        disposable.dispose();
+                        if (ObjectUtils.isNotEmpty(disposable)) {
+                            disposable.dispose();
+                        }
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -138,8 +139,7 @@ public class RetrofitConverterActivity extends BaseActivity {
         showProgress();
         disposable = httpConverterServiceConverter.postFlowable("aaa", "123")
                 .flatMap((Function<ConverterBean, Publisher<ResponseBody>>) converterBean -> httpConverterServiceConverter.postFlowable2("bbb", "111"))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseBody -> {
                     try {
                         String msg = "Converter Post Flowable：" + responseBody.string();
@@ -168,25 +168,26 @@ public class RetrofitConverterActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                InputStream inputStream = response.body().byteStream();
-                try {
-                    String path = PathUtils.getExternalDownloadsPath() + "/trailer2.mp4";
-                    FileOutputStream fileOutputStream = new FileOutputStream(path);
-                    int len;
-                    byte[] buffer = new byte[4096];
-                    while ((len = inputStream.read(buffer)) != -1) {
-                        fileOutputStream.write(buffer, 0, len);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        InputStream inputStream = body.byteStream();
+                        String path = PathUtils.getExternalDownloadsPath() + "/trailer2.mp4";
+                        FileOutputStream fileOutputStream = new FileOutputStream(path);
+                        int len;
+                        byte[] buffer = new byte[4096];
+                        while ((len = inputStream.read(buffer)) != -1) {
+                            fileOutputStream.write(buffer, 0, len);
+                        }
+                        fileOutputStream.close();
+                        inputStream.close();
+
+                        String msg = "下载完成 路径:" + path;
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
                     }
-                    fileOutputStream.close();
-                    inputStream.close();
-
-                    String msg = "下载完成 路径:" + path;
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
-
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

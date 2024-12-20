@@ -74,30 +74,25 @@ public class LoadingBottomPopupView extends BottomPopupView {
     }
 
     protected void setup() {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                if (!firstShow) {
-                    TransitionSet set = new TransitionSet()
-                            .setDuration(getAnimationDuration())
-                            .addTransition(new MaterialFade())
-                            .addTransition(new ChangeBounds());
-                    TransitionManager.beginDelayedTransition(bottomPopupContainer, set);
-                }
-                if (title == null || title.length() == 0) {
-                    XPopupUtils.setVisible(tv_title, false);
-                } else {
-                    XPopupUtils.setVisible(tv_title, true);
-                    if (tv_title != null) tv_title.setText(title);
-                }
+        post(() -> {
+            if (!firstShow) {
+                TransitionSet set = new TransitionSet().setDuration(getAnimationDuration())
+                        .addTransition(new MaterialFade()).addTransition(new ChangeBounds());
+                TransitionManager.beginDelayedTransition(bottomPopupContainer, set);
+            }
+            if (title == null || title.length() == 0) {
+                XPopupUtils.setVisible(tv_title, false);
+            } else {
+                XPopupUtils.setVisible(tv_title, true);
+                if (tv_title != null) tv_title.setText(title);
+            }
 
-                if (loadingStyle == LoadingBottomPopupView.Style.Spinner) {
-                    XPopupUtils.setVisible(progressBar, false);
-                    XPopupUtils.setVisible(spinnerView, true);
-                } else {
-                    XPopupUtils.setVisible(progressBar, true);
-                    XPopupUtils.setVisible(spinnerView, false);
-                }
+            if (loadingStyle == Style.Spinner) {
+                XPopupUtils.setVisible(progressBar, false);
+                XPopupUtils.setVisible(spinnerView, true);
+            } else {
+                XPopupUtils.setVisible(progressBar, true);
+                XPopupUtils.setVisible(spinnerView, false);
             }
         });
     }

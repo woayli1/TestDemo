@@ -13,8 +13,8 @@ import com.enjoypartytime.testdemo.mvp.view.IView;
  */
 public class MvpPresenter implements IPresenter, Callback {
 
-    private IView shopView;
-    private IModel shopModel;
+    private final IView shopView;
+    private final IModel shopModel;
 
     public MvpPresenter(IView shopView) {
         shopModel = new MvpModel();

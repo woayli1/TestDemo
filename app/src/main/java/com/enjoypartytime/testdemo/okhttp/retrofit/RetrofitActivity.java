@@ -65,13 +65,15 @@ public class RetrofitActivity extends BaseActivity {
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    String msg = "Retrofit Get：" + response.body().string();
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        String msg = "Retrofit Get：" + body.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -91,13 +93,15 @@ public class RetrofitActivity extends BaseActivity {
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    String msg = "Retrofit Post：" + response.body().string();
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        String msg = "Retrofit Post：" + body.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -116,13 +120,15 @@ public class RetrofitActivity extends BaseActivity {
         httpBinService.postBody(formBody).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    String msg = "Retrofit Body：" + response.body().string();
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        String msg = "Retrofit Body：" + body.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -141,13 +147,15 @@ public class RetrofitActivity extends BaseActivity {
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                        try {
-                            String msg = "Retrofit Path：" + response.body().string();
-                            runOnUiThread(() -> {
-                                hideProgress();
-                                tvRes.setText(msg);
-                            });
-                            LogUtils.i(msg);
+                        try (ResponseBody body = response.body()) {
+                            if (body != null) {
+                                String msg = "Retrofit Path：" + body.string();
+                                runOnUiThread(() -> {
+                                    hideProgress();
+                                    tvRes.setText(msg);
+                                });
+                                LogUtils.i(msg);
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -165,13 +173,15 @@ public class RetrofitActivity extends BaseActivity {
         httpBinService.postWithHeaders().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    String msg = "Retrofit Headers：" + response.body().string();
-                    runOnUiThread(() -> {
-                        hideProgress();
-                        tvRes.setText(msg);
-                    });
-                    LogUtils.i(msg);
+                try (ResponseBody body = response.body()) {
+                    if (body != null) {
+                        String msg = "Retrofit Headers：" + body.string();
+                        runOnUiThread(() -> {
+                            hideProgress();
+                            tvRes.setText(msg);
+                        });
+                        LogUtils.i(msg);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -190,13 +200,15 @@ public class RetrofitActivity extends BaseActivity {
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                        try {
-                            String msg = "Retrofit Url：" + response.body().string();
-                            runOnUiThread(() -> {
-                                hideProgress();
-                                tvRes.setText(msg);
-                            });
-                            LogUtils.i(msg);
+                        try (ResponseBody body = response.body()) {
+                            if (body != null) {
+                                String msg = "Retrofit Url：" + body.string();
+                                runOnUiThread(() -> {
+                                    hideProgress();
+                                    tvRes.setText(msg);
+                                });
+                                LogUtils.i(msg);
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
