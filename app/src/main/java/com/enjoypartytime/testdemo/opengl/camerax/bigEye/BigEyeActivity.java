@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.utils.bigeye.FaceData;
@@ -57,7 +56,7 @@ public class BigEyeActivity extends Activity {
     private static final int GALLERY_REQUEST_CODE = 2;
 
     private BigEyeOpenGLView imgGlSurfaceView;
-    private BigEyeRenderer mosaicRenderer;
+    private BigEyeRenderer bigEyeRenderer;
 
     private long timestamp;
     private ImageData imageData;
@@ -82,14 +81,16 @@ public class BigEyeActivity extends Activity {
         imgGlSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         imgGlSurfaceView.setZOrderOnTop(true);
 
-        mosaicRenderer = new BigEyeRenderer();
-        imgGlSurfaceView.setShapeRender(mosaicRenderer);
+        bigEyeRenderer = new BigEyeRenderer();
+        imgGlSurfaceView.setShapeRender(bigEyeRenderer);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int strength, boolean b) {
                 String sth = "强度：" + strength;
                 tvStrength.setText(sth);
+                bigEyeRenderer.setEnlargeEyesStrength(strength);
+                imgGlSurfaceView.requestRender();
             }
 
             @Override
@@ -202,12 +203,12 @@ public class BigEyeActivity extends Activity {
                 faceFrame[2] = new Point(face.x2, face.y2);
                 faceFrame[3] = new Point(face.x1, face.y2);
                 FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris, rightEyeIris, leftEyeIrisFrame, rightEyeIrisFrame, nose, upLip, downLip);
-//                mosaicRenderer.setFaceData(faceData);
+                bigEyeRenderer.faceDataReady(faceData);
                 imgGlSurfaceView.requestRender();
             }
         });
 
-//        mosaicRenderer.cameraReady(imageData);
+        bigEyeRenderer.cameraReady(imageData);
     }
 
     @Override
