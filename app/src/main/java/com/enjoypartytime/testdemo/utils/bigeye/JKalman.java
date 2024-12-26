@@ -1,12 +1,8 @@
 /*******************************************************************************
- *
  *  JKalman - KALMAN FILTER (Java)
- *
  *  Copyright (C) 2007 Petr Chmelar
- *
  *  By downloading, copying, installing or using the software you agree to
  *  the license in licenseIntel.txt or in licenseGNU.txt
- *
  **************************************************************************** */
 
 package com.enjoypartytime.testdemo.utils.bigeye;
@@ -114,13 +110,12 @@ public class JKalman {
      * The construstor allocates JKalman filter and all its matrices and
      * initializes them somehow.
      *
-     * @param dynam_params
-     * @param measure_params
-     * @param control_params
+     * @param dynam_params   int
+     * @param measure_params int
+     * @param control_params int
      * @throws IllegalArgumentException Kalman filter dimensions exception.
      */
-    public JKalman(int dynam_params, int measure_params, int control_params)
-            throws Exception {
+    public JKalman(int dynam_params, int measure_params, int control_params) throws Exception {
 
         if (dynam_params <= 0 || measure_params <= 0) {
             throw new IllegalArgumentException("Kalman filter: Illegal dimensions.");
@@ -172,8 +167,8 @@ public class JKalman {
     /**
      * Constructor in case of no control.
      *
-     * @param dynam_params
-     * @param measure_params
+     * @param dynam_params   int
+     * @param measure_params int
      */
     public JKalman(int dynam_params, int measure_params) throws Exception {
         this(dynam_params, measure_params, 0);
@@ -246,7 +241,7 @@ public class JKalman {
      * returns it on output.
      *
      * @param measurement Matrix containing the measurement vector.
-     * @return
+     * @return Matrix
      */
     public Matrix Correct(final Matrix measurement) {
 
@@ -282,7 +277,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param state_pre
+     * @param state_pre Matrix
      */
     public void setState_pre(Matrix state_pre) {
         this.state_pre = state_pre;
@@ -291,7 +286,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getState_pre() {
         return state_pre;
@@ -300,7 +295,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param state_post
+     * @param state_post Matrix
      */
     public void setState_post(Matrix state_post) {
         this.state_post = state_post;
@@ -313,7 +308,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @param transition_matrix
+     * @param transition_matrix Matrix
      */
     public void setTransition_matrix(Matrix transition_matrix) {
         this.transition_matrix = transition_matrix;
@@ -326,7 +321,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param control_matrix
+     * @param control_matrix Matrix
      */
     public void setControl_matrix(Matrix control_matrix) {
         this.control_matrix = control_matrix;
@@ -335,7 +330,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getControl_matrix() {
         return control_matrix;
@@ -344,7 +339,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param measurement_matrix
+     * @param measurement_matrix Matrix
      */
     public void setMeasurement_matrix(Matrix measurement_matrix) {
         this.measurement_matrix = measurement_matrix;
@@ -353,7 +348,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getMeasurement_matrix() {
         return measurement_matrix;
@@ -362,7 +357,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param process_noise_cov
+     * @param process_noise_cov Matrix
      */
     public void setProcess_noise_cov(Matrix process_noise_cov) {
         this.process_noise_cov = process_noise_cov;
@@ -371,7 +366,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getProcess_noise_cov() {
         return process_noise_cov;
@@ -380,7 +375,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param measurement_noise_cov
+     * @param measurement_noise_cov Matrix
      */
     public void setMeasurement_noise_cov(Matrix measurement_noise_cov) {
         this.measurement_noise_cov = measurement_noise_cov;
@@ -389,7 +384,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getMeasurement_noise_cov() {
         return measurement_noise_cov;
@@ -398,7 +393,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param error_cov_pre
+     * @param error_cov_pre Matrix
      */
     public void setError_cov_pre(Matrix error_cov_pre) {
         this.error_cov_pre = error_cov_pre;
@@ -407,7 +402,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getError_cov_pre() {
         return error_cov_pre;
@@ -416,7 +411,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param gain
+     * @param gain Matrix
      */
     public void setGain(Matrix gain) {
         this.gain = gain;
@@ -425,7 +420,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getGain() {
         return gain;
@@ -434,7 +429,7 @@ public class JKalman {
     /**
      * Setter
      *
-     * @param error_cov_post
+     * @param error_cov_post Matrix
      */
     public void setError_cov_post(Matrix error_cov_post) {
         this.error_cov_post = error_cov_post;
@@ -443,7 +438,7 @@ public class JKalman {
     /**
      * Getter
      *
-     * @return
+     * @return Matrix
      */
     public Matrix getError_cov_post() {
         return error_cov_post;

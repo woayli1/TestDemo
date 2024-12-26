@@ -26,7 +26,6 @@ public class BigEyeOpenGLView extends GLSurfaceView {
 
     public BigEyeOpenGLView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public void setShapeRender(BigEyeShapeRender shapeRender) {
@@ -35,6 +34,7 @@ public class BigEyeOpenGLView extends GLSurfaceView {
         }
 
         this.shapeRender = shapeRender;
+        init();
         requestRender();
     }
 
@@ -48,7 +48,7 @@ public class BigEyeOpenGLView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-    private class MyRenderer implements Renderer {
+    private static class MyRenderer implements Renderer {
 
         private final BigEyeOpenGLView owner;
 

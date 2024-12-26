@@ -24,14 +24,14 @@ public class CholeskyDecomposition implements java.io.Serializable {
      *
      * @serial internal array storage.
      */
-    private double[][] L;
+    private final double[][] L;
 
     /**
      * Row and column dimension (square matrix).
      *
      * @serial matrix dimension.
      */
-    private int n;
+    private final int n;
 
     /**
      * Symmetric and positive definite flag.
@@ -48,11 +48,10 @@ public class CholeskyDecomposition implements java.io.Serializable {
      * Cholesky algorithm for symmetric and positive definite matrix.
      *
      * @param Arg Square, symmetric matrix.
-     * @return Structure to access L and isspd flag.
+     *            return Structure to access L and isspd flag.
      */
 
     public CholeskyDecomposition(Matrix Arg) {
-
 
         // Initialize.
         double[][] A = Arg.getArray();

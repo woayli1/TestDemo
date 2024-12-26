@@ -70,15 +70,14 @@ Matrix implements Cloneable, java.io.Serializable {
      *
      * @serial internal array storage.
      */
-    private double[][] A;
+    private final double[][] A;
 
     /**
      * Row and column dimensions.
      *
-     * @serial row dimension.
-     * @serial column dimension.
+     * @serial row dimension.column dimension.
      */
-    private int m, n;
+    private final int m, n;
 
     /* ------------------------
    Constructors
@@ -185,9 +184,7 @@ Matrix implements Cloneable, java.io.Serializable {
             if (A[i].length != n) {
                 throw new IllegalArgumentException("All rows must have the same length.");
             }
-            for (int j = 0; j < n; j++) {
-                C[i][j] = A[i][j];
-            }
+            System.arraycopy(A[i], 0, C[i], 0, n);
         }
         return X;
     }
@@ -199,9 +196,7 @@ Matrix implements Cloneable, java.io.Serializable {
         Matrix X = new Matrix(m, n);
         double[][] C = X.getArray();
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                C[i][j] = A[i][j];
-            }
+            if (n >= 0) System.arraycopy(A[i], 0, C[i], 0, n);
         }
         return X;
     }
@@ -260,9 +255,7 @@ Matrix implements Cloneable, java.io.Serializable {
     public double[] getRowPackedCopy() {
         double[] vals = new double[m * n];
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                vals[i * n + j] = A[i][j];
-            }
+            if (n >= 0) System.arraycopy(A[i], 0, vals, i * n, n);
         }
         return vals;
     }
@@ -291,7 +284,6 @@ Matrix implements Cloneable, java.io.Serializable {
      * @param i Row index.
      * @param j Column index.
      * @return A(i, j)
-     * @throws ArrayIndexOutOfBoundsException
      */
     public double get(int i, int j) {
         return A[i][j];
@@ -312,9 +304,7 @@ Matrix implements Cloneable, java.io.Serializable {
         double[][] B = X.getArray();
         try {
             for (int i = i0; i <= i1; i++) {
-                for (int j = j0; j <= j1; j++) {
-                    B[i - i0][j - j0] = A[i][j];
-                }
+                if (j1 + 1 - j0 >= 0) System.arraycopy(A[i], j0, B[i - i0], 0, j1 + 1 - j0);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException("Submatrix indices");
@@ -383,9 +373,7 @@ Matrix implements Cloneable, java.io.Serializable {
         double[][] B = X.getArray();
         try {
             for (int i = 0; i < r.length; i++) {
-                for (int j = j0; j <= j1; j++) {
-                    B[i][j - j0] = A[r[i]][j];
-                }
+                if (j1 + 1 - j0 >= 0) System.arraycopy(A[r[i]], j0, B[i], 0, j1 + 1 - j0);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException("Submatrix indices");
@@ -399,7 +387,6 @@ Matrix implements Cloneable, java.io.Serializable {
      * @param i Row index.
      * @param j Column index.
      * @param s A(i,j).
-     * @throws ArrayIndexOutOfBoundsException
      */
     public void set(int i, int j, double s) {
         A[i][j] = s;
@@ -868,8 +855,7 @@ Matrix implements Cloneable, java.io.Serializable {
      * @return solution if A is square, least squares solution otherwise
      */
     public Matrix solve(Matrix B) {
-        return (m == n ? (new LUDecomposition(this)).solve(B) :
-                (new QRDecomposition(this)).solve(B));
+        return (m == n ? (new LUDecomposition(this)).solve(B) : (new QRDecomposition(this)).solve(B));
     }
 
     /**
@@ -1034,8 +1020,7 @@ Matrix implements Cloneable, java.io.Serializable {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 String s = format.format(A[i][j]); // format the number
-                int padding =
-                        Math.max(1, width - s.length()); // At _least_ 1 space
+                int padding = Math.max(1, width - s.length()); // At _least_ 1 space
                 for (int k = 0; k < padding; k++)
                     output.print(' ');
                 output.print(s);
@@ -1089,14 +1074,10 @@ Matrix implements Cloneable, java.io.Serializable {
             v.addElement(row = new double[n]);
             int j = 0;
             do {
-                if (j >= n)
-                    throw new java.io.IOException("Row " + v.size() +
-                            " is too long.");
+                if (j >= n) throw new java.io.IOException("Row " + v.size() + " is too long.");
                 row[j++] = Double.valueOf(tokenizer.sval).doubleValue();
             } while (tokenizer.nextToken() == StreamTokenizer.TT_WORD);
-            if (j < n)
-                throw new java.io.IOException("Row " + v.size() +
-                        " is too short.");
+            if (j < n) throw new java.io.IOException("Row " + v.size() + " is too short.");
         }
         int m = v.size(); // Now we've got the number of rows.
         double[][] A = new double[m][];
@@ -1118,10 +1099,6 @@ Matrix implements Cloneable, java.io.Serializable {
         }
     }
 
-
-    /***************************************************************************
-     * KALMAN FILTER FUNCTIONS (c) 2007 Petr Chmelar
-     **************************************************************************/
 
     /***************************************************************************
      * Generalized linear algebraic matrix-matrix multiplication (of A); 
@@ -1213,22 +1190,21 @@ Matrix implements Cloneable, java.io.Serializable {
         w += 2;
 
         String s;
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 s = format.format(A[i][j]); // format the number
-                int padding =
-                        Math.max(1, w - result.length()); // At _least_ 1 space
+                int padding = Math.max(1, w - result.length()); // At _least_ 1 space
 
-                result += s;
+                result.append(s);
                 for (int k = 0; k < padding; k++)
-                    result += " ";
+                    result.append(" ");
             }
-            result += "\n";
+            result.append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -1237,17 +1213,17 @@ Matrix implements Cloneable, java.io.Serializable {
      * @return String tab-separated rows on separate lines
      */
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int j = 0; j < m; j++) { // 4 columns
             for (int i = 0; i < n; i++) { // 4 rows
                 // append value
-                result += String.valueOf(this.A[j][i]) + "\t";
+                result.append(this.A[j][i]).append("\t");
             }
 
-            result += "\n";
+            result.append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -1284,6 +1260,6 @@ Matrix implements Cloneable, java.io.Serializable {
         return A;
     }
 
-/** end Petr Chmelar (c) 2007 *************************************************/
+    /* end Petr Chmelar (c) 2007 *************************************************/
 
 }

@@ -29,22 +29,21 @@ public class QRDecomposition implements java.io.Serializable {
      *
      * @serial internal array storage.
      */
-    private double[][] QR;
+    private final double[][] QR;
 
     /**
      * Row and column dimensions.
      *
-     * @serial column dimension.
-     * @serial row dimension.
+     * @serial column dimension.row dimension.
      */
-    private int m, n;
+    private final int m, n;
 
     /**
      * Array for internal storage of diagonal of R.
      *
      * @serial diagonal of R.
      */
-    private double[] Rdiag;
+    private final double[] Rdiag;
 
 /* ------------------------
    Constructor
@@ -54,7 +53,7 @@ public class QRDecomposition implements java.io.Serializable {
      * QR Decomposition, computed by Householder reflections.
      *
      * @param A Rectangular matrix
-     * @return Structure to access R and the Householder vectors and compute Q.
+     *          return Structure to access R and the Householder vectors and compute Q.
      */
 
     public QRDecomposition(Matrix A) {

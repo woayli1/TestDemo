@@ -27,25 +27,23 @@ public class SingularValueDecomposition implements java.io.Serializable {
     /**
      * Arrays for internal storage of U and V.
      *
-     * @serial internal storage of U.
-     * @serial internal storage of V.
+     * @serial internal storage of U. internal storage of V.
      */
-    private double[][] U, V;
+    private final double[][] U, V;
 
     /**
      * Array for internal storage of singular values.
      *
      * @serial internal storage of singular values.
      */
-    private double[] s;
+    private final double[] s;
 
     /**
      * Row and column dimensions.
      *
-     * @serial row dimension.
-     * @serial column dimension.
+     * @serial row dimension.column dimension.
      */
-    private int m, n;
+    private final int m, n;
 
 /* ------------------------
    Constructor
@@ -55,7 +53,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
      * Construct the singular value decomposition
      *
      * @param Arg Rectangular matrix
-     * @return Structure to access U, S and V.
+     *            return Structure to access U, S and V.
      */
 
     public SingularValueDecomposition(Matrix Arg) {
@@ -284,8 +282,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
                 if (k == -1) {
                     break;
                 }
-                if (Math.abs(e[k]) <=
-                        tiny + eps * (Math.abs(s[k]) + Math.abs(s[k + 1]))) {
+                if (Math.abs(e[k]) <= tiny + eps * (Math.abs(s[k]) + Math.abs(s[k + 1]))) {
                     e[k] = 0.0;
                     break;
                 }
@@ -298,8 +295,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
                     if (ks == k) {
                         break;
                     }
-                    double t = (ks != p ? Math.abs(e[ks]) : 0.) +
-                            (ks != k + 1 ? Math.abs(e[ks - 1]) : 0.);
+                    double t = (ks != p ? Math.abs(e[ks]) : 0.) + (ks != k + 1 ? Math.abs(e[ks - 1]) : 0.);
                     if (Math.abs(s[ks]) <= tiny + eps * t) {
                         s[ks] = 0.0;
                         break;
@@ -374,9 +370,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
 
                     // Calculate the shift.
 
-                    double scale = Math.max(Math.max(Math.max(Math.max(
-                                    Math.abs(s[p - 1]), Math.abs(s[p - 2])), Math.abs(e[p - 2])),
-                            Math.abs(s[k])), Math.abs(e[k]));
+                    double scale = Math.max(Math.max(Math.max(Math.max(Math.abs(s[p - 1]), Math.abs(s[p - 2])), Math.abs(e[p - 2])), Math.abs(s[k])), Math.abs(e[k]));
                     double sp = s[p - 1] / scale;
                     double spm1 = s[p - 2] / scale;
                     double epm1 = e[p - 2] / scale;
@@ -566,8 +560,8 @@ public class SingularValueDecomposition implements java.io.Serializable {
         double eps = Math.pow(2.0, -52.0);
         double tol = Math.max(m, n) * s[0] * eps;
         int r = 0;
-        for (int i = 0; i < s.length; i++) {
-            if (s[i] > tol) {
+        for (double v : s) {
+            if (v > tol) {
                 r++;
             }
         }

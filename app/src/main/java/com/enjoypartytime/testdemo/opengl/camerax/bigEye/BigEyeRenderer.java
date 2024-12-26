@@ -36,23 +36,22 @@ import kotlin.Pair;
 public class BigEyeRenderer extends BigEyeShapeRender {
 
     private InitData initData;
-    private Context mContext;
 
     private LinkedBlockingDeque<ImageData> pendingRenderFrames;
     private LinkedBlockingDeque<FaceData> pendingRenderFaceData;
     private List<KalmanPointFilter> pointFilters;
 
     private BigEyeOpenGLView owner;
-    private ScaleType scaleType = ScaleType.CenterCrop;
+    private final ScaleType scaleType = ScaleType.CenterCrop;
     // 镜像
     private boolean mirror = true;
     // 绘制脸部框架点
-    private boolean renderFaceFrame = false;
+    private boolean renderFaceFrame = true;
 
     private AtomicReference<Float> enlargeEyesStrength;
-    private AtomicReference<Float> thinFaceStrength;
-    private AtomicReference<Float> whiteningStrength;
-    private AtomicReference<Float> skinSmoothStrength;
+//    private AtomicReference<Float> thinFaceStrength;
+//    private AtomicReference<Float> whiteningStrength;
+//    private AtomicReference<Float> skinSmoothStrength;
 
     private static final float MIN_ENLARGE_EYES_STRENGTH = 0.0f;
     private static final float MAX_ENLARGE_EYES_STRENGTH = 30.0f;
@@ -77,14 +76,14 @@ public class BigEyeRenderer extends BigEyeShapeRender {
         pointFilters = new ArrayList<>(256);
 
         enlargeEyesStrength = new AtomicReference<>((MIN_ENLARGE_EYES_STRENGTH + MAX_ENLARGE_EYES_STRENGTH) / 2.0f);
-        thinFaceStrength = new AtomicReference<>((MIN_THIN_FACE_STRENGTH + MAX_THIN_FACE_STRENGTH) / 2.0f);
-        whiteningStrength = new AtomicReference<>((MIN_WHITENING_STRENGTH + MAX_WHITENING_STRENGTH) / 2.0f);
-        skinSmoothStrength = new AtomicReference<>((MIN_SKIN_SMOOTH_STRENGTH + MAX_SKIN_SMOOTH_STRENGTH) / 2.0f);
+//        thinFaceStrength = new AtomicReference<>((MIN_THIN_FACE_STRENGTH + MAX_THIN_FACE_STRENGTH) / 2.0f);
+//        whiteningStrength = new AtomicReference<>((MIN_WHITENING_STRENGTH + MAX_WHITENING_STRENGTH) / 2.0f);
+//        skinSmoothStrength = new AtomicReference<>((MIN_SKIN_SMOOTH_STRENGTH + MAX_SKIN_SMOOTH_STRENGTH) / 2.0f);
 
         super.onSurfaceCreated(owner, gl, config);
 
         this.owner = owner;
-        mContext = this.owner.getContext();
+        Context mContext = this.owner.getContext();
 
         int cameraProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeVertexShader.glsl", "Shaders/BigEyeFragmentShader.glsl");
         int faceProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeFaceVertexShader.glsl", "Shaders/BigEyeFaceFragmentShader.glsl");
@@ -124,12 +123,12 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 
             int rotation = imageData.getRotation() % 360;
             int imageWidth, imageHeight;
-            if ((0 <= rotation && rotation < 90) || (180 <= rotation && rotation < 270)) {
-                imageWidth = imageData.getWidth();
-                imageHeight = imageData.getHeight();
-            } else {
+            if (90 <= rotation && rotation < 180 || 270 <= rotation) {
                 imageWidth = imageData.getHeight();
                 imageHeight = imageData.getWidth();
+            } else {
+                imageWidth = imageData.getWidth();
+                imageHeight = imageData.getHeight();
             }
 
             float imageRadio = (float) imageWidth / (float) imageHeight;
@@ -152,7 +151,7 @@ public class BigEyeRenderer extends BigEyeShapeRender {
                 positionTl = pointPair.getFirst();
                 positionRb = pointPair.getSecond();
             } else {
-                // ScaleType.CenterCropS
+                // ScaleType.CenterCrop
                 positionTl = new Point(-1.0f * renderRadio, 1.0f);
                 positionRb = new Point(renderRadio, -1.0f);
             }
@@ -164,7 +163,7 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 
             Matrix textureTransform = new Matrix();
             Point rotateCenter = BigEyeCameraUtilsKt.centerPoint(textureTl, textureRb);
-            textureTransform.setRotate(360f - rotation, rotateCenter.getX(), rotateCenter.getY());
+            textureTransform.setRotate(360f - (float) rotation, rotateCenter.getX(), rotateCenter.getY());
             textureTransform.mapPoints(textureTopLeft);
             textureTransform.mapPoints(textureBottomLeft);
             textureTransform.mapPoints(textureTopRight);
@@ -174,15 +173,17 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             float xMax = positionRb.getX();
             float yMin = positionRb.getY();
             float yMax = positionTl.getY();
-            float[] cameraVertices = new float[]{xMin, yMin, 0.0f, textureTopLeft[0], textureTopLeft[1], //左上角
-                    xMax, yMin, 0.0f, textureTopRight[0], textureTopRight[1], //右上角
-                    xMin, yMax, 0.0f, textureBottomRight[0], textureBottomRight[1], //右下角
-                    xMax, yMax, 0.0f, textureBottomLeft[0], textureBottomLeft[1], //左下角
+            float[] cameraVertices = new float[]{
+                    xMin, yMax, 0.0f, textureTopLeft[0], textureTopLeft[1], //左上角
+                    xMax, yMax, 0.0f, textureTopRight[0], textureTopRight[1], //右上角
+                    xMax, yMin, 0.0f, textureBottomRight[0], textureBottomRight[1], //右下角
+                    xMin, yMin, 0.0f, textureBottomLeft[0], textureBottomLeft[1], //左下角
                     0.0f};
 
             GLES30.glBindVertexArray(initData.getCameraVAO());
             GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getCameraVBO());
-            GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, cameraVertices.length * 4, BigEyeUtilsKt.toGlBuffer(cameraVertices), GLES30.GL_STATIC_DRAW);
+            GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, cameraVertices.length * 4,
+                    BigEyeUtilsKt.toGlBuffer(cameraVertices), GLES30.GL_STREAM_DRAW);
             GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 5 * 4, 0);
             GLES30.glEnableVertexAttribArray(0);
             GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, 5 * 4, 3 * 4);
@@ -211,10 +212,13 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 
             //美颜
             beautify(initData, imageData, faceData, rotation);
-            int[] indices = {0, 1, 2, 2, 3, 0};
+            int[] indices = new int[]{0, 1, 2, 2, 3, 0};
             GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER, initData.getCameraEBO());
-            GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, indices.length * 4, BigEyeUtilsKt.toGlBuffer(indices), GLES30.GL_STATIC_DRAW);
-            GLES30.glDrawElements(GLES30.GL_TRIANGLES, indices.length, GLES30.GL_UNSIGNED_INT, 0);
+            GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, indices.length * 4,
+                    BigEyeUtilsKt.toGlBuffer(indices), GLES30.GL_STREAM_DRAW);
+            GLES30.glDrawElements(GLES30.GL_TRIANGLES, 6, GLES30.GL_UNSIGNED_INT, 0);
+
+            drawFaceFrame(initData, textureTl, textureRb, viewMatrix, modelMatrix, transformMatrix, xMin, xMax, yMin, yMax, faceData);
         }
     }
 
@@ -301,12 +305,72 @@ public class BigEyeRenderer extends BigEyeShapeRender {
         GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "enlargeEyesStrength"), enlargeEyesStrength.get());
     }
 
+    //绘制脸部框架
+    private void drawFaceFrame(InitData initData, Point textureTl, Point textureRb, float[] viewMatrix, float[] modelMatrix,
+                               float[] transformMatrix, float xMin, float xMax, float yMin, float yMax, FaceData faceData) {
+        if (faceData != null && renderFaceFrame) {
+            //绘制face frame
+            GLES30.glUseProgram(initData.getFaceProgram());
+            GLES30.glBindVertexArray(initData.getCameraVAO());
+            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getCameraVBO());
+            GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 6 * 4, 0);
+            GLES30.glEnableVertexAttribArray(0);
+            GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, 6 * 4, 3 * 4);
+            GLES30.glEnableVertexAttribArray(1);
+
+            float textureRadio = (textureRb.getX() - textureTl.getX()) / (textureRb.getY() - textureTl.getY());
+            android.opengl.Matrix.scaleM(viewMatrix, 0, 1 / textureRadio, 1.0f, 1.0f);
+            GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(initData.getFaceProgram(), "view"), 1, false, viewMatrix, 0);
+            GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(initData.getFaceProgram(), "model"), 1, false, modelMatrix, 0);
+            GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(initData.getFaceProgram(), "transform"), 1, false, transformMatrix, 0);
+            GLES30.glLineWidth(3f);
+
+            //绘制 Frame
+            GLES30.glBindVertexArray(initData.getCameraVAO());
+            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getCameraVBO());
+            float[] faceVertices = BigEyeCameraUtilsKt.toGlFacePoints(faceData.getFaceFrame(), xMin, xMax, yMin, yMax, 1.0f, 0.0f, 0.0f);
+            GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, faceVertices.length * 4, BigEyeUtilsKt.toGlBuffer(faceVertices), GLES30.GL_STREAM_DRAW);
+            GLES30.glDrawArrays(GLES30.GL_LINE_LOOP, 0, faceVertices.length / 6);
+
+//            //绘制 脸颊
+//            drawFacePoints(initData, faceData.getCheck(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 左眉毛
+//            drawFacePoints(initData, faceData.getLeftEyebrow(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 右眉毛
+//            drawFacePoints(initData, faceData.getRightEyebrow(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 左眼
+//            drawFacePoints(initData, faceData.getLeftEye(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 右眼
+//            drawFacePoints(initData, faceData.getRightEye(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 左眼虹膜
+//            drawFacePoints(initData, faceData.getLeftEyeIris(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//            drawFacePoints(initData, faceData.getLeftEyeIrisF(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 右眼虹膜
+//            drawFacePoints(initData, faceData.getRightEyeIris(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//            drawFacePoints(initData, faceData.getRightEyeIrisF(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 鼻子
+//            drawFacePoints(initData, faceData.getNose(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//
+//            //绘制 嘴巴
+//            drawFacePoints(initData, faceData.getUpLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+//            drawFacePoints(initData, faceData.getDownLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+        }
+    }
+
     private void drawFacePoints(InitData initData, Point[] points, float xMin, float xMax,
                                 float yMin, float yMax, float colorR, float colorG, float colorB) {
         GLES30.glBindVertexArray(initData.getFaceVAO());
         GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getFaceVBO());
         float[] faceVertices = BigEyeCameraUtilsKt.toGlFacePoints(points, xMin, xMax, yMin, yMax, colorR, colorG, colorB);
-        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, faceVertices.length * 4, BigEyeUtilsKt.toGlBuffer(faceVertices), GLES30.GL_STATIC_DRAW);
+        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, faceVertices.length * 4,
+                BigEyeUtilsKt.toGlBuffer(faceVertices), GLES30.GL_STREAM_DRAW);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, faceVertices.length / 6);
     }
 
@@ -316,7 +380,6 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             resetPointFilters();
             return null;
         } else {
-            Point[] faceFrame = needToFix.getFaceFrame();
             return needToFix.copy(System.currentTimeMillis(),
                     filterPoints(needToFix.getFaceFrame(), 0),
                     filterPoints(needToFix.getCheck(), 4),
