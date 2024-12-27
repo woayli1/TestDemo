@@ -54,7 +54,7 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 //    private AtomicReference<Float> skinSmoothStrength;
 
     private static final float MIN_ENLARGE_EYES_STRENGTH = 0.0f;
-    private static final float MAX_ENLARGE_EYES_STRENGTH = 30.0f;
+    private static final float MAX_ENLARGE_EYES_STRENGTH = 60.0f;
 
     private static final float MIN_THIN_FACE_STRENGTH = 1.0f;
     private static final float MAX_THIN_FACE_STRENGTH = 60.0f;
@@ -297,12 +297,43 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             rightEyeAxisB = rightOval.getB();
         }
         GLES30.glUniform2f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftEyeCenter"), leftEyeCenter[0], leftEyeCenter[1]);
-        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftEyeAxisA"), leftEyeAxisA);
-        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftEyeAxisB"), leftEyeAxisB);
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftEyeA"), leftEyeAxisA);
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftEyeB"), leftEyeAxisB);
         GLES30.glUniform2f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightEyeCenter"), rightEyeCenter[0], rightEyeCenter[1]);
-        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightEyeAxisA"), rightEyeAxisA);
-        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightEyeAxisB"), rightEyeAxisB);
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightEyeA"), rightEyeAxisA);
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightEyeB"), rightEyeAxisB);
         GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "enlargeEyesStrength"), enlargeEyesStrength.get());
+
+        //瘦脸
+//        float thinRadius = 0.0f;
+//        float[] stretchCenter = new float[]{0.0f, 0.0f};
+//        float[] leftFaceThinCenter = new float[]{0.0f, 0.0f};
+//        float[] rightFaceThinCenter = new float[]{0.0f, 0.0f};
+//        if (faceData != null && thinFaceStrength.get() > MIN_THIN_FACE_STRENGTH) {
+//            ThinFaceData thinData = BigEyeCameraUtilsKt.computeThinFaceData(faceData, 360 - rotation, 0.5f, 0.5f);
+//            thinRadius = thinData.getThinRadius();
+//            stretchCenter[0] = thinData.getStretchCenter().getX();
+//            stretchCenter[1] = thinData.getStretchCenter().getY();
+//            leftFaceThinCenter[0] = thinData.getLeftFaceThinCenter().getX();
+//            leftFaceThinCenter[1] = thinData.getLeftFaceThinCenter().getY();
+//            rightFaceThinCenter[0] = thinData.getRightFaceThinCenter().getX();
+//            rightFaceThinCenter[1] = thinData.getRightFaceThinCenter().getY();
+//        }
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "thinRadius"), thinRadius);
+//        GLES30.glUniform2f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "stretchCenter"), stretchCenter[0], stretchCenter[1]);
+//        GLES30.glUniform2f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "leftFaceThinCenter"), leftFaceThinCenter[0], leftFaceThinCenter[1]);
+//        GLES30.glUniform2f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "rightFaceThinCenter"), rightFaceThinCenter[0], rightFaceThinCenter[1]);
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "thinFaceStrength"), thinFaceStrength.get());
+
+        //美白
+//        GLES30.glUniform1i(GLES30.glGetUniformLocation(initData.getCameraProgram(), "whiteningSwitch"), whiteningStrength.get() > MIN_WHITENING_STRENGTH ? 1 : 0);
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "whiteningStrength"), whiteningStrength.get());
+
+        //磨皮
+//        GLES30.glUniform1i(GLES30.glGetUniformLocation(initData.getCameraProgram(), "skinSmoothSwitch"), skinSmoothStrength.get() > MIN_SKIN_SMOOTH_STRENGTH ? 1 : 0);
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "textureWidthPixelStep"), 1.0f / imageData.getWidth());
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "textureHeightPixelStep"), 1.0f / imageData.getHeight());
+//        GLES30.glUniform1f(GLES30.glGetUniformLocation(initData.getCameraProgram(), "skinSmoothStrength"), skinSmoothStrength.get());
     }
 
     //绘制脸部框架
@@ -311,8 +342,8 @@ public class BigEyeRenderer extends BigEyeShapeRender {
         if (faceData != null && renderFaceFrame) {
             //绘制face frame
             GLES30.glUseProgram(initData.getFaceProgram());
-            GLES30.glBindVertexArray(initData.getCameraVAO());
-            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getCameraVBO());
+            GLES30.glBindVertexArray(initData.getFaceVAO());
+            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getFaceVBO());
             GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 6 * 4, 0);
             GLES30.glEnableVertexAttribArray(0);
             GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, 6 * 4, 3 * 4);
@@ -326,41 +357,41 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             GLES30.glLineWidth(3f);
 
             //绘制 Frame
-            GLES30.glBindVertexArray(initData.getCameraVAO());
-            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getCameraVBO());
+            GLES30.glBindVertexArray(initData.getFaceVAO());
+            GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, initData.getFaceVBO());
             float[] faceVertices = BigEyeCameraUtilsKt.toGlFacePoints(faceData.getFaceFrame(), xMin, xMax, yMin, yMax, 1.0f, 0.0f, 0.0f);
             GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, faceVertices.length * 4, BigEyeUtilsKt.toGlBuffer(faceVertices), GLES30.GL_STREAM_DRAW);
             GLES30.glDrawArrays(GLES30.GL_LINE_LOOP, 0, faceVertices.length / 6);
 
-//            //绘制 脸颊
+            //绘制 脸颊
 //            drawFacePoints(initData, faceData.getCheck(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 左眉毛
+
+            //绘制 左眉毛
 //            drawFacePoints(initData, faceData.getLeftEyebrow(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 右眉毛
+
+            //绘制 右眉毛
 //            drawFacePoints(initData, faceData.getRightEyebrow(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 左眼
+
+            //绘制 左眼
 //            drawFacePoints(initData, faceData.getLeftEye(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 右眼
+
+            //绘制 右眼
 //            drawFacePoints(initData, faceData.getRightEye(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 左眼虹膜
+
+            //绘制 左眼虹膜
 //            drawFacePoints(initData, faceData.getLeftEyeIris(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
 //            drawFacePoints(initData, faceData.getLeftEyeIrisF(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 右眼虹膜
+
+            //绘制 右眼虹膜
 //            drawFacePoints(initData, faceData.getRightEyeIris(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
 //            drawFacePoints(initData, faceData.getRightEyeIrisF(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 鼻子
-//            drawFacePoints(initData, faceData.getNose(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//
-//            //绘制 嘴巴
-//            drawFacePoints(initData, faceData.getUpLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
-//            drawFacePoints(initData, faceData.getDownLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+
+            //绘制 鼻子
+            drawFacePoints(initData, faceData.getNose(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+
+            //绘制 嘴巴
+            drawFacePoints(initData, faceData.getUpLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
+            drawFacePoints(initData, faceData.getDownLip(), xMin, xMax, yMin, yMax, 0.0f, 1.0f, 0.0f);
         }
     }
 

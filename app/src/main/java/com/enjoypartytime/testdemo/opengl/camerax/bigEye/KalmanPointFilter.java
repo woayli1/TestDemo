@@ -32,12 +32,7 @@ public class KalmanPointFilter {
     }
 
     public void reset() {
-        double[][] tr = new double[4][4];
-        tr[0] = new double[]{1.0, 0.0, 1.0, 0.0};
-        tr[1] = new double[]{0.0, 1.0, 0.0, 1.0};
-        tr[2] = new double[]{0.0, 0.0, 1.0, 0.0};
-        tr[3] = new double[]{0.0, 0.0, 0.0, 1.0};
-
+        double[][] tr = new double[][]{{1.0, 0.0, 1.0, 0.0}, {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0, 1.0, 0.0}, {0.0, 0.0, 0.0, 1.0}};
         kalman.setControl_matrix(new Matrix(tr));
         kalman.setError_cov_post(kalman.getError_cov_post().identity());
     }

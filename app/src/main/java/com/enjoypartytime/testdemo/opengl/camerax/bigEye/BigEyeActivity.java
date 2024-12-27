@@ -61,9 +61,12 @@ public class BigEyeActivity extends AppCompatActivity {
     private BigEyeOpenGLView imgGlSurfaceView;
     private BigEyeRenderer bigEyeRenderer;
 
+    private boolean isCamera = true;
+
     private long timestamp;
     private ImageData imageData;
 
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ProcessCameraProvider cameraProvider;
     private ImageAnalysis imageAnalysis;
 
@@ -80,7 +83,10 @@ public class BigEyeActivity extends AppCompatActivity {
         TextView tvStrength = findViewById(R.id.tv_strength);
 
         tvClose.setOnClickListener(view -> finish());
-        tvCamera.setOnClickListener(v -> ToastUtils.showShort("打开摄像头"));
+        tvCamera.setOnClickListener(v -> {
+            isCamera = true;
+            ToastUtils.showShort("打开摄像头");
+        });
         tvChoose.setOnClickListener(view -> requestStoragePermission());
 
         imgGlSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
@@ -89,7 +95,6 @@ public class BigEyeActivity extends AppCompatActivity {
 
         bigEyeRenderer = new BigEyeRenderer();
         imgGlSurfaceView.setShapeRender(bigEyeRenderer);
-//        imgGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -97,7 +102,7 @@ public class BigEyeActivity extends AppCompatActivity {
                 String sth = "强度：" + strength;
                 tvStrength.setText(sth);
                 bigEyeRenderer.setEnlargeEyesStrength(strength);
-                imgGlSurfaceView.requestRender();
+//                imgGlSurfaceView.requestRender();
             }
 
             @Override
@@ -107,17 +112,6 @@ public class BigEyeActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                if (ObjectUtils.isEmpty(mosaicRenderer.getImgUri())) {
-//                    ToastUtils.showShort("请先选择图片");
-//                    return;
-//                }
-//
-//                int strength = seekBar.getProgress();
-//
-//                String sth = "强度：" + strength;
-//                tvStrength.setText(sth);
-//                mosaicRenderer.setStrength(strength);
-//                imgGlSurfaceView.requestRender();
 
             }
         });
@@ -205,19 +199,15 @@ public class BigEyeActivity extends AppCompatActivity {
                         rightEyeIrisFrame[i] = new Point(face.eyeLandMarkRight[x], face.eyeLandMarkRight[y]);
                     }
 
-                    Point[] faceFrame = new Point[4];
-                    faceFrame[0] = new Point(face.x1, face.y1);
-                    faceFrame[1] = new Point(face.x2, face.y1);
-                    faceFrame[2] = new Point(face.x2, face.y2);
-                    faceFrame[3] = new Point(face.x1, face.y2);
-                    FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris,leftEyeIrisFrame, rightEyeIris, rightEyeIrisFrame, nose, upLip, downLip);
+                    Point[] faceFrame = new Point[]{new Point(face.x1, face.y1), new Point(face.x2, face.y1), new Point(face.x2, face.y2), new Point(face.x1, face.y2)};
+                    FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris, leftEyeIrisFrame, rightEyeIris, rightEyeIrisFrame, nose, upLip, downLip);
                     bigEyeRenderer.faceDataReady(faceData);
                 }
             });
             bigEyeRenderer.cameraReady(imageData);
         });
 
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(() -> {
             try {
                 cameraProvider = cameraProviderFuture.get();
@@ -230,40 +220,10 @@ public class BigEyeActivity extends AppCompatActivity {
 
     }
 
-    private void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
-        if (ObjectUtils.isEmpty(imgGlSurfaceView)) {
-            ToastUtils.showShort("相机初始化错误，请重新进入页面");
-            finish();
-            return;
-        }
-
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                .build();
-
-        cameraProvider.unbindAll();
-        cameraProvider.bindToLifecycle(this, cameraSelector, imageAnalysis);
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        imgGlSurfaceView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        imgGlSurfaceView.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         releaseFaceTengine();
-        if (cameraProvider != null) {
-            cameraProvider.unbindAll();
-        }
     }
 
     private void requestStoragePermission() {
@@ -312,6 +272,7 @@ public class BigEyeActivity extends AppCompatActivity {
                 Uri imgUri = data.getData();
                 if (imgUri != null) {
 //                    mosaicRenderer.setImageURI(imgUri.toString());
+                    isCamera = false;
                     imgGlSurfaceView.requestRender();
                 }
             }
@@ -329,11 +290,28 @@ public class BigEyeActivity extends AppCompatActivity {
         imageConfig.setHeight(imageData.getHeight());
 
         if (imageData.getImageType() == ImageType.NV21) {
+            //ImageType.NV21
             imageConfig.setFormat(ImageConfig.FaceImageFormat.YUV);
-        } else if (imageData.getImageType() == ImageType.RGBA) {
+        } else {
+            //ImageType.RGBA
             imageConfig.setFormat(ImageConfig.FaceImageFormat.RGBA);
         }
         return imageConfig;
+    }
+
+    private void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
+        if (ObjectUtils.isEmpty(imgGlSurfaceView)) {
+            ToastUtils.showShort("相机初始化错误，请重新进入页面");
+            finish();
+            return;
+        }
+
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                .build();
+
+        cameraProvider.unbindAll();
+        cameraProvider.bindToLifecycle(this, cameraSelector, imageAnalysis);
     }
 
     private void initFaceTengine() {
