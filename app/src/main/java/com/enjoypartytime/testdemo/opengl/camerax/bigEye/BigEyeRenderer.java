@@ -246,12 +246,16 @@ public class BigEyeRenderer extends BigEyeShapeRender {
         this.owner = null;
     }
 
+    public void setCamera(boolean camera) {
+        isCamera = camera;
+        pendingRenderFrames.clear();
+        pendingRenderFaceData.clear();
+    }
+
     public void cameraReady(ImageData imageData) {
         if (this.owner != null) {
-            isCamera = imageData.getImageType() != ImageType.IMAGE;
             mirror = isCamera;
             try {
-                pendingRenderFrames.clear();
                 pendingRenderFrames.put(imageData);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -267,10 +271,7 @@ public class BigEyeRenderer extends BigEyeShapeRender {
     public void faceDataReady(FaceData faceData) {
         if (this.owner != null) {
             try {
-                pendingRenderFaceData.clear();
-                if (faceData != null) {
-                    pendingRenderFaceData.put(faceData);
-                }
+                pendingRenderFaceData.put(faceData);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

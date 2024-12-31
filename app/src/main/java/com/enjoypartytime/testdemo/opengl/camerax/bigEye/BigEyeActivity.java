@@ -87,6 +87,7 @@ public class BigEyeActivity extends AppCompatActivity {
         tvCamera.setOnClickListener(v -> {
             if (!isCamera) {
                 isCamera = true;
+                bigEyeRenderer.setCamera(true);
                 //重新开启摄像头
                 bindPreview(cameraProvider);
             }
@@ -189,6 +190,7 @@ public class BigEyeActivity extends AppCompatActivity {
                         cameraProvider.unbindAll();
                     }
                     isCamera = false;
+                    bigEyeRenderer.setCamera(false);
                     openImage(imgUri);
                 }
             }
@@ -272,8 +274,6 @@ public class BigEyeActivity extends AppCompatActivity {
                 FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris, leftEyeIrisFrame, rightEyeIris, rightEyeIrisFrame, nose, upLip, downLip);
 
                 bigEyeRenderer.faceDataReady(faceData);
-            } else {
-                bigEyeRenderer.faceDataReady(null);
             }
 
             bigEyeRenderer.cameraReady(imageData);
