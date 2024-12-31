@@ -45,6 +45,7 @@ public class BigEyeRenderer extends BigEyeShapeRender {
     private final ScaleType scaleType = ScaleType.CenterCrop;
     // 镜像
     private boolean mirror = true;
+    private boolean isCamera = true;
     // 绘制脸部框架点
     private boolean renderFaceFrame = true;
 
@@ -101,9 +102,14 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 
     @Override
     public void onDrawFrame(BigEyeOpenGLView owner, GL10 gl) {
-        ImageData imageData = pendingRenderFrames.pollFirst();
-        if (imageData != null && initData != null) {
+        ImageData imageData;
+        if (isCamera) {
+            imageData = pendingRenderFrames.pollFirst();
+        } else {
+            imageData = pendingRenderFrames.peekFirst();
+        }
 
+        if (imageData != null && initData != null) {
             GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
             GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, initData.getCameraTexture());
 
@@ -112,9 +118,10 @@ public class BigEyeRenderer extends BigEyeShapeRender {
                 // ImageType.NV21
                 bitmap = ImageUtilsKt.nv21ToBitmap(imageData.getImage(), imageData.getWidth(), imageData.getHeight());
             } else {
-                // ImageType.RGBA
+                // ImageType.RGBA || ImageType.IMAGE
                 bitmap = ImageUtilsKt.rgbaToBitmap(imageData.getImage(), imageData.getWidth(), imageData.getHeight());
             }
+
             GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
 
@@ -188,7 +195,9 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             GLES30.glEnableVertexAttribArray(0);
             GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, 5 * 4, 3 * 4);
             GLES30.glEnableVertexAttribArray(1);
-            imageData.getImageProxy().close();
+            if (imageData.getImageProxy() != null) {
+                imageData.getImageProxy().close();
+            }
 
             // view
             float[] viewMatrix = BigEyeUtilsKt.newGlFloatMatrix(4);
@@ -217,7 +226,6 @@ public class BigEyeRenderer extends BigEyeShapeRender {
             GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, indices.length * 4,
                     BigEyeUtilsKt.toGlBuffer(indices), GLES30.GL_STREAM_DRAW);
             GLES30.glDrawElements(GLES30.GL_TRIANGLES, 6, GLES30.GL_UNSIGNED_INT, 0);
-
             drawFaceFrame(initData, textureTl, textureRb, viewMatrix, modelMatrix, transformMatrix, xMin, xMax, yMin, yMax, faceData);
         }
     }
@@ -226,7 +234,9 @@ public class BigEyeRenderer extends BigEyeShapeRender {
     public void onViewDestroyed(BigEyeOpenGLView owner) {
         super.onViewDestroyed(owner);
         for (ImageData imageData : pendingRenderFrames) {
-            imageData.getImageProxy().close();
+            if (imageData != null && imageData.getImageProxy() != null) {
+                imageData.getImageProxy().close();
+            }
         }
 
         pendingRenderFrames.clear();
@@ -238,21 +248,29 @@ public class BigEyeRenderer extends BigEyeShapeRender {
 
     public void cameraReady(ImageData imageData) {
         if (this.owner != null) {
+            isCamera = imageData.getImageType() != ImageType.IMAGE;
+            mirror = isCamera;
             try {
+                pendingRenderFrames.clear();
                 pendingRenderFrames.put(imageData);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             this.owner.requestRender();
         } else {
-            imageData.getImageProxy().close();
+            if (imageData != null && imageData.getImageProxy() != null) {
+                imageData.getImageProxy().close();
+            }
         }
     }
 
     public void faceDataReady(FaceData faceData) {
         if (this.owner != null) {
             try {
-                pendingRenderFaceData.put(faceData);
+                pendingRenderFaceData.clear();
+                if (faceData != null) {
+                    pendingRenderFaceData.put(faceData);
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -406,7 +424,13 @@ public class BigEyeRenderer extends BigEyeShapeRender {
     }
 
     private FaceData findFaceData() {
-        FaceData needToFix = pendingRenderFaceData.pollFirst();
+        FaceData needToFix;
+        if (isCamera) {
+            needToFix = pendingRenderFaceData.pollFirst();
+        } else {
+            needToFix = pendingRenderFaceData.peekFirst();
+        }
+
         if (needToFix == null) {
             resetPointFilters();
             return null;

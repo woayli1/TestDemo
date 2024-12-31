@@ -1,5 +1,6 @@
 package com.enjoypartytime.testdemo.utils.bigeye
 
+import android.graphics.Bitmap
 import androidx.camera.core.ImageProxy
 import kotlin.math.sqrt
 
@@ -69,7 +70,7 @@ data class FaceData(
 }
 
 enum class ImageType {
-    NV21, RGBA
+    NV21, RGBA, IMAGE
 }
 
 data class ImageData(
@@ -78,7 +79,7 @@ data class ImageData(
     val height: Int,
     val rotation: Int,
     val imageType: ImageType,
-    val imageProxy: ImageProxy,
+    val imageProxy: ImageProxy?,
     val timestamp: Long,
 ) {
     override fun equals(other: Any?): Boolean {

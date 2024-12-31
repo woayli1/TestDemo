@@ -3,6 +3,7 @@ package com.enjoypartytime.testdemo.opengl.camerax.bigEye;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,6 +27,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.utils.ImageUtil;
 import com.enjoypartytime.testdemo.utils.bigeye.FaceData;
 import com.enjoypartytime.testdemo.utils.bigeye.ImageData;
 import com.enjoypartytime.testdemo.utils.bigeye.ImageType;
@@ -68,7 +71,6 @@ public class BigEyeActivity extends AppCompatActivity {
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ProcessCameraProvider cameraProvider;
-    private ImageAnalysis imageAnalysis;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,8 +86,11 @@ public class BigEyeActivity extends AppCompatActivity {
 
         tvClose.setOnClickListener(view -> finish());
         tvCamera.setOnClickListener(v -> {
-            isCamera = true;
-            ToastUtils.showShort("打开摄像头");
+            if (!isCamera) {
+                isCamera = true;
+                //重新开启摄像头
+                bindPreview(cameraProvider);
+            }
         });
         tvChoose.setOnClickListener(view -> requestStoragePermission());
 
@@ -102,7 +107,6 @@ public class BigEyeActivity extends AppCompatActivity {
                 String sth = "强度：" + strength;
                 tvStrength.setText(sth);
                 bigEyeRenderer.setEnlargeEyesStrength(strength);
-//                imgGlSurfaceView.requestRender();
             }
 
             @Override
@@ -118,95 +122,6 @@ public class BigEyeActivity extends AppCompatActivity {
 
         initFaceTengine();
 
-        imageAnalysis = new ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .setImageQueueDepth(1)
-                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
-                .setBackgroundExecutor((Executor) Dispatchers.getIO()).build();
-
-        imageAnalysis.setAnalyzer((Executor) Dispatchers.getIO(), imageProxy -> {
-            timestamp = System.currentTimeMillis();
-            if (imageProxy.getFormat() == ImageFormat.YUV_420_888) {
-                // ImageFormat.YUV_420_888
-                byte[] yuv = ImageUtilsKt.yuv420888ToNv21(imageProxy);
-                int width = imageProxy.getCropRect().width();
-                int height = imageProxy.getCropRect().height();
-                imageData = new ImageData(yuv, width, height, imageProxy.getImageInfo()
-                        .getRotationDegrees(), ImageType.NV21, imageProxy, timestamp);
-            } else {
-                //  PixelFormat.RGBA_8888
-                int width = imageProxy.getWidth();
-                int height = imageProxy.getHeight();
-                byte[] rgba = new byte[width * height * 4];
-                ImageUtilsKt.toRgba(imageProxy, rgba);
-                imageData = new ImageData(rgba, width, height, imageProxy.getImageInfo()
-                        .getRotationDegrees(), ImageType.RGBA, imageProxy, timestamp);
-            }
-
-            imgGlSurfaceView.queueEvent(() -> {
-                FaceConfig faceConfig = new FaceConfig();
-                faceConfig.setDetect(true);
-                faceConfig.setLandmark2d(true);
-                faceConfig.setAttribute(true);
-                faceConfig.setEyeIris(true);
-                faceConfig.setMaxFaceNum(1);
-
-                ImageConfig imageConfig = getImageConfig();
-
-                Face[] faces = TengineKitSdk.getInstance()
-                        .detectFace(imageConfig, faceConfig);
-                Face face = null;
-                if (faces != null) {
-                    face = faces[0];
-                }
-
-                if (face != null) {
-                    float[] landmark = face.landmark;
-                    Point[] check = getCameraPoints(landmark, 0, 69);
-                    Point[] leftEyeBrow = getCameraPoints(landmark, 69, 16);
-                    Point[] rightEyeBrow = getCameraPoints(landmark, 85, 16);
-                    Point[] leftEye = getCameraPoints(landmark, 101, 16);
-                    Point[] rightEye = getCameraPoints(landmark, 117, 16);
-                    Point[] nose = getCameraPoints(landmark, 133, 47);
-                    Point[] upLip = getCameraPoints(landmark, 180, 16);
-                    Point[] downLip = getCameraPoints(landmark, 196, 16);
-
-                    Point[] leftEyeIris = new Point[5];
-                    for (int i = 0; i < 5; i++) {
-                        int x = i * 3;
-                        int y = x + 1;
-                        leftEyeIris[i] = new Point(face.eyeIrisLeft[x], face.eyeIrisLeft[y]);
-                    }
-
-                    Point[] rightEyeIris = new Point[5];
-                    for (int i = 0; i < 5; i++) {
-                        int x = i * 3;
-                        int y = x + 1;
-                        rightEyeIris[i] = new Point(face.eyeIrisRight[x], face.eyeIrisRight[y]);
-                    }
-
-                    Point[] leftEyeIrisFrame = new Point[15];
-                    for (int i = 0; i < 15; i++) {
-                        int x = i * 3;
-                        int y = x + 1;
-                        leftEyeIrisFrame[i] = new Point(face.eyeLandMarkLeft[x], face.eyeLandMarkLeft[y]);
-                    }
-
-                    Point[] rightEyeIrisFrame = new Point[15];
-                    for (int i = 0; i < 15; i++) {
-                        int x = i * 3;
-                        int y = x + 1;
-                        rightEyeIrisFrame[i] = new Point(face.eyeLandMarkRight[x], face.eyeLandMarkRight[y]);
-                    }
-
-                    Point[] faceFrame = new Point[]{new Point(face.x1, face.y1), new Point(face.x2, face.y1), new Point(face.x2, face.y2), new Point(face.x1, face.y2)};
-                    FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris, leftEyeIrisFrame, rightEyeIris, rightEyeIrisFrame, nose, upLip, downLip);
-                    bigEyeRenderer.faceDataReady(faceData);
-                }
-            });
-            bigEyeRenderer.cameraReady(imageData);
-        });
-
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(() -> {
             try {
@@ -217,7 +132,6 @@ public class BigEyeActivity extends AppCompatActivity {
                 // This should never be reached.
             }
         }, ContextCompat.getMainExecutor(this));
-
     }
 
     @Override
@@ -271,12 +185,103 @@ public class BigEyeActivity extends AppCompatActivity {
             if (data != null) {
                 Uri imgUri = data.getData();
                 if (imgUri != null) {
-//                    mosaicRenderer.setImageURI(imgUri.toString());
+                    if (isCamera) {
+                        //关闭摄像头
+                        cameraProvider.unbindAll();
+                    }
                     isCamera = false;
-                    imgGlSurfaceView.requestRender();
+                    openImage(imgUri);
                 }
             }
         }
+
+    }
+
+    //选择图片
+    private void openImage(Uri imgUri) {
+        timestamp = System.currentTimeMillis();
+
+        Bitmap bitmap;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        imageData = new ImageData(ImageUtil.bitmapToRgba(bitmap), bitmap.getWidth(), bitmap.getHeight(), 0, ImageType.IMAGE, null, timestamp);
+        onImageData();
+    }
+
+    private void onImageData() {
+
+        imgGlSurfaceView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                FaceConfig faceConfig = new FaceConfig();
+                faceConfig.setDetect(true);
+                faceConfig.setLandmark2d(true);
+                faceConfig.setAttribute(true);
+                faceConfig.setEyeIris(true);
+                faceConfig.setMaxFaceNum(1);
+
+                ImageConfig imageConfig = BigEyeActivity.this.getImageConfig();
+
+                Face[] faces = TengineKitSdk.getInstance().detectFace(imageConfig, faceConfig);
+                Face face = null;
+                if (faces != null) {
+                    face = faces[0];
+                }
+
+                if (face != null) {
+                    float[] landmark = face.landmark;
+                    Point[] check = BigEyeActivity.this.getCameraPoints(landmark, 0, 69);
+                    Point[] leftEyeBrow = BigEyeActivity.this.getCameraPoints(landmark, 69, 16);
+                    Point[] rightEyeBrow = BigEyeActivity.this.getCameraPoints(landmark, 85, 16);
+                    Point[] leftEye = BigEyeActivity.this.getCameraPoints(landmark, 101, 16);
+                    Point[] rightEye = BigEyeActivity.this.getCameraPoints(landmark, 117, 16);
+                    Point[] nose = BigEyeActivity.this.getCameraPoints(landmark, 133, 47);
+                    Point[] upLip = BigEyeActivity.this.getCameraPoints(landmark, 180, 16);
+                    Point[] downLip = BigEyeActivity.this.getCameraPoints(landmark, 196, 16);
+
+                    Point[] leftEyeIris = new Point[5];
+                    for (int i = 0; i < 5; i++) {
+                        int x = i * 3;
+                        int y = x + 1;
+                        leftEyeIris[i] = new Point(face.eyeIrisLeft[x], face.eyeIrisLeft[y]);
+                    }
+
+                    Point[] rightEyeIris = new Point[5];
+                    for (int i = 0; i < 5; i++) {
+                        int x = i * 3;
+                        int y = x + 1;
+                        rightEyeIris[i] = new Point(face.eyeIrisRight[x], face.eyeIrisRight[y]);
+                    }
+
+                    Point[] leftEyeIrisFrame = new Point[15];
+                    for (int i = 0; i < 15; i++) {
+                        int x = i * 3;
+                        int y = x + 1;
+                        leftEyeIrisFrame[i] = new Point(face.eyeLandMarkLeft[x], face.eyeLandMarkLeft[y]);
+                    }
+
+                    Point[] rightEyeIrisFrame = new Point[15];
+                    for (int i = 0; i < 15; i++) {
+                        int x = i * 3;
+                        int y = x + 1;
+                        rightEyeIrisFrame[i] = new Point(face.eyeLandMarkRight[x], face.eyeLandMarkRight[y]);
+                    }
+
+                    Point[] faceFrame = new Point[]{new Point(face.x1, face.y1), new Point(face.x2, face.y1), new Point(face.x2, face.y2), new Point(face.x1, face.y2)};
+                    FaceData faceData = new FaceData(timestamp, faceFrame, check, leftEyeBrow, rightEyeBrow, leftEye, rightEye, leftEyeIris, leftEyeIrisFrame, rightEyeIris, rightEyeIrisFrame, nose, upLip, downLip);
+
+                    bigEyeRenderer.faceDataReady(faceData);
+                } else {
+                    bigEyeRenderer.faceDataReady(null);
+                }
+
+                bigEyeRenderer.cameraReady(imageData);
+            }
+        });
 
     }
 
@@ -290,10 +295,10 @@ public class BigEyeActivity extends AppCompatActivity {
         imageConfig.setHeight(imageData.getHeight());
 
         if (imageData.getImageType() == ImageType.NV21) {
-            //ImageType.NV21
+            // ImageType.NV21
             imageConfig.setFormat(ImageConfig.FaceImageFormat.YUV);
         } else {
-            //ImageType.RGBA
+            // ImageType.RGBA || ImageType.IMAGE
             imageConfig.setFormat(ImageConfig.FaceImageFormat.RGBA);
         }
         return imageConfig;
@@ -306,9 +311,41 @@ public class BigEyeActivity extends AppCompatActivity {
             return;
         }
 
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setImageQueueDepth(1)
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
+                .setBackgroundExecutor((Executor) Dispatchers.getIO()).build();
+
+        //打开摄像头
+        imageAnalysis.setAnalyzer((Executor) Dispatchers.getIO(), new ImageAnalysis.Analyzer() {
+            @Override
+            public void analyze(@NonNull ImageProxy imageProxy) {
+                if (isCamera) {
+                    timestamp = System.currentTimeMillis();
+                    if (imageProxy.getFormat() == ImageFormat.YUV_420_888) {
+                        // ImageFormat.YUV_420_888
+                        byte[] yuv = ImageUtilsKt.yuv420888ToNv21(imageProxy);
+                        int width = imageProxy.getCropRect().width();
+                        int height = imageProxy.getCropRect().height();
+                        imageData = new ImageData(yuv, width, height, imageProxy.getImageInfo()
+                                .getRotationDegrees(), ImageType.NV21, imageProxy, timestamp);
+                    } else {
+                        //  PixelFormat.RGBA_8888
+                        int width = imageProxy.getWidth();
+                        int height = imageProxy.getHeight();
+                        byte[] rgba = new byte[width * height * 4];
+                        ImageUtilsKt.toRgba(imageProxy, rgba);
+                        imageData = new ImageData(rgba, width, height, imageProxy.getImageInfo()
+                                .getRotationDegrees(), ImageType.RGBA, imageProxy, timestamp);
+                    }
+                    onImageData();
+                }
+            }
+        });
+
         CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                .build();
+                .requireLensFacing(CameraSelector.LENS_FACING_FRONT).build();
 
         cameraProvider.unbindAll();
         cameraProvider.bindToLifecycle(this, cameraSelector, imageAnalysis);
@@ -330,8 +367,7 @@ public class BigEyeActivity extends AppCompatActivity {
                     boolean newFile = modelFile.createNewFile();
                     if (newFile) {
                         try (InputStream inputStream = getApplicationContext().getAssets()
-                                .open("model/" + modelName);
-                             FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
+                                .open("model/" + modelName); FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
 
                             //定义存储空间
                             byte[] b = new byte[1024 * 5];
