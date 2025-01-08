@@ -1,17 +1,17 @@
 package com.enjoypartytime.testdemo.opengl.camerax;
 
-import android.content.Context;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.camera2.internal.Camera2CameraInfoImpl;
+import androidx.camera.camera2.internal.Camera2PhysicalCameraInfoImpl;
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraControl;
+import androidx.camera.core.CameraInfo;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageCapture;
@@ -19,11 +19,11 @@ import androidx.camera.core.MeteringPoint;
 import androidx.camera.core.MeteringPointFactory;
 import androidx.camera.core.Preview;
 import androidx.camera.core.SurfaceOrientedMeteringPointFactory;
+import androidx.camera.core.impl.RestrictedCameraInfo;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 
-import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -31,6 +31,8 @@ import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.camerax.view.TouchView;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +43,8 @@ import java.util.concurrent.TimeUnit;
  * date 2024/12/4
  * 基础CameraX照相机
  */
+@ExperimentalCamera2Interop
+@SuppressLint("RestrictedApi")
 public class CameraXActivity extends AppCompatActivity {
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
@@ -103,7 +107,7 @@ public class CameraXActivity extends AppCompatActivity {
 
         if (f > 1) {
             tmpScale = tmpScale + 0.01f;
-            tmpScale = Math.min(tmpScale, 1);
+            tmpScale = Math.min(tmpScale, 10);
         } else {
             tmpScale = tmpScale - 0.01f;
             tmpScale = Math.max(tmpScale, 0);
@@ -150,31 +154,32 @@ public class CameraXActivity extends AppCompatActivity {
         cameraProvider.unbindAll();
         camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
         getCameraList();
-
     }
 
     private void getCameraList() {
 
-        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-
-        try {
-            String[] cameraIdList = manager.getCameraIdList();
-            LogUtils.d("cameraIdList=" + GsonUtils.toJson(cameraIdList));
-
-            for (String id : cameraIdList) {
-                CameraCharacteristics cameraCharacteristics = manager.getCameraCharacteristics(id);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                    if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK) {
-                    Set<String> physicalCameraIds = cameraCharacteristics.getPhysicalCameraIds();
-                    LogUtils.d("cameraIdList:" + id + ",physicalCameraIds=" + GsonUtils.toJson(physicalCameraIds));
-//                    }
-                }
-            }
-
-        } catch (CameraAccessException | NullPointerException exception) {
-            throw new RuntimeException(exception);
+        // CameraX
+        Set<CameraInfo> cameraInfos = camera.getCameraInfo().getPhysicalCameraInfos();
+        LogUtils.d("cameraIdList cameraInfos.size=" + cameraInfos.size());
+        List<CameraInfo> cameraInfoList = new ArrayList<>(cameraInfos);
+        for (CameraInfo cameraInfo : cameraInfoList) {
+            LogUtils.d("cameraIdList cameraInfo.id=" + ((Camera2PhysicalCameraInfoImpl) cameraInfo).getCameraId());
         }
 
+        // available
+        List<List<CameraInfo>> availableConcurrentCameraInfos = cameraProvider.getAvailableConcurrentCameraInfos();
+        LogUtils.d("cameraIdList availableConcurrentCameraInfos.size=" + availableConcurrentCameraInfos.size());
+        for (List<CameraInfo> availableCameraInfos : availableConcurrentCameraInfos) {
+            LogUtils.d("cameraIdList cameraInfos.size=" + availableCameraInfos.size());
+            for (CameraInfo cameraInfo : availableCameraInfos) {
+                LogUtils.d("cameraIdList cameraInfo.id=" + ((RestrictedCameraInfo) cameraInfo).getCameraId());
+            }
+        }
 
+        List<CameraInfo> availableCameraInfos1 = cameraProvider.getAvailableCameraInfos();
+        LogUtils.d("cameraIdList availableCameraInfos1.size=" + availableCameraInfos1.size());
+        for (CameraInfo cameraInfo : availableCameraInfos1) {
+            LogUtils.d("cameraIdList cameraInfo.id=" + ((Camera2CameraInfoImpl) cameraInfo).getCameraId());
+        }
     }
 }

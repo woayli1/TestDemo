@@ -20,7 +20,7 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.brush.BrushActivity;
-import com.enjoypartytime.testdemo.opengl.camerax.CameraXMainActivity;
+import com.enjoypartytime.testdemo.opengl.camerax.CameraMainActivity;
 import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
 import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
@@ -53,7 +53,7 @@ public class OpenglActivity extends Activity {
         TextView tvMosaic = findViewById(R.id.tv_mosaic);
         TextView tvBrush = findViewById(R.id.tv_brush);
         TextView tvLive2d = findViewById(R.id.tv_live_2d);
-        TextView tvCameraX = findViewById(R.id.tv_camera_x);
+        TextView tvCameraMain = findViewById(R.id.tv_camera_main);
 
         int glVersion = getGLESVersion();
         String version = "OpenGL ES 1.0";
@@ -87,7 +87,7 @@ public class OpenglActivity extends Activity {
                 startActivity(intent);
             });
 
-            tvCameraX.setOnClickListener(view -> requestNeedPermissions());
+            tvCameraMain.setOnClickListener(view -> requestNeedPermissions());
 
             if (glVersion > 196609) {
                 version = "OpenGL ES 3.2";
@@ -106,7 +106,7 @@ public class OpenglActivity extends Activity {
             tvMosaic.setTextColor(getResources().getColor(R.color.lightGray, null));
             tvBrush.setTextColor(getResources().getColor(R.color.lightGray, null));
             tvLive2d.setTextColor(getResources().getColor(R.color.lightGray, null));
-            tvCameraX.setTextColor(getResources().getColor(R.color.lightGray, null));
+            tvCameraMain.setTextColor(getResources().getColor(R.color.lightGray, null));
 
             if (glVersion > 65537) {
                 version = "OpenGL ES 2.0";
@@ -186,7 +186,7 @@ public class OpenglActivity extends Activity {
         if (ObjectUtils.isNotEmpty(permissions)) {
             requestPermissions(permissions, PERMISSION_REQUEST_CODE);
         } else {
-            Intent intent = new Intent(OpenglActivity.this, CameraXMainActivity.class);
+            Intent intent = new Intent(OpenglActivity.this, CameraMainActivity.class);
             startActivity(intent);
         }
     }

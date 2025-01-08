@@ -7,9 +7,20 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_camera_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="Camera2相机"
+        android:textSize="20sp" />
+
+    <TextView
         android:id="@+id/tv_camera_x"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
@@ -36,6 +47,17 @@
         android:focusable="true"
         android:padding="5dp"
         android:text="Big Eye"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_vivo_zeiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:text="vivo X200 Pro 蔡司镜头"
         android:textSize="20sp" />
 
 </LinearLayout>
