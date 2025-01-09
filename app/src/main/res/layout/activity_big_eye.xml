@@ -49,7 +49,7 @@
 
     </RelativeLayout>
 
-    <com.enjoypartytime.testdemo.opengl.camerax.bigEye.BigEyeOpenGLView
+    <com.enjoypartytime.testdemo.opengl.camera.bigEye.BigEyeOpenGLView
         android:id="@+id/img_gl_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

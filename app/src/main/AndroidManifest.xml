@@ -76,12 +76,12 @@
         <activity android:name=".opengl.live2d.Live2DActivity" />
         <activity android:name=".opengl.brush.BrushActivity" />
 
-        <activity android:name=".opengl.camerax.CameraMainActivity" />
-        <activity android:name=".opengl.camerax.camera2.Camera2Activity" />
-        <activity android:name=".opengl.camerax.CameraXActivity" />
-        <activity android:name=".opengl.camerax.cameraXFilter.CameraXFilterActivity" />
-        <activity android:name=".opengl.camerax.bigEye.BigEyeActivity" />
-        <activity android:name=".opengl.camerax.vivo.VivoZeissActivity" />
+        <activity android:name=".opengl.camera.CameraMainActivity" />
+        <activity android:name=".opengl.camera.camera2.Camera2Activity" />
+        <activity android:name=".opengl.camera.CameraXActivity" />
+        <activity android:name=".opengl.camera.cameraXFilter.CameraXFilterActivity" />
+        <activity android:name=".opengl.camera.bigEye.BigEyeActivity" />
+        <activity android:name=".opengl.camera.vivo.VivoCameraActivity" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />
 

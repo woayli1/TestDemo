@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.enjoypartytime.testdemo.opengl.camerax.view.TouchView
+    <com.enjoypartytime.testdemo.opengl.camera.view.TouchView
         android:id="@+id/touch_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

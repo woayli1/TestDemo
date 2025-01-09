@@ -37,7 +37,7 @@
 
     </RelativeLayout>
 
-    <com.enjoypartytime.testdemo.opengl.camerax.cameraXFilter.CameraXFilterView
+    <com.enjoypartytime.testdemo.opengl.camera.cameraXFilter.CameraXFilterView
         android:id="@+id/camera_x_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

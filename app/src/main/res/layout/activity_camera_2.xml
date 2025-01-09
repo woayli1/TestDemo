@@ -5,12 +5,12 @@
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
-    <com.enjoypartytime.testdemo.opengl.camerax.camera2.view.ResizeAbleSurfaceView
+    <com.enjoypartytime.testdemo.opengl.camera.camera2.view.ResizeAbleSurfaceView
         android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.enjoypartytime.testdemo.opengl.camerax.view.TouchView
+    <com.enjoypartytime.testdemo.opengl.camera.view.TouchView
         android:id="@+id/touch_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

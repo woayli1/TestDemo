@@ -20,7 +20,7 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.brush.BrushActivity;
-import com.enjoypartytime.testdemo.opengl.camerax.CameraMainActivity;
+import com.enjoypartytime.testdemo.opengl.camera.CameraMainActivity;
 import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
 import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
