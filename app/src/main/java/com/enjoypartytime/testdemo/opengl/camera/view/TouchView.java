@@ -56,10 +56,16 @@ public class TouchView extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                performClick();
             case MotionEvent.ACTION_POINTER_UP:
                 moveType = 0;
                 break;
         }
+        return true;
+    }
+    @Override
+    public boolean performClick() {
+        super.performClick();
         return true;
     }
 
