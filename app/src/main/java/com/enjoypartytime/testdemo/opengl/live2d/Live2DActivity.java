@@ -28,7 +28,7 @@ public class Live2DActivity extends Activity {
         TextView tvLive2dMoveResponse = findViewById(R.id.tv_live_2d_move_response);
         TextView tvLive2dMore = findViewById(R.id.tv_live_2d_more);
 
-        tvLive2dBasic.setOnClickListener(view -> ActivityUtils.startActivity(Live2DActivity.this, Live2DBasicActivity.class));
+//        tvLive2dBasic.setOnClickListener(view -> ActivityUtils.startActivity(Live2DActivity.this, Live2DBasicActivity.class));
 
 
     }

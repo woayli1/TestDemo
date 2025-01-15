@@ -33,11 +33,11 @@ import java.util.Collections;
  * <p>
  * <p>
  * * VIVO x200pro
- * * 0 后置默认镜头
- * * 1 前置默认镜头
+ * * 0 后置默认镜头 ZOOM_RATIO [1,10]
+ * * 1 前置默认镜头 ZOOM_RATIO [1,4]
  * * 2 后置主镜头  ZOOM_RATIO [1,10]
  * * 3 后置蔡司镜头 ZOOM_RATIO [1,25]
- * * 4 后置广角镜头 ZOOM_RATIO [1,4]
+ * * 4 后置广角镜头 ZOOM_RATIO [1,10]
  */
 public class VivoCameraActivity extends AppCompatActivity {
 
@@ -52,7 +52,7 @@ public class VivoCameraActivity extends AppCompatActivity {
     private CaptureRequest.Builder previewBuilder;
     private CameraDevice cameraDevice;
 
-    private String currentCameraId = "2";
+    private String currentCameraId = "0";
 
     private TextView tvStrength;
 
@@ -68,10 +68,11 @@ public class VivoCameraActivity extends AppCompatActivity {
         vivoSeekBar = findViewById(R.id.vivo_seekbar);
         tvStrength = findViewById(R.id.tv_strength);
 
+        vivoSeekBar.setMax(1000);
         vivoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float tmpFloat = (float) (progress + 1) / 10;
+                float tmpFloat = (float) (progress + 1) / 100;
                 setZoom(tmpFloat);
             }
 
@@ -129,7 +130,7 @@ public class VivoCameraActivity extends AppCompatActivity {
             surfaceHolder = surfaceView.getHolder();
         }
         surfaceHolder.addCallback(surfaceCallback);
-        vivoSeekBar.setProgress(9);
+        vivoSeekBar.setProgress(99);
     }
 
     @Override
@@ -277,14 +278,15 @@ public class VivoCameraActivity extends AppCompatActivity {
      */
     public void setZoom(float scale) {
 
-        if (scale < 1) {
-            //广角镜头
-            switchCamera("4");
-            tmpScale = (float) (1 + (scale - 0.1) * (1.65 - 1));
-        } else if (scale < 3.7) {
+        if (scale < 3.7) {
             //主镜头
-            switchCamera("2");
-            tmpScale = (float) (1 + (scale - 1) / (3.7 - 1) * (4.5 - 1));
+            switchCamera("0");
+            if (scale < 1) {
+                //广角镜头
+                tmpScale = (float) (0.6 + (scale - 0) * (1 - 0.6));
+            } else {
+                tmpScale = (float) (1 + (scale - 1) / (3.7 - 1) * (4.5 - 1));
+            }
         } else {
             //长焦镜头
             switchCamera("3");
