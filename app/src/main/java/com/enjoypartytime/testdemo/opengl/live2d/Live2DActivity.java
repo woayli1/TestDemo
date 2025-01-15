@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.enjoypartytime.testdemo.R;
 
 /**
