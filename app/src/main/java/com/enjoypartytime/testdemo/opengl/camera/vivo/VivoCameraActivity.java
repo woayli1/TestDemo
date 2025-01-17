@@ -4,13 +4,18 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Range;
+import android.util.Size;
 import android.view.SurfaceHolder;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -24,7 +29,9 @@ import com.blankj.utilcode.util.LogUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.camera.camera2.view.ResizeAbleSurfaceView;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * author gc
@@ -56,7 +63,7 @@ public class VivoCameraActivity extends AppCompatActivity {
 
     private TextView tvStrength;
 
-    private float tmpScale = 0;
+    private float tmpScale = 1;
     private boolean isSwitch = false;
 
     @Override
@@ -90,21 +97,7 @@ public class VivoCameraActivity extends AppCompatActivity {
         surfaceCallback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {
-
                 initCamera();
-
-                //解决预览拉升
-                int height = surfaceView.getHeight();
-                int width = surfaceView.getWidth();
-                if (height > width) {
-                    //正常情况，竖屏
-                    float justH = width * 4.f / 3;
-                    //设置View在水平方向的缩放比例,保证宽高比为3:4
-                    surfaceView.setScaleX(height / justH);
-                } else {
-                    float justW = height * 4.f / 3;
-                    surfaceView.setScaleY(width / justW);
-                }
             }
 
             @Override
@@ -170,6 +163,12 @@ public class VivoCameraActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
+            //设置长宽
+            Size viewSize = getMaxSize(currentCameraId);
+            surfaceHolder.setFixedSize(viewSize.getWidth(), viewSize.getHeight());
+            surfaceView.resize(viewSize.getHeight(), viewSize.getWidth());
+
             //打开摄像头
             cameraManager.openCamera(currentCameraId, stateCallback, null);
         } catch (CameraAccessException exception) {
@@ -208,6 +207,12 @@ public class VivoCameraActivity extends AppCompatActivity {
             previewBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             //设置预览输出界面
             previewBuilder.addTarget(surfaceHolder.getSurface());
+            //设置EIS电子防抖
+            previewBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+            //设置OIS光学稳定器防抖
+            previewBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+            //设置FPS
+            previewBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, getFPSRanges(currentCameraId));
             startPreview();
         } catch (CameraAccessException exception) {
             LogUtils.e(exception);
@@ -219,7 +224,6 @@ public class VivoCameraActivity extends AppCompatActivity {
         previewBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
 
         //设置缩放
-        previewBuilder.addTarget(surfaceHolder.getSurface());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             previewBuilder.set(CaptureRequest.CONTROL_ZOOM_RATIO, tmpScale);
         } else {
@@ -314,6 +318,38 @@ public class VivoCameraActivity extends AppCompatActivity {
                 startPreview();
             }
         }
+    }
+
+    private Range<Integer> getFPSRanges(String cameraId) {
+        try {
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+            Range<Integer>[] ranges = cameraCharacteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES);
+            if (ranges == null) {
+                return new Range<>(25, 25);
+            } else {
+                List<Range<Integer>> rangeList = Arrays.asList(ranges);
+                return rangeList.get(rangeList.size() - 1);
+            }
+        } catch (CameraAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Size getMaxSize(String cameraId) {
+        try {
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if (map == null) {
+                return new Size(1920, 1440);
+            } else {
+                Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
+                return previewSizes[0];
+            }
+        } catch (CameraAccessException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**

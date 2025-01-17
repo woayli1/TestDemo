@@ -3,8 +3,8 @@ package com.enjoypartytime.testdemo.opengl.camera.camera2;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.ImageFormat;
 import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -13,7 +13,7 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.MeteringRectangle;
-import android.media.ImageReader;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -38,6 +38,7 @@ import com.enjoypartytime.testdemo.opengl.camera.view.TouchView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -52,8 +53,8 @@ public class Camera2Activity extends AppCompatActivity {
     private SurfaceHolder surfaceHolder;
     private SurfaceHolder.Callback surfaceCallback;
 
-    private Size previewSize;//图片尺寸
-    private ImageReader imageReader;//接受图片数据
+//    private Size previewSize;//图片尺寸
+//    private ImageReader imageReader;//接受图片数据
 
     private CameraCaptureSession cameraCaptureSession;
     private CaptureRequest.Builder previewBuilder;
@@ -100,27 +101,24 @@ public class Camera2Activity extends AppCompatActivity {
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {
 
-                previewSize = new Size(holder.getSurfaceFrame().width(), holder.getSurfaceFrame()
-                        .height());
+//                previewSize = new Size(holder.getSurfaceFrame().width(), holder.getSurfaceFrame()
+//                        .height());
                 switchCamera("0");
-
-                //解决预览拉升
-                int height = surfaceView.getHeight();
-                int width = surfaceView.getWidth();
-                if (height > width) {
-                    //正常情况，竖屏
-                    float justH = width * 4.f / 3;
-                    //设置View在水平方向的缩放比例,保证宽高比为3:4
-                    surfaceView.setScaleX(height / justH);
-                } else {
-                    float justW = height * 4.f / 3;
-                    surfaceView.setScaleY(width / justW);
-                }
             }
 
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
+                //解决预览拉升
+//                LogUtils.d("width=" + width + ",height=" + height);
+//                if (height > width) {
+//                    //正常情况，竖屏
+//                    float justH = width * 4.f / 3;
+//                    //设置View在水平方向的缩放比例,保证宽高比为3:4
+//                    surfaceView.setScaleX(height / justH);
+//                } else {
+//                    float justW = height * 4.f / 3;
+//                    surfaceView.setScaleY(width / justW);
+//                }
             }
 
             @Override
@@ -180,10 +178,10 @@ public class Camera2Activity extends AppCompatActivity {
             cameraDevice = null;
         }
         //关闭拍照处理器
-        if (imageReader != null) {
-            imageReader.close();
-            imageReader = null;
-        }
+//        if (imageReader != null) {
+//            imageReader.close();
+//            imageReader = null;
+//        }
 
         currentCameraId = null;
         surfaceHolder.removeCallback(surfaceCallback);
@@ -208,10 +206,9 @@ public class Camera2Activity extends AppCompatActivity {
      * 打开对应id的摄像头
      */
     private void setAndOpenCamera() {
-        //获取摄像头属性描述
-        CameraCharacteristics cameraCharacteristics;
         try {
-            cameraCharacteristics = cameraManager.getCameraCharacteristics(currentCameraId);
+            //获取摄像头属性描述
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(currentCameraId);
 //            cameraCharacteristics = cameraManager.getCameraCharacteristics(String.valueOf(CameraCharacteristics.LENS_FACING_FRONT));
             //获取支持的缩放
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -236,16 +233,22 @@ public class Camera2Activity extends AppCompatActivity {
                 }
             }
             Log.d("最大缩放倍数", "switchCamera: " + maxZoom);
+
+            //设置长宽
+            Size viewSize = getMaxSize(currentCameraId);
+            surfaceHolder.setFixedSize(viewSize.getWidth(), viewSize.getHeight());
+            surfaceView.resize(viewSize.getHeight(), viewSize.getWidth());
+
             //获取该摄像头支持输出的图片尺寸
 //            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             //根据屏幕尺寸即摄像头输出尺寸计算图片尺寸，或者直接选取最大的图片尺寸进行输出
             //初始化imageReader
-            imageReader = ImageReader.newInstance(previewSize.getWidth(), previewSize.getHeight(), ImageFormat.JPEG, 2);
+//            imageReader = ImageReader.newInstance(previewSize.getWidth(), previewSize.getHeight(), ImageFormat.JPEG, 2);
             //设置回调处理接受图片数据
-            imageReader.setOnImageAvailableListener(reader -> {
-                //发送数据进子线程处理
+//            imageReader.setOnImageAvailableListener(reader -> {
+            //发送数据进子线程处理
 //                    handler.post(new ImageSaver(reader.acquireNextImage(), MainActivity.this));
-            }, null);
+//            }, null);
             //打开相机，先检查权限
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -301,12 +304,18 @@ public class Camera2Activity extends AppCompatActivity {
 
             for (String id : cameraIdList) {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(id);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                if (map != null) {
+                    Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
+                    LogUtils.d("cameraIdList=" + id + ",,,previewSizes=" + Arrays.asList(previewSizes));
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 //                    if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK) {
-                    Set<String> physicalCameraIds = cameraCharacteristics.getPhysicalCameraIds();
-                    resList.addAll(physicalCameraIds);
-                    LogUtils.d("cameraIdList:" + id + ",physicalCameraIds=" + GsonUtils.toJson(physicalCameraIds));
+                        Set<String> physicalCameraIds = cameraCharacteristics.getPhysicalCameraIds();
+                        resList.addAll(physicalCameraIds);
+                        LogUtils.d("cameraIdList:" + id + ",physicalCameraIds=" + GsonUtils.toJson(physicalCameraIds));
 //                    }
+                    }
                 }
             }
 
@@ -314,6 +323,40 @@ public class Camera2Activity extends AppCompatActivity {
             throw new RuntimeException(exception);
         }
         return resList;
+    }
+
+    private Range<Integer> getFPSRanges(String cameraId) {
+        try {
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+            Range<Integer>[] ranges = cameraCharacteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES);
+//            LogUtils.d("cameraIdList=" + cameraId + ",,,ranges=" + Arrays.asList(ranges));
+            if (ranges == null) {
+                return new Range<>(25, 25);
+            } else {
+                List<Range<Integer>> rangeList = Arrays.asList(ranges);
+                return rangeList.get(rangeList.size() - 1);
+            }
+        } catch (CameraAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Size getMaxSize(String cameraId) {
+        try {
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if (map == null) {
+                return new Size(1920, 1440);
+            } else {
+                Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
+                LogUtils.d("cameraIdList=" + cameraId + ",,,previewSizes=" + Arrays.asList(previewSizes));
+                return previewSizes[0];
+            }
+        } catch (CameraAccessException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -325,6 +368,8 @@ public class Camera2Activity extends AppCompatActivity {
             previewBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             //设置预览输出界面
             previewBuilder.addTarget(surfaceHolder.getSurface());
+            //设置FPS
+            previewBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, getFPSRanges(currentCameraId));
             //获取缩放倍数
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 Float aFloat = previewBuilder.get(CaptureRequest.CONTROL_ZOOM_RATIO);
@@ -333,7 +378,7 @@ public class Camera2Activity extends AppCompatActivity {
                 }
             }
             //创建相机的会话Session
-            cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(), imageReader.getSurface()), statePreviewCallback, null);
+            cameraDevice.createCaptureSession(Collections.singletonList(surfaceHolder.getSurface()), statePreviewCallback, null);
         } catch (CameraAccessException ignore) {
 
         }
