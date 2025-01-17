@@ -168,8 +168,9 @@ public class Camera2Activity extends AppCompatActivity {
 
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-                //解决预览拉升
-//                LogUtils.d("width=" + width + ",height=" + height);
+
+                LogUtils.d("width=" + width + ",height=" + height);
+//                //解决预览拉升
 //                if (height > width) {
 //                    //正常情况，竖屏
 //                    float justH = width * 4.f / 3;
@@ -179,6 +180,8 @@ public class Camera2Activity extends AppCompatActivity {
 //                    float justW = height * 4.f / 3;
 //                    surfaceView.setScaleY(width / justW);
 //                }
+
+                startPreview();
             }
 
             @Override
@@ -325,6 +328,8 @@ public class Camera2Activity extends AppCompatActivity {
                     tvFps.setText(String.format("FPS：%s", fps));
                 });
 
+                setPreviewSize(previewSize);
+
                 //获取该摄像头支持输出的图片尺寸
 //            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 //根据屏幕尺寸即摄像头输出尺寸计算图片尺寸，或者直接选取最大的图片尺寸进行输出
@@ -340,7 +345,7 @@ public class Camera2Activity extends AppCompatActivity {
                     return;
                 }
                 //打开摄像头
-                cameraManager.openCamera(String.valueOf(currentCameraId), stateCallback, mBackgroundHandler);
+                cameraManager.openCamera(currentCameraId, stateCallback, mBackgroundHandler);
             } catch (CameraAccessException | NullPointerException ignore) {
 
             }
@@ -448,12 +453,11 @@ public class Camera2Activity extends AppCompatActivity {
      */
     public void startPreview() {
 
-        try {
+        if (cameraDevice == null) {
+            return;
+        }
 
-            //设置长宽
-            Size viewSize = previewSizes[previewSize];
-            surfaceView.resize(viewSize.getHeight(), viewSize.getWidth());
-            surfaceHolder.setFixedSize(viewSize.getWidth(), viewSize.getHeight());
+        try {
 
             //首先需要构建预览请求
             previewBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
@@ -470,9 +474,6 @@ public class Camera2Activity extends AppCompatActivity {
                     tmpScale = aFloat;
                 }
             }
-
-            //设置长宽
-//            previewBuilder.set(CaptureRequest.SCALER_CROP_REGION, new Rect(0, 0, viewSize.getWidth(), viewSize.getHeight()));
 
             //设置防抖
             //设置EIS电子防抖
@@ -618,6 +619,10 @@ public class Camera2Activity extends AppCompatActivity {
 
     public void setPreviewSize(Integer previewSize) {
         this.previewSize = previewSize;
-        startPreview();
+
+        //设置长宽
+        Size viewSize = previewSizes[previewSize];
+        surfaceView.resize(viewSize.getHeight(), viewSize.getWidth());
+        surfaceHolder.setFixedSize(viewSize.getWidth(), viewSize.getHeight());
     }
 }
