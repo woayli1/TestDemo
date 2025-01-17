@@ -23,4 +23,49 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" />
 
+    <TextView
+        android:id="@+id/tv_ratio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:text="1920*1080"
+        android:textColor="@color/lightBlue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_fps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:text="FPS：25"
+        android:textColor="@color/lightBlue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_stabilization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:text="防抖：关"
+        android:textColor="@color/lightBlue"
+        android:textSize="14sp" />
+
 </FrameLayout>
