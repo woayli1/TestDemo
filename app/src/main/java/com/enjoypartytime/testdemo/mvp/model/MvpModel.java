@@ -15,15 +15,12 @@ public class MvpModel implements IModel {
 
     @Override
     public void login(final String username, String password, final Callback callback) {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                long time = TimeUtils.getNowMills();
-                if (time % 2 == 0) {
-                    callback.onSuccess(new UserBean(1, "AAA"));
-                } else {
-                    callback.onFailure("今天运气差了一丢丢");
-                }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            long time = TimeUtils.getNowMills();
+            if (time % 2 == 0) {
+                callback.onSuccess(new UserBean(1, "AAA"));
+            } else {
+                callback.onFailure("今天运气差了一丢丢");
             }
         }, 2000);
     }
