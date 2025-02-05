@@ -7,6 +7,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.view.LoadingBottomPopupView;
 import com.lxj.xpopup.XPopup;
@@ -49,6 +50,12 @@ public abstract class BaseActivity extends FragmentActivity {
 
     protected <T extends View> T find(@IdRes int id) {
         return findViewById(id);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ToastUtils.cancel();
     }
 
 }
