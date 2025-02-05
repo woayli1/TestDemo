@@ -49,7 +49,7 @@ public class MvpActivity extends BaseActivity implements IView {
 
     @Override
     public void loginSuccess(UserBean userBean) {
-        ToastUtils.showShort("登录成功");
+        ToastUtils.showShort("登录成功：运气不错哦~");
     }
 
     @Override

@@ -188,8 +188,12 @@ public class RetrofitConverterActivity extends BaseActivity {
                         });
                         LogUtils.i(msg);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException exception) {
+                    LogUtils.e(exception);
+                    RetrofitConverterActivity.this.runOnUiThread(() -> {
+                        RetrofitConverterActivity.this.hideProgress();
+                        tvRes.setText(exception.getMessage());
+                    });
                 }
             }
 
@@ -225,8 +229,8 @@ public class RetrofitConverterActivity extends BaseActivity {
                     return file;
                 }).subscribe(file -> {
                     String msg = "下载完成 Flowable 路径:" + file.getAbsolutePath();
-                    runOnUiThread(() -> {
-                        hideProgress();
+                    RetrofitConverterActivity.this.runOnUiThread(() -> {
+                        RetrofitConverterActivity.this.hideProgress();
                         tvRes.setText(msg);
                     });
                     LogUtils.i(msg);
@@ -234,6 +238,12 @@ public class RetrofitConverterActivity extends BaseActivity {
                     if (ObjectUtils.isNotEmpty(disposableDownload)) {
                         disposableDownload.dispose();
                     }
+                }, throwable -> {
+                    LogUtils.e(throwable);
+                    RetrofitConverterActivity.this.runOnUiThread(() -> {
+                        RetrofitConverterActivity.this.hideProgress();
+                        tvRes.setText(throwable.getMessage());
+                    });
                 });
     }
 }

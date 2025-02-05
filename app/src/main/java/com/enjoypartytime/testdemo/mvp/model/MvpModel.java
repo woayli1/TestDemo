@@ -22,7 +22,7 @@ public class MvpModel implements IModel {
                 if (time % 2 == 0) {
                     callback.onSuccess(new UserBean(1, "AAA"));
                 } else {
-                    callback.onFailure("连接服务器超时");
+                    callback.onFailure("今天运气差了一丢丢");
                 }
             }
         }, 2000);

@@ -348,34 +348,32 @@ public class BigEyeActivity extends AppCompatActivity {
         File ModelDir = getApplicationContext().getFilesDir();
         List<String> modelNames;
         try {
-            modelNames = Arrays.asList(getApplicationContext().getAssets().list("model"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            String[] models = getApplicationContext().getAssets().list("model");
+            if (models != null) {
+                modelNames = Arrays.asList(models);
+                for (String modelName : modelNames) {
+                    File modelFile = new File(ModelDir, modelName);
+                    if (!modelFile.exists()) {
+                        boolean newFile = modelFile.createNewFile();
+                        if (newFile) {
+                            try (InputStream inputStream = getApplicationContext().getAssets()
+                                    .open("model/" + modelName); FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
 
-        for (String modelName : modelNames) {
-            File modelFile = new File(ModelDir, modelName);
-            if (!modelFile.exists()) {
-                try {
-                    boolean newFile = modelFile.createNewFile();
-                    if (newFile) {
-                        try (InputStream inputStream = getApplicationContext().getAssets()
-                                .open("model/" + modelName); FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
-
-                            //定义存储空间
-                            byte[] b = new byte[1024 * 5];
-                            //开始读文件
-                            int len;
-                            while ((len = inputStream.read(b)) != -1) {
-                                //将b中的数据写入到FileOutputStream对象中
-                                fileOutputStream.write(b, 0, len);
+                                //定义存储空间
+                                byte[] b = new byte[1024 * 5];
+                                //开始读文件
+                                int len;
+                                while ((len = inputStream.read(b)) != -1) {
+                                    //将b中的数据写入到FileOutputStream对象中
+                                    fileOutputStream.write(b, 0, len);
+                                }
                             }
                         }
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         SdkConfig config = new SdkConfig();
