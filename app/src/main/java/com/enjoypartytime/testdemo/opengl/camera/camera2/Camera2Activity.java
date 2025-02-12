@@ -75,9 +75,9 @@ public class Camera2Activity extends AppCompatActivity {
     private float tmpScale = 0;
 
     private List<Range<Integer>> rangeList;
-    private Integer rangeSize;
+    private Integer rangeSize = 0;
     private Size[] previewSizes;
-    private Integer previewSize;
+    private Integer previewSize = 0;
 
     private boolean isStabilization = false;
 
@@ -126,7 +126,8 @@ public class Camera2Activity extends AppCompatActivity {
 
             new XPopup.Builder(Camera2Activity.this).isViewMode(true)
                     .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
-                    .maxHeight(1200).asBottomList("分辨率", strings, null, 2, (position, text) -> {
+                    .maxHeight(1200)
+                    .asBottomList("分辨率", strings, null, previewSize, (position, text) -> {
                         tvRatio.setText(text);
                         setPreviewSize(position);
                     }).show();
@@ -140,7 +141,8 @@ public class Camera2Activity extends AppCompatActivity {
 
             new XPopup.Builder(Camera2Activity.this).isViewMode(true)
                     .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
-                    .maxHeight(1200).asBottomList("FPS", strings, null, 2, (position, text) -> {
+                    .maxHeight(1200)
+                    .asBottomList("FPS", strings, null, rangeSize, (position, text) -> {
                         tvFps.setText(String.format("FPS：%s", text));
                         setRangeSize(position);
                     }).show();
@@ -317,7 +319,6 @@ public class Camera2Activity extends AppCompatActivity {
                 previewSizes = getMaxSize(currentCameraId);
                 rangeList = getFPSRanges(currentCameraId);
 
-                previewSize = 0;
                 String ration = previewSizes[previewSize].getWidth() + "x" + previewSizes[previewSize].getHeight();
 
                 rangeSize = rangeList.size() - 1;
