@@ -64,7 +64,8 @@
             android:focusable="true"
             android:padding="5dp"
             android:text="跳转到 Live 2D"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_camera_main"

@@ -14,6 +14,7 @@ import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
 import com.enjoypartytime.testdemo.mvp.MvpActivity;
 import com.enjoypartytime.testdemo.opengl.OpenglActivity;
 import com.enjoypartytime.testdemo.shop.ShopActivity;
+import com.enjoypartytime.testdemo.utils.OtherUtil;
 
 public class MainActivity extends Activity {
 
@@ -21,6 +22,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        OtherUtil.getInstance();
 
         TextView tvJump = findViewById(R.id.tv_jump);
         tvJump.setOnClickListener(view -> {

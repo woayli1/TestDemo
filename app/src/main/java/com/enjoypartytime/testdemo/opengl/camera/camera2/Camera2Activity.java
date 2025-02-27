@@ -271,6 +271,9 @@ public class Camera2Activity extends AppCompatActivity {
         }
 
         currentCameraId = cameraId;
+        rangeSize = 0;
+        previewSize = 0;
+
         if (cameraDevice != null) {
             cameraDevice.close();
             stateCallback.onClosed(cameraDevice);
