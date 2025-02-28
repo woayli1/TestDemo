@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.camera.camera2.adapter.CameraAdapter;
 import com.enjoypartytime.testdemo.opengl.camera.camera2.view.ResizeAbleSurfaceView;
@@ -218,6 +219,8 @@ public class Camera2Activity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        closeCamera();
+
         if (cameraCaptureSession != null) {
             cameraCaptureSession.close();
             cameraCaptureSession = null;
@@ -255,6 +258,9 @@ public class Camera2Activity extends AppCompatActivity {
     }
 
     private void stopBackgroundThread() {
+        if (mBackgroundThread == null) {
+            return;
+        }
         mBackgroundThread.quitSafely();
         try {
             mBackgroundThread.join();
@@ -369,12 +375,15 @@ public class Camera2Activity extends AppCompatActivity {
 
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
+            LogUtils.e("camera onDisconnected");
             camera.close();
             cameraDevice = null;
         }
 
         @Override
         public void onError(@NonNull CameraDevice camera, int error) {
+            LogUtils.e("open camera error=" + error);
+            ToastUtils.showShort("打开相机失败");
             camera.close();
             cameraDevice = null;
             finish();

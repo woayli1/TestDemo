@@ -119,7 +119,11 @@ public class BigEyeActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         initFaceTengine();
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
@@ -132,6 +136,19 @@ public class BigEyeActivity extends AppCompatActivity {
                 // This should never be reached.
             }
         }, ContextCompat.getMainExecutor(this));
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (cameraProvider != null) {
+            cameraProvider.unbindAll();
+        }
+        if (cameraProviderFuture != null) {
+            cameraProviderFuture.cancel(true);
+        }
     }
 
     @Override
@@ -345,14 +362,14 @@ public class BigEyeActivity extends AppCompatActivity {
     }
 
     private void initFaceTengine() {
-        File ModelDir = getApplicationContext().getFilesDir();
+        File modelDir = getApplicationContext().getFilesDir();
         List<String> modelNames;
         try {
             String[] models = getApplicationContext().getAssets().list("model");
             if (models != null) {
                 modelNames = Arrays.asList(models);
                 for (String modelName : modelNames) {
-                    File modelFile = new File(ModelDir, modelName);
+                    File modelFile = new File(modelDir, modelName);
                     if (!modelFile.exists()) {
                         boolean newFile = modelFile.createNewFile();
                         if (newFile) {
@@ -377,7 +394,7 @@ public class BigEyeActivity extends AppCompatActivity {
         }
 
         SdkConfig config = new SdkConfig();
-        TengineKitSdk.getInstance().initSdk(ModelDir.toString(), config, getApplicationContext());
+        TengineKitSdk.getInstance().initSdk(modelDir.toString(), config, getApplicationContext());
         TengineKitSdk.getInstance().initFaceDetect();
     }
 
