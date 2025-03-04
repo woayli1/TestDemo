@@ -70,7 +70,7 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"
-        android:text="跳转到 OpenGl"
+        android:text="跳转到 OpenGL ES"
         android:textSize="20sp" />
 
     <TextView
