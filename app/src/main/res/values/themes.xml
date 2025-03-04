@@ -3,15 +3,11 @@
     <style name="Base.Theme.TestDemo" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
         <item name="android:navigationBarColor">@color/white</item>
 
     </style>
 
-    <style name="Theme.WhiteBG" parent="Base.Theme.TestDemo">
-        <!--        <item name="android:windowBackground">@drawable/ic_launcher_foreground</item>-->
-        <item name="android:background">@color/white</item>
-    </style>
 </resources>
