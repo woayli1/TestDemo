@@ -119,24 +119,26 @@ public class BigEyeActivity extends AppCompatActivity {
 
             }
         });
+
+        initFaceTengine();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initFaceTengine();
+    protected void onStart() {
+        super.onStart();
 
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-        cameraProviderFuture.addListener(() -> {
-            try {
-                cameraProvider = cameraProviderFuture.get();
-                bindPreview(cameraProvider);
-            } catch (ExecutionException | InterruptedException e) {
-                // No errors need to be handled for this Future.
-                // This should never be reached.
-            }
-        }, ContextCompat.getMainExecutor(this));
-
+        if (isCamera) {
+            cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+            cameraProviderFuture.addListener(() -> {
+                try {
+                    cameraProvider = cameraProviderFuture.get();
+                    bindPreview(cameraProvider);
+                } catch (ExecutionException | InterruptedException e) {
+                    // No errors need to be handled for this Future.
+                    // This should never be reached.
+                }
+            }, ContextCompat.getMainExecutor(this));
+        }
     }
 
     @Override
