@@ -4,6 +4,8 @@ banner = "2.2.3"
 cameraCore = "1.4.1"
 converterGson = "2.11.0"
 glide = "4.16.0"
+glideTransformations = "4.3.0"
+gpuimage = "2.1.0"
 gradle = "8.5.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -29,6 +31,8 @@ camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = 
 camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-transformations = { module = "jp.wasabeef:glide-transformations", version.ref = "glideTransformations" }
+gpuimage = { module = "jp.co.cyberagent.android:gpuimage", version.ref = "gpuimage" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

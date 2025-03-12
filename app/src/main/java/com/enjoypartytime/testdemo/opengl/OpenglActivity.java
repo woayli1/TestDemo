@@ -25,6 +25,7 @@ import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
 import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
 import com.enjoypartytime.testdemo.opengl.triangle.TriangleActivity;
+import com.enjoypartytime.testdemo.opengl.image.ImageActivity;
 import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class OpenglActivity extends Activity {
         TextView tvBrush = findViewById(R.id.tv_brush);
         TextView tvLive2d = findViewById(R.id.tv_live_2d);
         TextView tvCameraMain = findViewById(R.id.tv_camera_main);
+        TextView tvImage = findViewById(R.id.tv_image);
 
         int glVersion = getGLESVersion();
         String version = "OpenGL ES 1.0";
@@ -88,6 +90,11 @@ public class OpenglActivity extends Activity {
             });
 
             tvCameraMain.setOnClickListener(view -> requestNeedPermissions());
+
+            tvImage.setOnClickListener(view -> {
+                Intent intent = new Intent(OpenglActivity.this, ImageActivity.class);
+                startActivity(intent);
+            });
 
             if (glVersion > 196609) {
                 version = "OpenGL ES 3.2";

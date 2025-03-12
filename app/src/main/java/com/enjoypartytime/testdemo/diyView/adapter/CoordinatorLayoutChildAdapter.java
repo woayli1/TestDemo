@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView.Adapter;
+package com.enjoypartytime.testdemo.diyView.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

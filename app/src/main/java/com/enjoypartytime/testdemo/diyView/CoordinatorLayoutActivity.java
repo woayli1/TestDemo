@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.diyView.Adapter.CoordinatorLayoutAdapter;
+import com.enjoypartytime.testdemo.diyView.adapter.CoordinatorLayoutAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;

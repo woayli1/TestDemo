@@ -83,6 +83,7 @@
         <activity android:name=".opengl.camera.vivo.VivoCameraActivity" />
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />
+        <activity android:name=".opengl.image.ImageActivity" />
 
         <activity android:name=".canvas.CanvasActivity" />
         <activity android:name=".canvas.RadarActivity" />

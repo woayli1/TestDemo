@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView.Adapter;
+package com.enjoypartytime.testdemo.diyView.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

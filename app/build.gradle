@@ -59,7 +59,11 @@ dependencies {
 
     implementation libs.swiperefreshlayout
     implementation libs.banner
+
     implementation libs.glide
+    implementation libs.glide.transformations
+    // If you want to use the GPU Filters
+    implementation libs.gpuimage
 
     implementation libs.camera.core
     implementation libs.camera.camera2
