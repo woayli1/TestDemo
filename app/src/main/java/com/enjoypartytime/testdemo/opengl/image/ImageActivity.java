@@ -63,12 +63,8 @@ public class ImageActivity extends Activity {
             stringList.add("第" + i + "个选项");
         }
 
-        tvOrigin.setOnClickListener(v -> {
-            recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, true));
-        });
+        tvOrigin.setOnClickListener(v -> recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, true)));
 
-        tvFilter.setOnClickListener(v -> {
-            recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, false));
-        });
+        tvFilter.setOnClickListener(v -> recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, false)));
     }
 }
