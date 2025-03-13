@@ -28,6 +28,7 @@ public class ImageActivity extends Activity {
     private boolean isLocal = true;
     private long loadTime = 0;
     private boolean countTime = false;
+    private boolean isShowLoadTime = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class ImageActivity extends Activity {
         TextView tvType = findViewById(R.id.tv_image_type);
         TextView tvLocal = findViewById(R.id.tv_image_local);
         TextView tvClearCache = findViewById(R.id.tv_image_clear_cache);
+        TextView tvShowLoadTime = findViewById(R.id.tv_image_show_load_time);
+
         TextView tvOrigin = findViewById(R.id.tv_image_origin);
         TextView tvFilter = findViewById(R.id.tv_image_filter);
 
@@ -66,12 +69,22 @@ public class ImageActivity extends Activity {
             ToastUtils.showShort("缓存清理完成");
         });
 
+        tvShowLoadTime.setOnClickListener(v -> {
+            isShowLoadTime = !isShowLoadTime;
+            tvShowLoadTime.setText(isShowLoadTime ? "显示 加载时间" : "隐藏 加载时间");
+
+            if (!isShowLoadTime) {
+                ToastUtils.cancel();
+            }
+
+        });
+
         swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         recyclerView.getViewTreeObserver()
                 .addOnGlobalLayoutListener(() -> {
-                    if (countTime) {
+                    if (countTime && isShowLoadTime) {
                         countTime = false;
                         loadTime = System.currentTimeMillis() - loadTime;
                         ToastUtils.showShort("加载时长=" + loadTime + "ms");
