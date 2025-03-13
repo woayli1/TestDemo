@@ -54,7 +54,12 @@ public class VideoViewActivity extends Activity {
                 isBegin = true;
 
                 videoView.setVideoPath(fileList.get(0).getAbsolutePath());
-                videoView.start();
+                videoView.setOnPreparedListener(mp -> videoView.start());
+
+                videoView.setOnCompletionListener(mp -> {
+                    tvPlay.setText("开始播放");
+                    isBegin = false;
+                });
 
             } else {
                 tvPlay.setText("开始播放");
