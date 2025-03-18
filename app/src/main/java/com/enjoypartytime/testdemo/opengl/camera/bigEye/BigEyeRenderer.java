@@ -86,8 +86,8 @@ public class BigEyeRenderer extends BigEyeShapeRender {
         this.owner = owner;
         Context mContext = this.owner.getContext();
 
-        int cameraProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeVertexShader.glsl", "Shaders/BigEyeFragmentShader.glsl");
-        int faceProgram = compileShaderFromAssets(mContext, "Shaders/BigEyeFaceVertexShader.glsl", "Shaders/BigEyeFaceFragmentShader.glsl");
+        int cameraProgram = compileShaderFromAssets(mContext, "shaders/BigEyeVertexShader.glsl", "shaders/BigEyeFragmentShader.glsl");
+        int faceProgram = compileShaderFromAssets(mContext, "shaders/BigEyeFaceVertexShader.glsl", "shaders/BigEyeFaceFragmentShader.glsl");
         int cameraVAO = BigEyeUtilsKt.glGenVertexArrays();
         int cameraVBO = BigEyeUtilsKt.glGenBuffers();
         int cameraEBO = BigEyeUtilsKt.glGenBuffers();

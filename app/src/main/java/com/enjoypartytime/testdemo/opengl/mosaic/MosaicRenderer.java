@@ -62,8 +62,8 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
         GLES30.glClearColor(0f, 0f, 0f, 1f);
 
         //着色器脚本
-        String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicVertexShader.glsl");
-        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "Shaders/MosaicFragmentShader.glsl");
+        String vertexShaderCode = GLUtil.loadFromAssetsFile(mContext, "shaders/MosaicVertexShader.glsl");
+        String fragmentShaderCode = GLUtil.loadFromAssetsFile(mContext, "shaders/MosaicFragmentShader.glsl");
 
         //获取程序，封装了加载、链接等操作
         mProgram = GLUtil.createProgram(vertexShaderCode, fragmentShaderCode);

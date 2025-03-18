@@ -56,8 +56,8 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         vertexBuffer.put(triangleCoords);
         vertexBuffer.position(0);
 
-        int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, GLUtil.loadFromAssetsFile(mContext, "Shaders/TriangleVertexShader.glsl"));
-        int fragmentShader = loadShader(GLES30.GL_FRAGMENT_SHADER, GLUtil.loadFromAssetsFile(mContext, "Shaders/TriangleFragmentShader.glsl"));
+        int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, GLUtil.loadFromAssetsFile(mContext, "shaders/TriangleVertexShader.glsl"));
+        int fragmentShader = loadShader(GLES30.GL_FRAGMENT_SHADER, GLUtil.loadFromAssetsFile(mContext, "shaders/TriangleFragmentShader.glsl"));
 
         //创建一个空的OpenGL ES程序
         mProgram = GLES30.glCreateProgram();
