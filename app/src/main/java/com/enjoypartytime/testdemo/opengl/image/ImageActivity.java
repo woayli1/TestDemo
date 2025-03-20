@@ -30,6 +30,9 @@ public class ImageActivity extends Activity {
     private boolean countTime = false;
     private boolean isShowLoadTime = false;
 
+    private final String[] imageType = {"webp", "jpg", "png"};
+    private int imageTypeIndex = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +50,11 @@ public class ImageActivity extends Activity {
         TextView tvFilter = findViewById(R.id.tv_image_filter);
 
         tvType.setOnClickListener(v -> {
-
-            if (type.equals("jpg")) {
-                type = "png";
-            } else if (type.equals("png")) {
-                type = "webp";
-            } else {
-                type = "jpg";
+            imageTypeIndex++;
+            if (imageTypeIndex >= imageType.length) {
+                imageTypeIndex = 0;
             }
+            type = imageType[imageTypeIndex];
             tvType.setText(type);
         });
 

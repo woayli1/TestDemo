@@ -101,19 +101,25 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         GoodsBean goodsBean = goodsBeanList.get(position);
+
         if (goodsBean.getBanners() != null) {
             //banner
             return R.layout.home_recycler_banner;
-        } else if (goodsBean.getImageUrl() == null) {
+        }
+
+        if (goodsBean.getImageUrl() == null) {
             //显示文字
             return R.layout.home_recycler_text;
-        } else if (goodsBean.getText() == null) {
+        }
+
+        if (goodsBean.getText() == null) {
             //显示图片
             return R.layout.home_recycler_img;
-        } else {
-            //显示文字+图片
-            return R.layout.home_recycler_text_img;
         }
+
+        //显示文字+图片
+        return R.layout.home_recycler_text_img;
+
     }
 
     @Override

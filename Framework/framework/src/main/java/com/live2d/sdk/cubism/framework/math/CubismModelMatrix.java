@@ -19,7 +19,6 @@ public class CubismModelMatrix extends CubismMatrix44 {
      * @param w width
      * @param h height
      * @return CubismModelMatrix instance with the width and height
-     *
      * @throws IllegalArgumentException if arguments equals 0 or are less than 0
      */
     public static CubismModelMatrix create(float w, float h) {
@@ -189,22 +188,31 @@ public class CubismModelMatrix extends CubismMatrix44 {
             String key = entry.getKey();
             float value = entry.getValue();
 
-            if (key.equals(keyX)) {
-                setX(value);
-            } else if (key.equals(keyY)) {
-                setY(value);
-            } else if (key.equals(keyCenterX)) {
-                centerX(value);
-            } else if (key.equals(keyCenterY)) {
-                centerY(value);
-            } else if (key.equals(keyTop)) {
-                top(value);
-            } else if (key.equals(keyBottom)) {
-                bottom(value);
-            } else if (key.equals(keyLeft)) {
-                left(value);
-            } else if (key.equals(keyRight)) {
-                right(value);
+            switch (key) {
+                case keyX:
+                    setX(value);
+                    break;
+                case keyY:
+                    setY(value);
+                    break;
+                case keyCenterX:
+                    centerX(value);
+                    break;
+                case keyCenterY:
+                    centerY(value);
+                    break;
+                case keyTop:
+                    top(value);
+                    break;
+                case keyBottom:
+                    bottom(value);
+                    break;
+                case keyLeft:
+                    left(value);
+                    break;
+                case keyRight:
+                    right(value);
+                    break;
             }
         }
     }
