@@ -25,13 +25,38 @@ import java.util.List;
 public class ImageActivity extends Activity {
 
     private String type = "webp";
+
+    /**
+     * 是否是本地路径
+     * true:本地路径
+     * false:网络路径
+     */
     private boolean isLocal = true;
-    private long loadTime = 0;
+    /**
+     * 是否是原图
+     * true:原图
+     * false:过滤后的图
+     */
+    private boolean isOrigin = true;
+    /**
+     * 计时
+     */
     private boolean countTime = false;
+    /**
+     * 是否显示加载时间
+     * true:显示
+     * false:隐藏
+     */
     private boolean isShowLoadTime = false;
+
+    private long loadTime = 0;
 
     private final String[] imageType = {"webp", "jpg", "png"};
     private int imageTypeIndex = 0;
+
+    private List<String> stringList;
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +64,7 @@ public class ImageActivity extends Activity {
         setContentView(R.layout.activity_image);
 
         SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.image_swipe_refresh_layout);
-        RecyclerView recyclerView = findViewById(R.id.image_recycler_view);
+        recyclerView = findViewById(R.id.image_recycler_view);
 
         TextView tvType = findViewById(R.id.tv_image_type);
         TextView tvLocal = findViewById(R.id.tv_image_local);
@@ -91,21 +116,25 @@ public class ImageActivity extends Activity {
                     }
                 });
 
-        List<String> stringList = new ArrayList<>();
+        stringList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             stringList.add("第" + i + "个选项");
         }
 
         tvOrigin.setOnClickListener(v -> {
-            countTime = true;
-            loadTime = System.currentTimeMillis();
-            recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, true));
+            isOrigin = true;
+            reloadAdapter();
         });
 
         tvFilter.setOnClickListener(v -> {
-            countTime = true;
-            loadTime = System.currentTimeMillis();
-            recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, false));
+            isOrigin = false;
+            reloadAdapter();
         });
+    }
+
+    private void reloadAdapter() {
+        countTime = true;
+        loadTime = System.currentTimeMillis();
+        recyclerView.setAdapter(new ImageAdapter(getApplicationContext(), stringList, type, isLocal, isOrigin));
     }
 }
