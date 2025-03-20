@@ -367,7 +367,7 @@ public class BigEyeActivity extends AppCompatActivity {
         File modelDir = getApplicationContext().getFilesDir();
         List<String> modelNames;
         try {
-            String[] models = getApplicationContext().getAssets().list("model");
+            String[] models = getApplicationContext().getAssets().list("Model");
             if (models != null) {
                 modelNames = Arrays.asList(models);
                 for (String modelName : modelNames) {
@@ -376,7 +376,7 @@ public class BigEyeActivity extends AppCompatActivity {
                         boolean newFile = modelFile.createNewFile();
                         if (newFile) {
                             try (InputStream inputStream = getApplicationContext().getAssets()
-                                    .open("model/" + modelName); FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
+                                    .open("Model/" + modelName); FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
 
                                 //定义存储空间
                                 byte[] b = new byte[1024 * 5];

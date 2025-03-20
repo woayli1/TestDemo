@@ -85,7 +85,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 Image"
+            android:text="跳转到 Image(Glide)"
             android:textSize="20sp" />
 
     </LinearLayout>

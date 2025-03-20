@@ -22,23 +22,23 @@ public class ShaderManager {
 
         mParamSparseArray = new SparseArray<>();
 
-        insertParam(CAMERA_SHADER_BASE, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_base.glsl"));
+        insertParam(CAMERA_SHADER_BASE, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_base.glsl"));
 
-        insertParam(CAMERA_SHADER_X_2, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_x_2.glsl"));
+        insertParam(CAMERA_SHADER_X_2, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_x_2.glsl"));
 
-        insertParam(CAMERA_SHADER_Y_2, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_y_2.glsl"));
+        insertParam(CAMERA_SHADER_Y_2, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_y_2.glsl"));
 
-        insertParam(CAMERA_SHADER_NEGATIVE, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_negative.glsl"));
+        insertParam(CAMERA_SHADER_NEGATIVE, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_negative.glsl"));
 
-        insertParam(CAMERA_SHADER_BLACK_WHITE, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_black_white.glsl"));
+        insertParam(CAMERA_SHADER_BLACK_WHITE, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_black_white.glsl"));
 
-        insertParam(CAMERA_SHADER_GRAY, GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_vert_base.glsl")
-                , GLUtil.loadFromAssetsFile(context, "shaders/CameraXFilter/camera_frag_gray.glsl"));
+        insertParam(CAMERA_SHADER_GRAY, GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_vert_base.glsl")
+                , GLUtil.loadFromAssetsFile(context, "Shaders/CameraXFilter/camera_frag_gray.glsl"));
 
     }
 
