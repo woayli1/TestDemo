@@ -75,10 +75,7 @@ public class ImageActivity extends Activity {
         TextView tvFilter = findViewById(R.id.tv_image_filter);
 
         tvType.setOnClickListener(v -> {
-            imageTypeIndex++;
-            if (imageTypeIndex >= imageType.length) {
-                imageTypeIndex = 0;
-            }
+            imageTypeIndex = (imageTypeIndex + 1) % imageType.length;
             type = imageType[imageTypeIndex];
             tvType.setText(type);
         });

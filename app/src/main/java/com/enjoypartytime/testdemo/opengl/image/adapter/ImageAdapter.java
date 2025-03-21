@@ -15,7 +15,10 @@ import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.image.filter.FilterBean;
 import com.enjoypartytime.testdemo.opengl.image.filter.FilterFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * author gc
@@ -28,6 +31,25 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private final List<String> stringList;
     private final String type;
     private final boolean isLocal, isOrigin;
+
+    private static final Map<String, Map<Boolean, Object>> srcMap = new HashMap<>();
+
+    static {
+        srcMap.put("jpg", new HashMap<>());
+        Objects.requireNonNull(srcMap.get("jpg")).put(true, R.raw.jpg4);
+        Objects.requireNonNull(srcMap.get("jpg"))
+                .put(false, "https://www.gstatic.cn/webp/gallery/4.jpg");
+
+        srcMap.put("png", new HashMap<>());
+        Objects.requireNonNull(srcMap.get("png")).put(true, R.raw.png4);
+        Objects.requireNonNull(srcMap.get("png"))
+                .put(false, "https://www.gstatic.cn/webp/gallery/4.png");
+
+        srcMap.put("webp", new HashMap<>());
+        Objects.requireNonNull(srcMap.get("webp")).put(true, R.raw.webp4);
+        Objects.requireNonNull(srcMap.get("webp"))
+                .put(false, "https://www.gstatic.cn/webp/gallery/4.webp");
+    }
 
     public ImageAdapter(Context context, List<String> stringList, String type, boolean isLocal, boolean isOrigin) {
         this.context = context;
@@ -61,19 +83,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @NonNull
     private Object getSrc() {
-        Object src;
-        if (type.equals("jpg")) {
-            //jpg
-            src = isLocal ? R.raw.jpg4 : "https://www.gstatic.cn/webp/gallery/4.jpg";
-        } else if (type.equals("png")) {
-            //png
-            src = isLocal ? R.raw.png4 : "https://www.gstatic.cn/webp/gallery/4.png";
-        } else {
-            //webp
-            src = isLocal ? R.raw.webp4 : "https://www.gstatic.cn/webp/gallery/4.webp";
-//            srcStr = "https://isparta.github.io/compare-webp/image/gif_webp/webp/1.webp";
-        }
-        return src;
+        return Objects.requireNonNull(Objects.requireNonNull(srcMap.get(type)).get(isLocal));
     }
 
     @Override
