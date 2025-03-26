@@ -46,19 +46,26 @@ public class WebPGLView extends GLSurfaceView {
         mDraweeHolder = DraweeHolder.create(hierarchyBuilder.build(), context);
         mDraweeHolder.getTopLevelDrawable().setCallback(this);
 
+        /* ** 以下代码可在外部实现 ** */
         setEGLContextClientVersion(2);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
         setZOrderOnTop(true);
 
-        dynamicRender = new WebpDynamicRender();
-        setRenderer(dynamicRender);
+        setRenderer(new WebpDynamicRender());
         setRenderMode(WebPGLView.RENDERMODE_WHEN_DIRTY);
 
 //        String uri = context.getResources().getResourceName(R.raw.webp_dynamic1);
         Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.webp_dynamic1);
 //        Uri uri = Uri.parse("android.resource://com.enjoypartytime.testdemo/raw/webp_dynamic1");
         setImageUri(uri);
+        /* ** 以上代码可在外部实现 ** */
+    }
+
+    @Override
+    public void setRenderer(Renderer renderer) {
+        super.setRenderer(renderer);
+        this.dynamicRender = (WebpDynamicRender) renderer;
     }
 
     @Override
