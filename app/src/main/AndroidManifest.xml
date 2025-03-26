@@ -84,6 +84,7 @@
 
         <activity android:name=".opengl.live2d.Live2DBasicActivity" />
         <activity android:name=".opengl.image.ImageActivity" />
+        <activity android:name=".opengl.webpDynamic.WebpDynamicActivity" />
 
         <activity android:name=".canvas.CanvasActivity" />
         <activity android:name=".canvas.RadarActivity" />
@@ -95,6 +96,8 @@
         <activity android:name=".diyView.KoiActivity" />
 
         <activity android:name=".lazyLoad.LazyLoadActivity" />
+
+        <activity android:name=".udp.UdpActivity" />
 
     </application>
 

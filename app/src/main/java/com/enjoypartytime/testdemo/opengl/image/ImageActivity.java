@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.image.adapter.ImageAdapter;
+import com.enjoypartytime.testdemo.opengl.image.filter.FilterFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,7 @@ public class ImageActivity extends Activity {
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         recyclerView.getViewTreeObserver()
@@ -114,7 +116,7 @@ public class ImageActivity extends Activity {
                 });
 
         stringList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < FilterFactory.getFilterSize(); i++) {
             stringList.add("第" + i + "个选项");
         }
 

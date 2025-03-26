@@ -63,6 +63,9 @@ dependencies {
     implementation libs.glide
     implementation libs.glide.transformations
     // If you want to use the GPU Filters
+    implementation libs.fresco
+    implementation libs.animated.webp
+    implementation libs.webpsupport
     implementation libs.gpuimage
 
     implementation libs.camera.core

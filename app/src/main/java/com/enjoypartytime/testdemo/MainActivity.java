@@ -14,6 +14,7 @@ import com.enjoypartytime.testdemo.okhttp.OkhttpActivity;
 import com.enjoypartytime.testdemo.mvp.MvpActivity;
 import com.enjoypartytime.testdemo.opengl.OpenglActivity;
 import com.enjoypartytime.testdemo.shop.ShopActivity;
+import com.enjoypartytime.testdemo.udp.UdpActivity;
 import com.enjoypartytime.testdemo.utils.OtherUtil;
 
 public class MainActivity extends Activity {
@@ -76,6 +77,12 @@ public class MainActivity extends Activity {
         TextView tvLazyLoad = findViewById(R.id.tv_lazy_load);
         tvLazyLoad.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LazyLoadActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvUdp = findViewById(R.id.tv_udp);
+        tvUdp.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, UdpActivity.class);
             startActivity(intent);
         });
 
