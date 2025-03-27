@@ -21,6 +21,8 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeHolder;
 import com.facebook.imagepipeline.image.ImageInfo;
 
+import java.util.Objects;
+
 /**
  * Created by liuwei64 on 2018/3/16.
  */
@@ -50,7 +52,6 @@ public class WebPGLView extends GLSurfaceView {
         setEGLContextClientVersion(2);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        setZOrderOnTop(true);
 
         setRenderer(new WebpDynamicRender());
         setRenderMode(WebPGLView.RENDERMODE_WHEN_DIRTY);
@@ -119,12 +120,9 @@ public class WebPGLView extends GLSurfaceView {
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override
                     public void onFinalImageSet(String id, @Nullable final ImageInfo imageInfo, @Nullable Animatable animatable) {
-                        queueEvent(new Runnable() {
-                            @Override
-                            public void run() {
-                                dynamicRender.setContentSize(imageInfo.getWidth(), imageInfo.getHeight());
-                                requestRender();
-                            }
+                        queueEvent(() -> {
+                            dynamicRender.setContentSize(Objects.requireNonNull(imageInfo).getWidth(), imageInfo.getHeight());
+                            requestRender();
                         });
                     }
                 }).build();

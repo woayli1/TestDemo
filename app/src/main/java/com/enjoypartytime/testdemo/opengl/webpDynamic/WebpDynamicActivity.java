@@ -34,6 +34,7 @@ public class WebpDynamicActivity extends Activity {
 
         RecyclerView recyclerView = findViewById(R.id.webp_dynamic_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setItemViewCacheSize(-1);
 
         List<String> stringList = new ArrayList<>();
         for (int i = 0; i < DynamicFilterFactory.getFilterSize(); i++) {
