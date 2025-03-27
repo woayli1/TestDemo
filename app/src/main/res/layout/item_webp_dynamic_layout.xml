@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.enjoypartytime.testdemo.opengl.webpDynamic.view.WebPGLView
+    <com.enjoypartytime.testdemo.opengl.webpDynamic.view.WebDynamicView
         android:id="@+id/item_iv_webp_dynamic"
         android:layout_width="300dp"
         android:layout_height="220dp"

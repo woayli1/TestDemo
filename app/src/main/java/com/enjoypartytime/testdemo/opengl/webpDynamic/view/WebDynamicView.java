@@ -24,21 +24,22 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import java.util.Objects;
 
 /**
- * Created by liuwei64 on 2018/3/16.
+ * author gc
+ * company enjoyPartyTime
+ * date 2025/3/26
  */
-
-public class WebPGLView extends GLSurfaceView {
+public class WebDynamicView extends GLSurfaceView {
 
     private DraweeHolder mDraweeHolder;
 
     private WebpDynamicRender dynamicRender;
 
-    public WebPGLView(Context context) {
+    public WebDynamicView(Context context) {
         super(context);
         init(context);
     }
 
-    public WebPGLView(Context context, AttributeSet attrs) {
+    public WebDynamicView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -54,7 +55,7 @@ public class WebPGLView extends GLSurfaceView {
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
         setRenderer(new WebpDynamicRender());
-        setRenderMode(WebPGLView.RENDERMODE_WHEN_DIRTY);
+        setRenderMode(WebDynamicView.RENDERMODE_WHEN_DIRTY);
 
 //        String uri = context.getResources().getResourceName(R.raw.webp_dynamic1);
         Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.webp_dynamic1);

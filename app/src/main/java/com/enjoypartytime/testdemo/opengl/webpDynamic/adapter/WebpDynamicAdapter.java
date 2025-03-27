@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.opengl.webpDynamic.view.WebPGLView;
+import com.enjoypartytime.testdemo.opengl.webpDynamic.view.WebDynamicView;
 import com.enjoypartytime.testdemo.opengl.webpDynamic.webpDynamicFilter.DynamicFilterBean;
 import com.enjoypartytime.testdemo.opengl.webpDynamic.webpDynamicFilter.DynamicFilterFactory;
 
@@ -41,13 +41,13 @@ public class WebpDynamicAdapter extends RecyclerView.Adapter<WebpDynamicAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull WebpDynamicHolder holder, int position) {
-        WebPGLView webPGLView = holder.itemView.findViewById(R.id.item_iv_webp_dynamic);
+        WebDynamicView webDynamicView = holder.itemView.findViewById(R.id.item_iv_webp_dynamic);
         TextView tvWebpDynamicName = holder.itemView.findViewById(R.id.item_tv_webp_dynamic_name);
 
         int remainder = position % DynamicFilterFactory.getFilterSize();
         DynamicFilterBean dynamicFilterBean = DynamicFilterFactory.getFilter(remainder);
         tvWebpDynamicName.setText(dynamicFilterBean.getFilterName());
-        webPGLView.getDynamicRender().setFilter(dynamicFilterBean.getImageFilter());
+        webDynamicView.getDynamicRender().setFilter(dynamicFilterBean.getImageFilter());
     }
 
     @Override
