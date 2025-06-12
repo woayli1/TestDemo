@@ -117,6 +117,10 @@ public class CameraXActivity extends AppCompatActivity {
     }
 
     private void focus(float x, float y) {
+        if (ObjectUtils.isEmpty(camera)) {
+            return;
+        }
+
         MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(previewView.getWidth(), previewView.getHeight());
         MeteringPoint point = factory.createPoint(x, y);
         FocusMeteringAction action = new FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)

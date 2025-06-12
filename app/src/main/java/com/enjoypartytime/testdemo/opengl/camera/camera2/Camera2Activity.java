@@ -24,6 +24,7 @@ import android.util.Log;
 import android.util.Range;
 import android.util.Size;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,7 @@ public class Camera2Activity extends AppCompatActivity {
 
     private TextView tvRatio;
     private TextView tvFps;
+    private TextView tvStabilization;
 
     private ResizeAbleSurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
@@ -69,6 +71,7 @@ public class Camera2Activity extends AppCompatActivity {
     private CaptureRequest.Builder previewBuilder;
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
+    private String firstCameraId;
     private String currentCameraId;
 
     private float maxZoom = 10;
@@ -103,7 +106,7 @@ public class Camera2Activity extends AppCompatActivity {
         TouchView mTouchView = findViewById(R.id.touch_view);
         tvRatio = findViewById(R.id.tv_ratio);
         tvFps = findViewById(R.id.tv_fps);
-        TextView tvStabilization = findViewById(R.id.tv_stabilization);
+        tvStabilization = findViewById(R.id.tv_stabilization);
 
         getDisplayMetrics();
 
@@ -166,7 +169,7 @@ public class Camera2Activity extends AppCompatActivity {
 
 //                previewSize = new Size(holder.getSurfaceFrame().width(), holder.getSurfaceFrame()
 //                        .height());
-                switchCamera("0");
+                switchCamera(firstCameraId);
             }
 
             @Override
@@ -205,6 +208,22 @@ public class Camera2Activity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         List<String> cameraIdList = getCameraIdList();
+        if (cameraIdList.isEmpty()) {
+
+            tvRatio.setVisibility(View.GONE);
+            tvFps.setVisibility(View.GONE);
+            tvStabilization.setVisibility(View.GONE);
+
+            ToastUtils.showLong("此设备无任何摄像头");
+            return;
+        }
+
+        firstCameraId = cameraIdList.get(0);
+
+        tvRatio.setVisibility(View.VISIBLE);
+        tvFps.setVisibility(View.VISIBLE);
+        tvStabilization.setVisibility(View.VISIBLE);
+
         //切换摄像头
         CameraAdapter adapter = new CameraAdapter(getApplicationContext(), cameraIdList, this::switchCamera);
         recyclerView.setAdapter(adapter);
@@ -252,7 +271,11 @@ public class Camera2Activity extends AppCompatActivity {
 //        }
 
         currentCameraId = null;
-        surfaceHolder.removeCallback(surfaceCallback);
+
+        if (surfaceHolder != null) {
+            surfaceHolder.removeCallback(surfaceCallback);
+            surfaceHolder = null;
+        }
 
         stopBackgroundThread();
     }

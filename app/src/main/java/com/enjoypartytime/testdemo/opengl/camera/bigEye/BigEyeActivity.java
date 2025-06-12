@@ -1,15 +1,22 @@
 package com.enjoypartytime.testdemo.opengl.camera.bigEye;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Size;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,6 +30,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.GsonUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
@@ -43,8 +52,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -63,6 +74,7 @@ public class BigEyeActivity extends AppCompatActivity {
     private BigEyeOpenGLView imgGlSurfaceView;
     private BigEyeRenderer bigEyeRenderer;
 
+    private boolean isSupportOpenCamera = false;
     private boolean isCamera = true;
 
     private long timestamp;
@@ -85,7 +97,7 @@ public class BigEyeActivity extends AppCompatActivity {
 
         tvClose.setOnClickListener(view -> finish());
         tvCamera.setOnClickListener(v -> {
-            if (!isCamera) {
+            if (!isCamera && isSupportOpenCamera) {
                 isCamera = true;
                 bigEyeRenderer.setCamera(true);
                 //重新开启摄像头
@@ -121,21 +133,24 @@ public class BigEyeActivity extends AppCompatActivity {
         });
 
         initFaceTengine();
+
+        isSupportOpenCamera = checkCameraIsSupport();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if (isCamera) {
+        if (isCamera && isSupportOpenCamera) {
             cameraProviderFuture = ProcessCameraProvider.getInstance(this);
             cameraProviderFuture.addListener(() -> {
                 try {
                     cameraProvider = cameraProviderFuture.get();
                     bindPreview(cameraProvider);
                 } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
+                    ToastUtils.showShort("相机打开错误");
+                    LogUtils.e(e);
+                    isSupportOpenCamera = false;
                 }
             }, ContextCompat.getMainExecutor(this));
         }
@@ -157,6 +172,43 @@ public class BigEyeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         releaseFaceTengine();
+    }
+
+    private boolean checkCameraIsSupport() {
+        //获取相机管理
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        List<String> resList = new ArrayList<>();
+        // Camera2
+        try {
+            String[] cameraIdList = cameraManager.getCameraIdList();
+            resList.addAll(List.of(cameraIdList));
+            LogUtils.d("cameraIdList=" + GsonUtils.toJson(cameraIdList));
+
+            for (String id : cameraIdList) {
+                CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(id);
+                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                if (map != null) {
+                    Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
+                    LogUtils.d("cameraIdList=" + id + ",,,previewSizes=" + Arrays.asList(previewSizes));
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                    if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK) {
+                        Set<String> physicalCameraIds = cameraCharacteristics.getPhysicalCameraIds();
+                        resList.addAll(physicalCameraIds);
+                        LogUtils.d("cameraIdList:" + id + ",physicalCameraIds=" + GsonUtils.toJson(physicalCameraIds));
+//                    }
+                    }
+                }
+            }
+
+        } catch (CameraAccessException | NullPointerException exception) {
+            ToastUtils.showShort("相机打开错误");
+            LogUtils.e(exception);
+            return false;
+        }
+
+        return !resList.isEmpty();
     }
 
     private void requestStoragePermission() {
@@ -204,12 +256,12 @@ public class BigEyeActivity extends AppCompatActivity {
             if (data != null) {
                 Uri imgUri = data.getData();
                 if (imgUri != null) {
-                    if (isCamera) {
+                    if (isCamera && isSupportOpenCamera) {
                         //关闭摄像头
                         cameraProvider.unbindAll();
+                        bigEyeRenderer.setCamera(false);
                     }
                     isCamera = false;
-                    bigEyeRenderer.setCamera(false);
                     openImage(imgUri);
                 }
             }
@@ -334,7 +386,7 @@ public class BigEyeActivity extends AppCompatActivity {
 
         //打开摄像头
         imageAnalysis.setAnalyzer((Executor) Dispatchers.getIO(), imageProxy -> {
-            if (isCamera) {
+            if (isCamera && isSupportOpenCamera) {
                 timestamp = System.currentTimeMillis();
                 if (imageProxy.getFormat() == ImageFormat.YUV_420_888) {
                     // ImageFormat.YUV_420_888

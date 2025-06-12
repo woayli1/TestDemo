@@ -36,7 +36,8 @@
         android:paddingVertical="5dp"
         android:text="1920*1080"
         android:textColor="@color/lightBlue"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_fps"
@@ -51,7 +52,8 @@
         android:paddingVertical="5dp"
         android:text="FPS：25"
         android:textColor="@color/lightBlue"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_stabilization"
@@ -66,6 +68,7 @@
         android:paddingVertical="5dp"
         android:text="防抖：关"
         android:textColor="@color/lightBlue"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 </FrameLayout>

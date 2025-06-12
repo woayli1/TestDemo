@@ -10,8 +10,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -20,6 +23,8 @@ import java.util.concurrent.ExecutionException;
  * date 2024/11/27
  */
 public class CameraXFilterView extends GLSurfaceView {
+
+    private boolean isSuccessOpenCamera = true;
 
     private CameraXFilterRenderer cameraXFilterRenderer;
 
@@ -65,7 +70,9 @@ public class CameraXFilterView extends GLSurfaceView {
     }
 
     public void setFilterType(int filterType) {
-        cameraXFilterRenderer.setFilterType(filterType);
+        if (isSuccessOpenCamera) {
+            cameraXFilterRenderer.setFilterType(filterType);
+        }
     }
 
     //相机处理
@@ -78,8 +85,12 @@ public class CameraXFilterView extends GLSurfaceView {
                 preview.setSurfaceProvider(cameraXFilterRenderer);
                 cameraProvider.unbindAll();
                 cameraProvider.bindToLifecycle((LifecycleOwner) getContext(), CameraSelector.DEFAULT_BACK_CAMERA, preview);
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
+                isSuccessOpenCamera = true;
+            } catch (ExecutionException | InterruptedException | CancellationException e) {
+                ToastUtils.showShort("相机打开错误");
+                LogUtils.e(e);
+                cameraProviderListenableFuture.cancel(true);
+                isSuccessOpenCamera = false;
             }
         };
         cameraProviderListenableFuture.addListener(runnable, ContextCompat.getMainExecutor(getContext()));
