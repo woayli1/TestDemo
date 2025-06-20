@@ -30,7 +30,6 @@ public class Live2DActivity extends Activity {
 
         tvLive2dBasic.setOnClickListener(view -> ActivityUtils.startActivity(Live2DActivity.this, Live2DBasicActivity.class));
 
-
     }
 
 }

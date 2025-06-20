@@ -13,19 +13,15 @@ import static android.opengl.GLES20.glVertexAttribPointer;
 
 import android.opengl.GLES20;
 
+import com.blankj.utilcode.util.BarUtils;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class LAppSprite {
-    public LAppSprite(
-        float x,
-        float y,
-        float width,
-        float height,
-        int textureId,
-        int programId
-    ) {
+    public LAppSprite(float x, float y, float width, float height, int textureId, int programId) {
+
         rect.left = x - width * 0.5f;
         rect.right = x + width * 0.5f;
         rect.up = y + height * 0.5f;
@@ -104,7 +100,7 @@ public class LAppSprite {
      * テクスチャIDを指定して描画する
      *
      * @param textureId テクスチャID
-     * @param uvVertex uv頂点座標
+     * @param uvVertex  uv頂点座標
      */
     public void renderImmediate(int textureId, final float[] uvVertex) {
         // attribute属性を有効にする
@@ -115,12 +111,7 @@ public class LAppSprite {
         GLES20.glUniform1i(textureLocation, 0);
 
         // 頂点データ
-        float[] positionVertex = {
-            (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f)
-        };
+        float[] positionVertex = {(rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f), (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f), (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f), (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f)};
 
         // attribute属性を登録
         {
@@ -168,7 +159,7 @@ public class LAppSprite {
         // y座標は変換する必要あり
         float y = maxHeight - pointY;
 
-        return (pointX >= rect.left && pointX <= rect.right && y <= rect.up && y >= rect.down);
+        return (rect.left <= pointX && pointX <= rect.right && (rect.down - BarUtils.getActionBarHeight()) <= y && y <= (rect.up + BarUtils.getStatusBarHeight()));
     }
 
     public void setColor(float r, float g, float b, float a) {
@@ -181,7 +172,7 @@ public class LAppSprite {
     /**
      * ウィンドウサイズを設定する。
      *
-     * @param width 横幅
+     * @param width  横幅
      * @param height 高さ
      */
     public void setWindowSize(int width, int height) {
