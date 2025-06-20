@@ -1,13 +1,15 @@
 package com.enjoypartytime.testdemo.opengl.live2d;
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.opengl.live2d.full.GLRenderer;
+import com.enjoypartytime.testdemo.opengl.live2d.full.LAppDelegate;
 
 /**
  * author gc
@@ -16,6 +18,7 @@ import com.enjoypartytime.testdemo.R;
  */
 public class Live2DBasicActivity extends Activity {
 
+    private GLRenderer glRenderer;
     private GLSurfaceView glSurfaceView;
 
     @Override
@@ -24,28 +27,69 @@ public class Live2DBasicActivity extends Activity {
         setContentView(R.layout.activity_live_2d_basic);
 
         glSurfaceView = findViewById(R.id.gl_surface_view);
+        glSurfaceView.setEGLContextClientVersion(2);
 
-        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        glSurfaceView.setZOrderOnTop(true);
+        glRenderer = new GLRenderer();
 
-        glSurfaceView.setEGLContextClientVersion(3);
-
-        Live2DBasicRenderer live2DBasicRenderer = new Live2DBasicRenderer(getApplicationContext());
-        glSurfaceView.setRenderer(live2DBasicRenderer);
+        glSurfaceView.setRenderer(glRenderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        LAppDelegate.getInstance().onStart(this);
+
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         glSurfaceView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
         glSurfaceView.onPause();
+        LAppDelegate.getInstance().onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LAppDelegate.getInstance().onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        LAppDelegate.getInstance().onDestroy();
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float pointX = event.getX();
+        float pointY = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                LAppDelegate.getInstance().onTouchBegan(pointX, pointY);
+                break;
+            case MotionEvent.ACTION_UP:
+                LAppDelegate.getInstance().onTouchEnd(pointX, pointY);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                LAppDelegate.getInstance().onTouchMoved(pointX, pointY);
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }
