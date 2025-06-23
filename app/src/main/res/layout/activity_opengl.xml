@@ -18,7 +18,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 绘制三角形"
+            android:text="绘制三角形"
             android:textSize="20sp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 绘制正方形"
+            android:text="绘制正方形"
             android:textSize="20sp" />
 
         <TextView
@@ -40,7 +40,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 马赛克滤镜"
+            android:text="马赛克滤镜"
             android:textSize="20sp" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 画笔"
+            android:text="画笔"
             android:textSize="20sp" />
 
         <TextView
@@ -62,7 +62,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 Live 2D"
+            android:text="Live 2D"
             android:textSize="20sp" />
 
         <TextView
@@ -73,7 +73,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 Camera"
+            android:text="Camera"
             android:textSize="20sp" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 Image(Glide)"
+            android:text="Image(Glide)"
             android:textSize="20sp" />
 
         <TextView
@@ -95,7 +95,18 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
-            android:text="跳转到 Webp动态图(Fresco)"
+            android:text="Webp动态图(Fresco)"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_gl_transitions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            android:text="GL-Transitions"
             android:textSize="20sp" />
 
     </LinearLayout>

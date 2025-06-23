@@ -21,6 +21,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.enjoypartytime.testdemo.R;
 import com.enjoypartytime.testdemo.opengl.brush.BrushActivity;
 import com.enjoypartytime.testdemo.opengl.camera.CameraMainActivity;
+import com.enjoypartytime.testdemo.opengl.glTransitions.GlTransitionsActivity;
 import com.enjoypartytime.testdemo.opengl.live2d.Live2DActivity;
 import com.enjoypartytime.testdemo.opengl.mosaic.MosaicActivity;
 import com.enjoypartytime.testdemo.opengl.square.SquareActivity;
@@ -58,6 +59,7 @@ public class OpenglActivity extends Activity {
         TextView tvCameraMain = findViewById(R.id.tv_camera_main);
         TextView tvImage = findViewById(R.id.tv_image);
         TextView tvWebpDynamic = findViewById(R.id.tv_webp_dynamic);
+        TextView tvGlTransitions = findViewById(R.id.tv_gl_transitions);
 
         int glVersion = getGLESVersion();
         String version = "OpenGL ES 1.0";
@@ -103,6 +105,11 @@ public class OpenglActivity extends Activity {
                 startActivity(intent);
             });
 
+            tvGlTransitions.setOnClickListener(view -> {
+                Intent intent = new Intent(OpenglActivity.this, GlTransitionsActivity.class);
+                startActivity(intent);
+            });
+
             if (glVersion > 196609) {
                 version = "OpenGL ES 3.2";
             } else if (glVersion > 196608) {
@@ -123,6 +130,7 @@ public class OpenglActivity extends Activity {
             tvCameraMain.setTextColor(getResources().getColor(R.color.lightGray, null));
             tvImage.setTextColor(getResources().getColor(R.color.lightGray, null));
             tvWebpDynamic.setTextColor(getResources().getColor(R.color.lightGray, null));
+            tvGlTransitions.setTextColor(getResources().getColor(R.color.lightGray, null));
 
             if (glVersion > 65537) {
                 version = "OpenGL ES 2.0";

@@ -22,7 +22,6 @@ import static android.opengl.GLES20.glClearDepthf;
 import android.app.Activity;
 import android.opengl.GLES20;
 
-import com.blankj.utilcode.util.ScreenUtils;
 import com.enjoypartytime.testdemo.opengl.live2d.LAppDefine;
 import com.live2d.sdk.cubism.framework.CubismFramework;
 
