@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.enjoypartytime.testdemo.opengl.glVideo.view.eplayer.EPlayerView
+        android:id="@+id/gl_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="156dp"
+        android:layout_margin="10dp" />
+
+    <ScrollView
+        android:id="@+id/scroll_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:id="@+id/tv_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:text="恢复默认值"
+                android:textColor="@color/lightBlue"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_seek_red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="红色：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="255"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_green"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="绿色：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_green"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="255"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="蓝色：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_blue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="255"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_brightness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_brightness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="亮度：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_brightness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="255"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_effect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_effect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="特效：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_effect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="70"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="速度：x1.0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="8"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_seek_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <TextView
+                    android:id="@+id/tv_range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minWidth="80dp"
+                    android:text="频闪：0"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_range"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:max="240"
+                    android:paddingVertical="10dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

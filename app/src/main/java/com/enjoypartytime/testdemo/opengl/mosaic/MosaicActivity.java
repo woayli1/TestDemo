@@ -45,6 +45,7 @@ public class MosaicActivity extends Activity {
         TextView tvChoose = findViewById(R.id.tv_choose);
         imgGlSurfaceView = findViewById(R.id.img_gl_surface_view);
         SeekBar seekBar = findViewById(R.id.seekbar);
+        seekBar.setMax(100);
         TextView tvStrength = findViewById(R.id.tv_strength);
 
         tvClose.setOnClickListener(view -> finish());

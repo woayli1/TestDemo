@@ -109,6 +109,17 @@
             android:text="GL-Transitions"
             android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/tv_gl_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            android:text="GL-Video"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <TextView

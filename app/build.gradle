@@ -73,6 +73,9 @@ dependencies {
     implementation libs.camera.lifecycle
     implementation libs.camera.view
 
+    implementation libs.media3.exoplayer
+    implementation libs.media3.effect
+
     implementation project(":Framework:framework")
     implementation(fileTree(dir: 'libs', include: ['*.aar']))
 }

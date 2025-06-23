@@ -86,6 +86,7 @@
         <activity android:name=".opengl.image.ImageActivity" />
         <activity android:name=".opengl.webpDynamic.WebpDynamicActivity" />
         <activity android:name=".opengl.glTransitions.GlTransitionsActivity" />
+        <activity android:name=".opengl.glVideo.GlVideoActivity" />
 
         <activity android:name=".canvas.CanvasActivity" />
         <activity android:name=".canvas.RadarActivity" />
