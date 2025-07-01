@@ -9,6 +9,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -94,7 +95,7 @@ public class KoiDrawable extends Drawable {
         valueAnimator.addUpdateListener(animator -> currentValue = (float) animator.getAnimatedValue());
         valueAnimator.start();
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

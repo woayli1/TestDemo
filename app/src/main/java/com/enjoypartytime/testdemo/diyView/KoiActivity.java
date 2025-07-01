@@ -3,6 +3,7 @@ package com.enjoypartytime.testdemo.diyView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
@@ -27,7 +28,7 @@ public class KoiActivity extends Activity {
         KoiRelativeLayout krlKoi = findViewById(R.id.krl_koi);
         krlKoi.invalidate();
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
             public void run() {

@@ -3,6 +3,7 @@ package com.enjoypartytime.testdemo.canvas.brush;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
@@ -26,7 +27,7 @@ public class BrushCanvasActivity extends Activity {
 
         BrushCanvasView bcv_view = findViewById(R.id.bcv_view);
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
             public void run() {
