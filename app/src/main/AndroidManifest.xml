@@ -93,9 +93,10 @@
         <activity android:name=".canvas.brush.BrushCanvasActivity" />
 
         <activity android:name=".diyView.DiyViewActivity" />
-        <activity android:name=".diyView.FlowLayoutActivity" />
-        <activity android:name=".diyView.CoordinatorLayoutActivity" />
-        <activity android:name=".diyView.KoiActivity" />
+        <activity android:name=".diyView.flowLayout.FlowLayoutActivity" />
+        <activity android:name=".diyView.coordinatorLayout.CoordinatorLayoutActivity" />
+        <activity android:name=".diyView.koi.KoiActivity" />
+        <activity android:name=".diyView.noiseSpline.NoiseSplineActivity" />
 
         <activity android:name=".lazyLoad.LazyLoadActivity" />
 

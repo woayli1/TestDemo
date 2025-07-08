@@ -31,6 +31,8 @@ void main() {
     vec2 UVMosaic = vec2(XYMosaic.x / TexSize.x, XYMosaic.y / TexSize.y);
     //获取到马赛克后的纹理坐标的颜色值
     vec4 color = texture(Texture, UVMosaic);
+
+    smoothstep()
     //将马赛克颜色值赋值给gl_FragColor
     FragColor = color;
 }

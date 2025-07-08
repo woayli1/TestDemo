@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView;
+package com.enjoypartytime.testdemo.diyView.koi;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.os.Looper;
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.diyView.view.KoiRelativeLayout;
+import com.enjoypartytime.testdemo.diyView.koi.view.KoiRelativeLayout;
 
 /**
  * author gc

@@ -200,7 +200,7 @@ public class MosaicRenderer implements GLSurfaceView.Renderer {
         GLES30.glUniform1f(mStrength, strength);
 
         //设置使用的纹理编号
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+//        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         GLES30.glEnable(GLES30.GL_BLEND);
 
         // 绘制三角形，三个顶点

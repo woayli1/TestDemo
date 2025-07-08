@@ -8,6 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.enjoypartytime.testdemo.R;
+import com.enjoypartytime.testdemo.diyView.coordinatorLayout.CoordinatorLayoutActivity;
+import com.enjoypartytime.testdemo.diyView.flowLayout.FlowLayoutActivity;
+import com.enjoypartytime.testdemo.diyView.koi.KoiActivity;
+import com.enjoypartytime.testdemo.diyView.noiseSpline.NoiseSplineActivity;
 
 /**
  * author gc
@@ -36,6 +40,12 @@ public class DiyViewActivity extends Activity {
         TextView tvKoi = findViewById(R.id.tv_koi);
         tvKoi.setOnClickListener(view -> {
             Intent intent = new Intent(DiyViewActivity.this, KoiActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvNoiseSpline = findViewById(R.id.tv_noise_spline);
+        tvNoiseSpline.setOnClickListener(view -> {
+            Intent intent = new Intent(DiyViewActivity.this, NoiseSplineActivity.class);
             startActivity(intent);
         });
 

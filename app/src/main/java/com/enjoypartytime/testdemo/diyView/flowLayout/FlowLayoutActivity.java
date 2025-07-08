@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView;
+package com.enjoypartytime.testdemo.diyView.flowLayout;
 
 import android.app.Activity;
 import android.os.Bundle;

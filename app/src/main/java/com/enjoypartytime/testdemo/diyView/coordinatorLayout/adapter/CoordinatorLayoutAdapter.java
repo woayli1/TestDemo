@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView.adapter;
+package com.enjoypartytime.testdemo.diyView.coordinatorLayout.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

@@ -1,4 +1,4 @@
-package com.enjoypartytime.testdemo.diyView;
+package com.enjoypartytime.testdemo.diyView.coordinatorLayout;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.enjoypartytime.testdemo.R;
-import com.enjoypartytime.testdemo.diyView.adapter.CoordinatorLayoutChildAdapter;
+import com.enjoypartytime.testdemo.diyView.coordinatorLayout.adapter.CoordinatorLayoutChildAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

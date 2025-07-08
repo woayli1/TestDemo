@@ -2,6 +2,7 @@ package com.enjoypartytime.testdemo.opengl.camera.cameraXFilter;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.Process;
 import android.util.AttributeSet;
 
 import androidx.camera.core.CameraSelector;
@@ -79,6 +80,7 @@ public class CameraXFilterView extends GLSurfaceView {
     private void setupCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture = ProcessCameraProvider.getInstance(getContext());
         Runnable runnable = () -> {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderListenableFuture.get();
                 Preview preview = new Preview.Builder().build();
