@@ -93,7 +93,7 @@ public class NoiseSplineActivity extends Activity {
                 //等待下一次检测
                 synchronized (mLock) {
                     try {
-                        mLock.wait(200);
+                        mLock.wait(100);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -122,7 +122,7 @@ public class NoiseSplineActivity extends Activity {
         }
 
         if (handlerThread != null) {
-            handlerThread.quit();
+            handlerThread.quitSafely();
             handlerThread = null;
         }
     }
